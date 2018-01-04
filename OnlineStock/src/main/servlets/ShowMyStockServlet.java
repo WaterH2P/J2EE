@@ -82,7 +82,7 @@ public class ShowMyStockServlet extends HttpServlet {
 				}
 				else{
 					System.out.println("username or password is wrong");
-					RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/loginFail.jsp");
+					RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/views/log/loginFail.jsp");
 					requestDispatcher.forward(request, response);
 				}
 			}
@@ -95,6 +95,10 @@ public class ShowMyStockServlet extends HttpServlet {
 	
 	// deal with the GET or POST request
 	private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		// 设置 UserAccountBean
+		LoginServlet.setUserAccountBean(request);
+		
 		HttpSession session = request.getSession(false);
 		request.setAttribute( ParaName.reqUserName, session.getAttribute(ParaName.reqUserName) );
 		
@@ -103,7 +107,7 @@ public class ShowMyStockServlet extends HttpServlet {
 		ArrayList<Order> orders = new ArrayList<>( orderService.getOrders( (String)session.getAttribute(ParaName.reqUserName) ) );
 		request.setAttribute(ParaName.orderList, orders);
 		
-		RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/myOrders.jsp");
+		RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/views/myOrders.jsp");
 		try{
 			requestDispatcher.forward(request, response);
 		}catch( ServletException e ){

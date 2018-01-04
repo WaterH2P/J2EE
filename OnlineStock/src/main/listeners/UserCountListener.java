@@ -30,11 +30,6 @@ public class UserCountListener implements ServletContextListener,
 			You can initialize servlet context related data here.
 		*/
 		servletContext = sce.getServletContext();
-//		if( servletContext.getAttribute(ParaName.totalAttr)==null ){
-//			servletContext.setAttribute(ParaName.totalAttr, 0);
-//			servletContext.setAttribute(ParaName.onlineAttr, 0);
-//			servletContext.setAttribute(ParaName.visitorAttr, 0);
-//		}
 		
 		if( servletContext.getAttribute(ParaName.userCountBean)==null ){
 			servletContext.setAttribute(ParaName.userCountBean, new UserCountBean());

@@ -129,7 +129,7 @@ public class LoginServlet extends HttpServlet {
 			setUserAccountBean(request);
 		}
 		
-		RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/login.jsp");
+		RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/views/log/login.jsp");
 		try{
 			requestDispatcher.forward(request, response);
 		}catch( ServletException e ){

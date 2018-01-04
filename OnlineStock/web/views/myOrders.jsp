@@ -5,11 +5,21 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page session="false" %>
+
+<%@ page errorPage="log/loginError.jsp" %>
+
+<%@ taglib prefix="user" uri="/WEB-INF/tlds/userOnline.tld" %>
+
 <html>
 <head>
     <title>Orders</title>
+    <jsp:useBean id="userAccount" scope="request" type="main.javabean.UserAccountBean"/>
+
+    <user:checkSession username="<%= userAccount.getUsername() %>"/>
+
 </head>
 <body>
+
     <h2>用户  <%= request.getAttribute(ParaName.reqUserName) %>   订单详情</h2>
     <table style='padding:1px; text-align:center; margin:2px' width='auto' border='1' >
         <tr>
@@ -53,7 +63,7 @@
         %>
     </table>
 
-    <%@ include file="logout.jsp"%>
+    <%@ include file="log/logout.jsp"%>
     <br/>
     <br/>
     <%@ include file="userCount.jsp"%>
