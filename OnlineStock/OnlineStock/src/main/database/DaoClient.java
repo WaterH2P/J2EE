@@ -1,4 +1,4 @@
-package main.database;
+package main.dao;
 
 import main.model.Order;
 import main.servlets.ParaName;

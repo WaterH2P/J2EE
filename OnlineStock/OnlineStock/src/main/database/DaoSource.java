@@ -1,4 +1,4 @@
-package main.database;
+package main.dao;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;

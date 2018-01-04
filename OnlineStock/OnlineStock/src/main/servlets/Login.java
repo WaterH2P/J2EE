@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class Login
+ * Servlet implementation class LoginServlet
  */
-@WebServlet("/Login")
+@WebServlet("/LoginServlet")
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -43,12 +43,12 @@ public class Login extends HttpServlet {
 			}
 			
 			// logout, 减少一个 总人数 和 一个 登陆者
-			System.out.println("Login 46 退出 delete a total and a visitor");
+			System.out.println("LoginServlet 46 退出 delete a total and a visitor");
 			ServletContext servletContext = getServletContext();
 			servletContext.setAttribute(ParaName.totalAttr, (int)servletContext.getAttribute(ParaName.totalAttr)-1 );
 			servletContext.setAttribute(ParaName.onlineAttr, (int)servletContext.getAttribute(ParaName.onlineAttr)-1 );
 			
-			response.sendRedirect("/Login");
+			response.sendRedirect("/LoginServlet");
 		}
 		else{
 			if( session==null ){
@@ -58,7 +58,7 @@ public class Login extends HttpServlet {
 				session.setMaxInactiveInterval(600);
 				
 				// 增加一个 总人数 和 一个 游客
-				System.out.println("Login 61 访问 add a total and a visitor");
+				System.out.println("LoginServlet 61 访问 add a total and a visitor");
 				ServletContext servletContext = getServletContext();
 				servletContext.setAttribute(ParaName.totalAttr, (int)servletContext.getAttribute(ParaName.totalAttr)+1 );
 				servletContext.setAttribute(ParaName.visitorAttr, (int)servletContext.getAttribute(ParaName.visitorAttr)+1 );

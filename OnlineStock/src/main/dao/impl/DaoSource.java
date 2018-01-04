@@ -1,10 +1,9 @@
-package main.database;
+package main.dao.impl;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -50,5 +49,15 @@ public class DaoSource {
 	
 	protected static DataSource getInstance(){
 		return datasource;
+	}
+	
+	protected static Connection getConnection(){
+		Connection connection = null;
+		try {
+			connection = datasource.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return connection;
 	}
 }

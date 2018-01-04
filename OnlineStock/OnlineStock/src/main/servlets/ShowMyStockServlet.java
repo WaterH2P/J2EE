@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import main.database.DaoClient;
+import main.dao.DaoClient;
 import main.model.Order;
 
 /**
@@ -43,7 +43,7 @@ public class ShowMyStockServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		
 		if( session==null || session.getAttribute(ParaName.reqUserName)==null ){
-			response.sendRedirect("/Login");
+			response.sendRedirect("/LoginServlet");
 		}
 		else {
 			processRequest(request, response);
@@ -60,7 +60,7 @@ public class ShowMyStockServlet extends HttpServlet {
 		
 		HttpSession session = request.getSession(false);
 		if( session==null ){
-			response.sendRedirect("/Login");
+			response.sendRedirect("/LoginServlet");
 		}
 		
 		if( session.getAttribute(ParaName.reqUserName)==null ){
@@ -200,7 +200,7 @@ public class ShowMyStockServlet extends HttpServlet {
 			out.println("<br/>");
 		}
 		// Logout注销登录
-		out.println("<form method='GET' action='" + response.encodeURL(requset.getContextPath() + "/Login") + "'>");
+		out.println("<form method='GET' action='" + response.encodeURL(requset.getContextPath() + "/LoginServlet") + "'>");
 		out.println("</p>");
 		out.println("<input type='submit' name='Logout' value='Logout'>");
 		out.println("</form>");
