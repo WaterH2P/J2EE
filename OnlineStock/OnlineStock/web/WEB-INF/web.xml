@@ -5,7 +5,7 @@
          version="3.1">
     <!-- 设置默认界面 -->
     <welcome-file-list>
-        <welcome-file>Login</welcome-file>
+        <welcome-file>LoginServlet</welcome-file>
     </welcome-file-list>
 
     <filter>
@@ -14,6 +14,15 @@
     </filter>
     <filter-mapping>
         <filter-name>ChEncodeFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>URLFilter</filter-name>
+        <filter-class>main.filters.URLFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>URLFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
