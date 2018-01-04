@@ -11,9 +11,6 @@ public class ParaName {
 	
 	public final static String totalAttr = "totalUser", onlineAttr = "onlineUser", visitorAttr = "visitorUser";
 	
-	public final static String userAccountBean = "userAccount";
 	public final static String userCountBean = "userCount";
-	
-	public final static String orderList = "orders";
 	
 }

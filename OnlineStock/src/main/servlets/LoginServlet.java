@@ -1,12 +1,8 @@
 package main.servlets;
 
-import main.javabean.UserAccountBean;
-import main.javabean.UserCountBean;
-
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -36,8 +32,8 @@ public class LoginServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		// 设置 UserAccountBean
-		setUserAccountBean(request);
+		// 设置 UserAccount
+		setUserAccount(request);
 		
 		HttpSession session = request.getSession(false);
 		
@@ -46,13 +42,6 @@ public class LoginServlet extends HttpServlet {
 			
 			// 600s 不活跃 session 失效
 			session.setMaxInactiveInterval(600);
-				
-			// 增加一个 总人数 和 一个 游客
-			ServletContext servletContext = getServletContext();
-			UserCountBean userCount = (UserCountBean) servletContext.getAttribute(ParaName.userCountBean);
-			userCount.totalAddOne();
-			userCount.visitorAddOne();
-			servletContext.setAttribute(ParaName.userCountBean, userCount);
 			
 			gotoLogin(request, response);
 		}
@@ -62,7 +51,7 @@ public class LoginServlet extends HttpServlet {
 				gotoLogin(request, response);
 			}
 			else{
-				response.sendRedirect("/ShowMyStockServlet");
+				response.sendRedirect("/ShowMyOrderServlet");
 			}
 		}
 	}
@@ -73,8 +62,8 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		// 设置 UserAccountBean
-		setUserAccountBean(request);
+		// 设置 UserAccount
+		setUserAccount(request);
 		
 		// Logout action removes session, but the cookie remains
 		if( request.getParameter(ParaName.logout)!=null ){
@@ -82,16 +71,8 @@ public class LoginServlet extends HttpServlet {
 			if( session != null && session.getAttribute(ParaName.reqUserName)!=null ){
 				session.invalidate();
 				session = null;
-				
-				// logout, 减少一个 总人数 和 一个 登陆者
-				ServletContext servletContext = getServletContext();
-				UserCountBean userCount = (UserCountBean) servletContext.getAttribute(ParaName.userCountBean);
-				userCount.totalDeleteOne();
-				userCount.onlineDeleteOne();
-				servletContext.setAttribute(ParaName.userCountBean, userCount);
 			}
 			
-//			gotoLogin(request, response);
 			response.sendRedirect("LoginServlet");
 		}
 	}
@@ -113,23 +94,21 @@ public class LoginServlet extends HttpServlet {
 		return value;
 	}
 	
-	public static void setUserAccountBean(HttpServletRequest request){
+	public static void setUserAccount(HttpServletRequest request){
 		Cookie[] cookies = request.getCookies();
 		
-		// 设置 UserAccountBean
+		// 设置 UserAccount
 		String username = getCookieValue( cookies, ParaName.cookieUserName);
-		UserAccountBean userAccountBean = new UserAccountBean();
-		userAccountBean.setUsername( username );
-		request.setAttribute(ParaName.userAccountBean, userAccountBean);
+		request.setAttribute(ParaName.reqUserName, username);
 	}
 	
 	private void gotoLogin(HttpServletRequest request, HttpServletResponse response){
 		
-		if( request.getAttribute(ParaName.userAccountBean)==null ){
-			setUserAccountBean(request);
+		if( request.getAttribute(ParaName.reqUserName)==null ){
+			setUserAccount(request);
 		}
 		
-		RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/views/log/login.jsp");
+		RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/views/log/login_log.jsp");
 		try{
 			requestDispatcher.forward(request, response);
 		}catch( ServletException e ){

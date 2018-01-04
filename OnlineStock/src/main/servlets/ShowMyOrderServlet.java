@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -15,21 +14,21 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import main.factory.ServiceFactory;
-import main.javabean.UserCountBean;
+import main.javabean.OrderListBean;
 import main.model.Order;
 import main.service.OrderService;
 
 /**
  * Servlet implementation class StockListServlet
  */
-@WebServlet("/ShowMyStockServlet")
-public class ShowMyStockServlet extends HttpServlet {
+@WebServlet("/ShowMyOrderServlet")
+public class ShowMyOrderServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public ShowMyStockServlet() {
+	public ShowMyOrderServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -70,19 +69,12 @@ public class ShowMyStockServlet extends HttpServlet {
 				String password = request.getParameter(ParaName.password);
 				System.out.println( username + " is trying login");
 				if( ServiceFactory.getClientService().login(username, password) ){
-					// 登陆成功，增加一个在线者，减少一个游客
-					ServletContext servletContext = getServletContext();
-					UserCountBean userCount = (UserCountBean) servletContext.getAttribute(ParaName.userCountBean);
-					userCount.onlineAddOne();
-					userCount.visitorDeleteOne();
-					servletContext.setAttribute(ParaName.userCountBean, userCount);
-					
 					checkCookieUserName(request, response);
 					processRequest(request, response);
 				}
 				else{
 					System.out.println("username or password is wrong");
-					RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/views/log/loginFail.jsp");
+					RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/views/log/loginFail_log.jsp");
 					requestDispatcher.forward(request, response);
 				}
 			}
@@ -96,22 +88,20 @@ public class ShowMyStockServlet extends HttpServlet {
 	// deal with the GET or POST request
 	private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
-		// 设置 UserAccountBean
-		LoginServlet.setUserAccountBean(request);
-		
 		HttpSession session = request.getSession(false);
 		request.setAttribute( ParaName.reqUserName, session.getAttribute(ParaName.reqUserName) );
 		
 		// 获得订单列表
 		OrderService orderService = ServiceFactory.getOrderService();
-		ArrayList<Order> orders = new ArrayList<>( orderService.getOrders( (String)session.getAttribute(ParaName.reqUserName) ) );
-		request.setAttribute(ParaName.orderList, orders);
+		OrderListBean orders = new OrderListBean();
+		orders.setOrders( orderService.getOrders( (String)session.getAttribute(ParaName.reqUserName) ) );
+		request.setAttribute("orders", orders);
 		
-		RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/views/myOrders.jsp");
+		RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/views/order/myOrders.jsp");
 		try{
 			requestDispatcher.forward(request, response);
 		}catch( ServletException e ){
-			System.out.println( " ShowMyStockServlet.java gotoLogin cause ServletException " );
+			System.out.println( " ShowMyOrderServlet.java gotoLogin cause ServletException " );
 			e.printStackTrace();
 		}catch( IOException e ){
 			e.printStackTrace();

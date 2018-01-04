@@ -51,11 +51,17 @@ public class UserCountListener implements ServletContextListener,
 	// -------------------------------------------------------
 	public void sessionCreated(HttpSessionEvent se){
 		/* Session is created. */
+		UserCountBean userCount = (UserCountBean) servletContext.getAttribute(ParaName.userCountBean);
+		userCount.totalAddOne();
+		userCount.visitorAddOne();
 		System.out.println("sessionCreated");
 	}
 	
 	public void sessionDestroyed(HttpSessionEvent se){
 		/* Session is destroyed. */
+		UserCountBean userCount = (UserCountBean) servletContext.getAttribute(ParaName.userCountBean);
+		userCount.totalDeleteOne();
+		userCount.visitorDeleteOne();
 		System.out.println("sessionDestroyed");
 	}
 	
@@ -64,15 +70,21 @@ public class UserCountListener implements ServletContextListener,
 	// -------------------------------------------------------
 	
 	public void attributeAdded(HttpSessionBindingEvent sbe){
-      /* This method is called when an attribute 
-         is added to a session.
-      */
+		/* This method is called when an attribute
+			is added to a session.
+        */
+		UserCountBean userCount = (UserCountBean) servletContext.getAttribute(ParaName.userCountBean);
+		userCount.onlineAddOne();
+		userCount.visitorDeleteOne();
 	}
 	
 	public void attributeRemoved(HttpSessionBindingEvent sbe){
       /* This method is called when an attribute
          is removed from a session.
       */
+		UserCountBean userCount = (UserCountBean) servletContext.getAttribute(ParaName.userCountBean);
+		userCount.onlineDeleteOne();
+		userCount.visitorAddOne();
 	}
 	
 	public void attributeReplaced(HttpSessionBindingEvent sbe){

@@ -20,7 +20,7 @@ import main.model.Order;
 /**
  * Servlet implementation class StockListServlet
  */
-@WebServlet("/ShowMyStockServlet")
+@WebServlet("/ShowMyOrderServlet")
 public class ShowMyStockServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private DaoClient daoClient = new DaoClient();
@@ -69,7 +69,7 @@ public class ShowMyStockServlet extends HttpServlet {
 			System.out.println( username + " is trying login");
 			if( daoClient.checkLogin(username, password) ){
 				// 登陆成功，增加一个在线者，减少一个游客
-				System.out.println("ShowMyStockServlet 72 add a online and delete a visitor");
+				System.out.println("ShowMyOrderServlet 72 add a online and delete a visitor");
 				ServletContext servletContext = getServletContext();
 				servletContext.setAttribute(ParaName.onlineAttr, (int)servletContext.getAttribute(ParaName.onlineAttr)+1 );
 				servletContext.setAttribute(ParaName.visitorAttr, (int)servletContext.getAttribute(ParaName.visitorAttr)-1 );

@@ -1,7 +1,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page session="false" %>
-<%@ include file="login.jsp" %>
+<%@ include file="login_log.jsp" %>
 <html>
 <head>
     <title>Login Fail</title>

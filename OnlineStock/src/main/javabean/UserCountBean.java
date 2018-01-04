@@ -1,10 +1,8 @@
 package main.javabean;
 
-public class UserCountBean {
-	
-	public static final String totalAttr = "total";
-	public static final String onlineAttr = "online";
-	public static final String visitorAttr = "visitor";
+import java.io.Serializable;
+
+public class UserCountBean implements Serializable {
 	
 	private int total = 0;
 	private int online = 0;

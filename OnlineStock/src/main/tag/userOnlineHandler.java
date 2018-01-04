@@ -16,13 +16,6 @@ public class userOnlineHandler extends BodyTagSupport {
 		this.username = username;
 	}
 	
-	public int doAfterBody(){
-		if( username.equals("") ){
-			username = bodyContent.getString();
-		}
-		return SKIP_BODY;
-	}
-	
 	public int doEndTag(){
 		if( username==null || username.equals("") ){
 			JspWriter out = pageContext.getOut();

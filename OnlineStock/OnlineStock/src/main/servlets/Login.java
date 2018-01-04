@@ -70,7 +70,7 @@ public class Login extends HttpServlet {
 					showLoginPage(request, response, false);
 				}
 				else {
-					response.sendRedirect("/ShowMyStockServlet");
+					response.sendRedirect("/ShowMyOrderServlet");
 				}
 			}
 		}
@@ -91,7 +91,7 @@ public class Login extends HttpServlet {
 		String cookieUsername = getCookieValue(cookies, "LoginCookie");
 		
 		PrintWriter out = response.getWriter();
-		out.println("<form method='POST' action='/ShowMyStockServlet'>");
+		out.println("<form method='POST' action='/ShowMyOrderServlet'>");
 		out.println(
 				"username: <input type='text' name='username' value='" + cookieUsername + "'>");
 		out.println(

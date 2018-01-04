@@ -1,8 +1,9 @@
 package main.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Order {
+public class Order implements Serializable {
 	private String orderID;
 	private String goodID;
 	private String goodName;
