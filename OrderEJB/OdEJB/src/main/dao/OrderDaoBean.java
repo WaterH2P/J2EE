@@ -3,6 +3,8 @@ package main.dao;
 import main.model.Order;
 
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -49,6 +51,20 @@ public class OrderDaoBean implements OrderDao {
 		
 //		requset.setAttribute("orderList", orderList);
 		return orderList;
+	}
+	
+	@PersistenceContext
+	protected EntityManager em;
+	
+	@Override
+	public Order findOdByID(String id){
+		try {
+			Order order = em.find(Order.class, id);
+			return order;
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 }

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <!-- 1、设置四本一言  -->
+        <!-- 四本一言
+        四大基本项：
+            1、驱动类名
+            2、指明需要连接的 url
+            3、用户名
+            4、密码
+            Hibernate支持不同的数据库，但是每种数据库语法可能有区别，可以使用方言,注意版本 -->
+        <!-- 数据库驱动类全称 -->
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/J2EE</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">hzp</property>
+
+        <!-- SQL dialect 方言 -->
+        <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
+
+        <!--2、全局配置信息  -->
+        <!-- Echo all executed SQL to stdout -->
+        <property name="hibernate.show_sql">true</property>
+
+        <property name="hibernate.connection.autocommit">true</property>
+
+        <!-- 自动把实体类与属性映射成数据库中的表与列 -->
+        <!-- 执行DDL的类别：
+            create:
+                每次都删除新建
+            update:
+                存在就修改，不存在就新建  -->
+        <property name="hbm2ddl.auto">update</property>
+
+        <!-- 启用getCurrentSession，默认未启用 -->
+        <property name="current_session_context_class">thread</property>
+
+        <!-- 连接池配置 -->
+        <property name="connection.provider_class">org.hibernate.c3p0.internal.C3P0ConnectionProvider</property>
+        <property name="hibernate.c3p0.max_size">20</property>
+        <property name="hibernate.c3p0.min_size">1</property>
+        <property name="hibernate.c3p0.timeout">5000</property>
+        <property name="hibernate.c3p0.max_statements">100</property>
+        <property name="hibernate.c3p0.idle_test_period">3000</property>
+        <property name="hibernate.c3p0.acquire_increment">2</property>
+        <property name="hibernate.c3p0.validate">true</property>
+    </session-factory>
+</hibernate-configuration>
