@@ -27,3 +27,9 @@ WEB-INF/lib/
 .idea
 .DS_Store
 *.iml
+
+.classpath
+.project
+org.eclipse.*
+top.jpg
+

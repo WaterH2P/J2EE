@@ -1,1 +1,0 @@
-INSERT INTO J2EE.goodInfo (goodID, goodName, goodPrice, storeNum) VALUES (560, 'brash', 5, 20);
