@@ -22,7 +22,17 @@
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"></bean>
 
     <!-- 上面两个可以使用 直接配置注解驱动 代替 -->
-    <!--<mvc:annotation-driven />-->
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
     <mvc:resources location="WEB-INF/stylesheet/" mapping="/stylesheet/**" />
     <mvc:resources location="WEB-INF/javascript/" mapping="/javascript/**" />

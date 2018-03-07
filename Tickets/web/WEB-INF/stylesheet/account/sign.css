@@ -135,16 +135,6 @@ input{
     margin-bottom: 30px;
 }
 
-.sign form .input_up_prepend i,
-.sign form .input_middle_prepend i,
-.sign form .input_down_prepend i {
-    position: absolute;
-    top: 14px;
-    left: 10px;
-    font-size: 18px;
-    color: #969696;
-}
-
 .sign_button {
     font-family: Georgia,Times New Roman,Times,Songti SC,serif;
     width: 100%;

@@ -6,26 +6,27 @@
     <meta charset="utf-8">
     <title>Login</title>
 
-    <link rel="stylesheet" type="text/css" href="../stylesheet/sign.css">
+    <link rel="stylesheet" type="text/css" href="../../../stylesheet/account/sign.css">
 </head>
 
 <body>
     <div class="sign">
-
         <div class="main">
             <h4 class="title">
                 <div id="aSign">
                     <a class="active" href="/Login">登录</a>
                     <b>·</b>
-                    <a href="/Register">注册</a>
+                    <a href="/UserRegister">注册</a>
+                    <b>·</b>
+                    <a href="/VenueRegister">场馆注册</a>
                 </div>
             </h4>
 
             <div>
                 <form role="form" id="signInForm" accept-charset="utf-8" method="post" action="/Login">
                     <!-- 登录名输入框 -->
-                    <input class="input_prepend input_up_prepend" placeholder="邮箱"
-                           type="email" name="userEmail" id="userEmail" required/>
+                    <input class="input_prepend input_up_prepend" placeholder="邮箱 或 场馆ID"
+                           type="email" name="EmailORVenueID" id="EmailORVenueID" required/>
 
                     <!-- 登录密码输入框 -->
                     <input class="input_prepend input_down_prepend" placeholder="密码"

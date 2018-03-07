@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import tickets.dao.ParaName;
 import tickets.model.UserInfo;
 import tickets.service.UserService;
 
@@ -20,18 +22,28 @@ public class UserInfoController {
 	@Autowired
 	private HttpServletRequest request;
 	
-	@RequestMapping(value = "/UserInfo")
+	@RequestMapping(value = "/UserInfo", method = RequestMethod.GET)
 	public String userInfo(ModelMap model){
 		HttpSession session = request.getSession(false);
 		if( Common.hasLogin(session) ){
-			String email = (String) session.getAttribute("email");
+			String email = (String) session.getAttribute(ParaName.VerificationCode);
 			UserInfo userInfo = userService.getUserInfo(email);
 			model.addAttribute("userInfo", userInfo);
-			return "UserInfo";
+			return "user/UserInfo";
 		}
 		else {
 			return "redirect:/Login";
 		}
 	}
 	
+	@RequestMapping(value = "/UserInfo", method = RequestMethod.POST)
+	public void changeUserName(String userEmail, String userName){
+		HttpSession session = request.getSession(false);
+		if( Common.hasLogin(session) ){
+			String email = (String) session.getAttribute(ParaName.VerificationCode);
+			if( email.equals(userEmail) ){
+				userService.changeUserName(email, userName);
+			}
+		}
+	}
 }

@@ -8,4 +8,6 @@ public interface UserDao {
 	
 	UserInfo selectUserInfo(String email);
 	
+	void updateUserName(String email, String name);
+	
 }

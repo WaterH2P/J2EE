@@ -19,6 +19,6 @@ public class UserOrderController {
 	
 	@RequestMapping(value = "/OrderMain")
 	public String OrderMainPage(){
-		return "Order";
+		return "user/Order";
 	}
 }

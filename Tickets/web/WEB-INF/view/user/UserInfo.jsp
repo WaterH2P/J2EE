@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <title>Info</title>
-    <link rel="stylesheet" type="text/css" href="../stylesheet/sign.css">
+    <link rel="stylesheet" type="text/css" href="../../stylesheet/account/sign.css">
 </head>
 
 <body>
@@ -21,27 +21,26 @@
             </div>
 
             <div>
-                <div>
+                <p>
                     <label>邮箱 : </label>
-                    <input type="email" value="${userInfo.email}" readonly />
-                    <button style="display: none"/>
-                </div>
-                <div>
+                    <input type="email" id="userEmail" value="${userInfo.email}" readonly />
+                </p>
+                <p>
                     <label>昵称 : </label>
-                    <input id="nameInput" type="text" value="${userInfo.name}" readonly />
+                    <input type="text" id="userName" value="${userInfo.name}" readonly />
                     <button id="changeName" style="display: inline-block" onclick="changeName()">修改昵称</button>
                     <button id="submitName" style="display: none" onclick="submitName()">提交修改</button>
-                </div>
-                <div>
+                </p>
+                <p>
                     <label>VIP : </label>
                     <input type="text" value="${userInfo.vipLevel}" readonly />
                     <button style="display: none"/>
-                </div>
-                <div>
+                </p>
+                <p>
                     <label>余额 : </label>
                     <input type="text" value="${userInfo.balance}" readonly />
                     <button style="display: none"/>
-                </div>
+                </p>
             </div>
 
             <div>
@@ -52,29 +51,25 @@
         </div>
     </div>
 
-    <script src="../javascript/jquery-3.2.1.min.js" ></script>
+    <script src="../../javascript/jquery-3.2.1.min.js" ></script>
     <script>
         $("#changeName").click(function () {
-            $("#nameInput").removeAttr("readonly");
+            $("#userName").removeAttr("readonly");
+            $("#userName").css("border", "1px solid blue");
             $("#changeName").hide();
             $("#submitName").show();
         });
-        // function changeName() {
-        //     document.getElementById("nameInput").readOnly = false;
-        //     document.getElementById("changeName").style.display = "none";
-        //     document.getElementById("submitName").style.display = "inline-block";
-        // }
 
         $("#submitName").click(function () {
-            $("#nameInput").attr("readonly", "readonly");
+            $("#userName").attr("readonly", "readonly");
+            $("#userName").css("border", "1px solid gray");
             $("#changeName").show();
             $("#submitName").hide();
+            var userEmail = $("#userEmail").val().toString();
+            var userName = $("#userName").val().toString();
+            var data = {"userEmail":userEmail, "userName":userName};
+            $.post("/UserInfo", data);
         });
-        // function submitName() {
-        //     document.getElementById("nameInput").readOnly = true;
-        //     document.getElementById("changeName").style.display = "inline-block";
-        //     document.getElementById("submitName").style.display = "none";
-        // }
     </script>
 </body>
 </html>

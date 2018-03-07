@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <title>Order</title>
-    <link rel="stylesheet" type="text/css" href="../stylesheet/sign.css">
-    <link rel="stylesheet" type="text/css" href="../stylesheet/title.css">
+    <link rel="stylesheet" type="text/css" href="../../stylesheet/account/sign.css">
+    <link rel="stylesheet" type="text/css" href="../../stylesheet/title.css">
 </head>
 <body>
     <div class="sign">

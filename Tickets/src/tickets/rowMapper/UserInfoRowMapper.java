@@ -15,8 +15,6 @@ public class UserInfoRowMapper implements RowMapper {
 		userInfo.setName( rs.getString("name") );
 		userInfo.setVipLevel( rs.getString("vipLevel") );
 		userInfo.setBalance( rs.getInt("balance") );
-		userInfo.setConfirmed( rs.getBoolean("isConfirmed") );
-		userInfo.setDeleted( rs.getBoolean("isDeleted") );
 		return userInfo;
 	}
 	

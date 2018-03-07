@@ -1,34 +1,27 @@
 package tickets.service;
 
 import org.springframework.stereotype.Service;
-import tickets.dao.AccountDao;
-import tickets.dao.UserDao;
+import tickets.controller.Common;
+import tickets.dao.ParaName;
+import tickets.dao.UserAccountDao;
 
 import javax.annotation.Resource;
 
 @Service("accountService")
 public class AccountServiceImpl implements AccountService {
 	
-	@Resource(name = "accountDao")
-	private AccountDao accountDao;
-	
-	@Resource(name = "mailService")
-	private MailService mailService;
+	@Resource(name = "userAccountDao" )
+	private UserAccountDao userAccountDao;
 	
 	@Override
-	public boolean login(String email, String password){
-		return accountDao.loginCheck(email, password);
-	}
-	
-	@Override
-	public boolean register(String email, String password, String name){
-		if( !accountDao.accountExist(email) ){
-			String subject = "test";
-			String content = "Hello " + email;
-			return mailService.sendMail(email, subject, content);
-		}
-		else{
+	public boolean login(String EmailORVenueID, String password){
+		if( EmailORVenueID.length()==7 && Common.regCheck(ParaName.venueIDRegex, EmailORVenueID) ){
+			System.out.println("场馆登录");
 			return false;
+		}
+		else {
+			System.out.println("邮箱登录");
+			return userAccountDao.loginCheck(EmailORVenueID, password);
 		}
 	}
 	

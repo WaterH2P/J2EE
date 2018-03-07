@@ -1,6 +1,0 @@
-DROP TABLE IF EXISTS userInfo;
-CREATE TABLE userInfo(
-  userID VARCHAR(10) ,
-  password VARCHAR(30) NOT NULL ,
-  PRIMARY KEY( userID )
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
