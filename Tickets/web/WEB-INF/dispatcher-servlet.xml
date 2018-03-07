@@ -15,8 +15,6 @@
     <!-- 自动扫描 tickets 下或子包下的 Java 文件，如果扫描到有 @Component @Controller @Service 等注解的类，则把这些类注册为 Bean -->
     <context:component-scan base-package="tickets"/>
 
-
-
     <!-- 配置注解式处理器映射器 -->
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"></bean>
 
@@ -26,16 +24,39 @@
     <!-- 上面两个可以使用 直接配置注解驱动 代替 -->
     <!--<mvc:annotation-driven />-->
 
+    <mvc:resources location="WEB-INF/stylesheet/" mapping="/stylesheet/**" />
+    <mvc:resources location="WEB-INF/javascript/" mapping="/javascript/**" />
+
     <!-- 配置视图解析器(对jsp默认解析的视图解析器) -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <!-- prefix：前缀 -->
         <property name="prefix" >
-            <value>/WEB-INF/views/</value>
+            <value>/WEB-INF/view/</value>
         </property>
         <!-- suffix：后缀 -->
         <property name="suffix" >
             <value>.jsp</value>
         </property>
+    </bean>
+
+    <!-- 发送邮件 -->
+    <bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <!--<property name="host" value="smtp.126.com" />-->
+        <property name="host" value="smtp.exmail.qq.com" />
+        <!--<property name="username" value="z110a110@126.com" />-->
+        <property name="username" value="151250066@smail.nju.edu.cn" />
+        <property name="password" value="" />
+        <property name="defaultEncoding" value="UTF-8" />
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.timeout">25000</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="simpleMailMessage" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="151250066@smail.nju.edu.cn" />
     </bean>
 
 </beans>

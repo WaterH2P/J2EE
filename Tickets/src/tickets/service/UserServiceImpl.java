@@ -1,25 +1,20 @@
 package tickets.service;
 
-import tickets.factory.DaoFactory;
 import org.springframework.stereotype.Service;
 import tickets.dao.UserDao;
+import tickets.model.UserInfo;
 
-@Service
+import javax.annotation.Resource;
+
+@Service("userService")
 public class UserServiceImpl implements UserService {
 	
-	private static UserServiceImpl userService = new UserServiceImpl();
-	
-	private UserServiceImpl(){};
-	
-	public static UserServiceImpl getInstance(){
-		return userService;
-	}
-	
-	private static UserDao userDao = DaoFactory.getUserDaoImpl();
+	@Resource(name = "userDao")
+	private UserDao userDao;
 	
 	@Override
-	public boolean login(String userID, String password){
-		return userDao.loginCheck(userID, password);
+	public UserInfo getUserInfo(String email){
+		return userDao.selectUserInfo(email);
 	}
 	
 }

@@ -1,39 +1,51 @@
 package tickets.dao;
 
-import java.sql.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+import java.sql.*;
+import java.util.Properties;
+
+@Repository("daoHelper")
 public class DaoHelperImpl implements DaoHelper {
 	
-	private DaoHelperImpl(){};
-	
-	private static DaoHelperImpl daoHelper = new DaoHelperImpl();
-	
-	public static DaoHelperImpl getInstance(){
-		return daoHelper;
-	}
-	
-	private static final String URL = "jdbc:mysql://localhost:3306/Tickets?useSSL=true&characterEncoding=utf8";
-	private static final String UNAME = "root";
-	private static final String PWD = "hzp";
-	private static Connection connect = null;
-	
-	static{
-		try{
-			Class.forName("com.mysql.jdbc.Driver");
-			//加载MySQL JDBC驱动程序
-			connect = DriverManager.getConnection(URL,UNAME,PWD);
-		}catch (ClassNotFoundException e){
-			e.printStackTrace();
-		}catch (SQLException e){
-			e.printStackTrace();
-		}catch (Exception e){
+	private static DataSource datasource;
+	private static ApplicationContext ctx;
+	private static JdbcTemplate jdbcTemplate;
+	static {
+		InitialContext jndiContext = null;
+
+		Properties properties = new Properties();
+		properties.put(javax.naming.Context.PROVIDER_URL, "jnp:///");
+		properties.put(javax.naming.Context.INITIAL_CONTEXT_FACTORY, "org.apache.naming.java.javaURLContextFactory");
+		try {
+			jndiContext = new InitialContext(properties);
+			datasource = (DataSource) jndiContext.lookup("java:comp/env/jdbc/Tickets");
+			jdbcTemplate = new JdbcTemplate(datasource);
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
+	public static JdbcTemplate getJdbcTemplate(){
+		return jdbcTemplate;
+	}
+	
 	@Override
 	public Connection getConnection(){
-		return connect;
+		Connection connection = null;
+		try {
+			connection = datasource.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return connection;
 	}
 	
 	@Override

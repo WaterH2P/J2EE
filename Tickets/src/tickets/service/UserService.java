@@ -1,7 +1,8 @@
 package tickets.service;
 
+import tickets.model.UserInfo;
+
 public interface UserService {
 	
-	boolean login(String userID, String password);
-	
+	UserInfo getUserInfo(String email);
 }

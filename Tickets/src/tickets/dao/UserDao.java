@@ -1,6 +1,11 @@
 package tickets.dao;
 
+import tickets.model.UserInfo;
+
+import java.util.List;
+
 public interface UserDao {
 	
-	boolean loginCheck(String userID, String password);
+	UserInfo selectUserInfo(String email);
+	
 }

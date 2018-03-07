@@ -1,0 +1,19 @@
+.main .title_2 {
+    font-family: Georgia,Times New Roman,Times,Songti SC,serif;
+
+    margin: 0 auto 30px;
+    padding: 0px;
+    font-weight: 400;
+    color: #969696;
+}
+
+.title_2 a{
+    padding: 5px;
+    color: #969696;
+}
+
+.title_2 .active{
+    font-weight: 700;
+    color: #5da8ea;
+    border-bottom: 2px solid #5da8ea;
+}
