@@ -1,7 +1,7 @@
 package tickets.test;
 
 import tickets.controller.Common;
-import tickets.dao.ParaName;
+import tickets.daoImpl.ParaName;
 
 public class CommonControllerTest {
 	
