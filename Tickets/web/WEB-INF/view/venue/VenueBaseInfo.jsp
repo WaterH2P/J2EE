@@ -1,6 +1,6 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="tickets.model.VenueInfo" %>
+<%@ page import="tickets.model.VenueBaseInfo" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -12,8 +12,11 @@
 <div class="sign">
     <div class="main">
         <div id="aSign" class="title">
-            <a class="active" href="">个人信息</a>
+            <a href="/VenueHallPage">场厅管理</a>
             <b>·</b>
+            <a href="/VenuePlanManage">计划管理</a>
+            <b>·</b>
+            <a class="active">个人信息</a>
         </div>
 
         <div>
@@ -53,13 +56,13 @@
     </div>
 </div>
 
-<script src="../../javascript/jquery-3.2.1.min.js" ></script>
+<script src="../../javascript/jquery/jquery-3.2.1.min.js" ></script>
 <script>
     var venueAddress = "";
     var venueTel = "";
     var isChanging = false;
     $(function () {
-        $.post("GetVenueInfo", function (rs) {
+        $.post("GetVenueBaseInfo", function (rs) {
             var res = $.parseJSON(rs);
             $("#venueID").val(res.venueID);
             $("#venueProvince").val(res.province);
@@ -71,7 +74,8 @@
             isChanging = res.isChanging;
         });
     });
-
+</script>
+<script>
     $("#venueAddress").blur(function(){
         var venuseAddress = $("#venueAddress").val().toString();
         venuseAddress = deleteSpace(venuseAddress);
@@ -119,7 +123,7 @@
 
             var data = {"venueID":venueID, "province":province, "city":city,
                 "address":address, "telephone":telephone};
-            $.post("ChangeVenueInfo", data, function (rs) {
+            $.post("ChangeVenueBaseInfo", data, function (rs) {
                 var res = $.parseJSON(rs);
                 if( res.result ){
                     isChanging = true;

@@ -16,4 +16,6 @@ public interface UserAccountDao {
 	
 	void updateRegisterAccount(String email, String password);
 	
+	void deleteAccountVIP(String email);
+	
 }

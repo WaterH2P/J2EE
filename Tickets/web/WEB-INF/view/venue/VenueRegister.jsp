@@ -6,6 +6,7 @@
     <title>Login</title>
 
     <link rel="stylesheet" type="text/css" href="../../stylesheet/account/sign.css">
+    <link rel="stylesheet" type="text/css" href="../../stylesheet/venue/venueRegister.css">
 </head>
 <body>
 <div class="sign">
@@ -22,10 +23,8 @@
         <div id="div_info">
             <form role="form" id="signUpForm" accept-charset="utf-8" method="post" onsubmit="return false">
                 <p>
-                    <select style=" width:95px;" runat="server" onchange="selectprovince(this);"
-                            id="province" ></select>
-                    <select runat="server" style=" width:95px;"
-                            id="city"></select>
+                    <select class="selectPC" id="province" onchange="selectProvince(this)"></select>
+                    <select class="selectPC" id="city"></select>
                 </p>
 
                 <p>
@@ -60,7 +59,7 @@
     </div>
 </div>
 
-<script src="../../javascript/jquery-3.2.1.min.js"></script>
+<script src="../../javascript/jquery/jquery-3.2.1.min.js"></script>
 <script src="../../javascript/venue/venueRegister.js"></script>
 <script src="../../javascript/password.js"></script>
 <script>

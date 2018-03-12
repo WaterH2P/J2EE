@@ -5,8 +5,8 @@ public class ParaName {
 	public final static String Table_userInfo = "userInfo";
 	public final static String Table_userAccount = "userAccount";
 	
-	public final static String Table_venueInfo = "venueInfo";
-	public final static String Table_venueInfoChange = "venueInfoChange";
+	public final static String Table_venueBaseInfo = "venueBaseInfo";
+	public final static String Table_venueBaseInfoChange = "venueBaseInfoChange";
 	public final static String Table_venueAccount = "venueAccount";
 	
 	public final static String Table_mgrAccount = "mgrAccount";

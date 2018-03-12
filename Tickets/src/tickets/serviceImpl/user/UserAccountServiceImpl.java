@@ -95,4 +95,9 @@ public class UserAccountServiceImpl implements CommonAccountService, UserAccount
 		}
 	}
 	
+	@Override
+	public void cancelAccountVIP(String email){
+		userAccountDao.deleteAccountVIP(email);
+	}
+	
 }

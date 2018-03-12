@@ -1,8 +1,8 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="tickets.model.VenueInfo" %>
-<%@ page import="tickets.model.VenueInfoChange" %>
-<%@ page import="tickets.model.VenueInfoRedundancy" %>
+<%@ page import="tickets.model.VenueBaseInfo" %>
+<%@ page import="tickets.model.VenueBaseInfoChange" %>
+<%@ page import="tickets.model.VenueBaseInfoRedundancy" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -25,26 +25,26 @@
         </div>
     </div>
 </div>
-<script src="../../javascript/jquery-3.2.1.min.js"></script>
+<script src="../../javascript/jquery/jquery-3.2.1.min.js"></script>
 <script>
     $(function () {
         $.post("GetAllVenueInfoRedundancies", function (rs) {
             var res = $.parseJSON(rs);
             for( var i=0; i<res.length; i++ ){
-                var venueInfoRedundancy = res[i];
-                var venueInfo = venueInfoRedundancy.venueInfo;
-                var venueInfoChange = venueInfoRedundancy.venueInfoChange;
-                var infoDiv = "<div id='" + venueInfo.venueID + "_info_div'>" +
-                    "<p><label>帐号 : </label><input type='text' value='" + venueInfo.venueID + "' readonly /></p>" +
-                    "<p><label>省市 : </label><input type='text' value='" + venueInfo.province + venueInfo.city + "' readonly /></p>" +
-                    "<p><label>地址 : </label><input type='text' value='" + venueInfo.address + "' readonly /></p>" +
-                    "<p><label>电话 : </label><input type='tel' value='" + venueInfo.telephone + "' readonly /></p>" +
+                var venueBaseInfoRedundancy = res[i];
+                var venueBaseInfo = venueBaseInfoRedundancy.venueBaseInfo;
+                var venueBaseInfoChange = venueBaseInfoRedundancy.venueBaseInfoChange;
+                var infoDiv = "<div id='" + venueBaseInfo.venueID + "_info_div'>" +
+                    "<p><label>帐号 : </label><input type='text' value='" + venueBaseInfo.venueID + "' readonly /></p>" +
+                    "<p><label>省市 : </label><input type='text' value='" + venueBaseInfo.province + venueBaseInfo.city + "' readonly /></p>" +
+                    "<p><label>地址 : </label><input type='text' value='" + venueBaseInfo.address + "' readonly /></p>" +
+                    "<p><label>电话 : </label><input type='tel' value='" + venueBaseInfo.telephone + "' readonly /></p>" +
                     "<p><label>  ->  </label></p>" +
-                    "<p><label>省市 : </label><input type='text' value='" + venueInfoChange.province + venueInfoChange.city + "' readonly /></p>" +
-                    "<p><label>地址 : </label><input type='text' value='" + venueInfoChange.address + "' readonly /></p>" +
-                    "<p><label>电话 : </label><input type='tel' value='" + venueInfoChange.telephone + "' readonly /></p>" +
-                    "<p><button id='btn_" + venueInfo.venueID + "_agree' onclick='agreeVenueInfoChange(this)'>同意</button>" +
-                    "<button id='btn_" + venueInfo.venueID + "_disagree' onclick='disagreeVenueInfoChange()'>不同意</button></p>" +
+                    "<p><label>省市 : </label><input type='text' value='" + venueBaseInfoChange.province + venueBaseInfoChange.city + "' readonly /></p>" +
+                    "<p><label>地址 : </label><input type='text' value='" + venueBaseInfoChange.address + "' readonly /></p>" +
+                    "<p><label>电话 : </label><input type='tel' value='" + venueBaseInfoChange.telephone + "' readonly /></p>" +
+                    "<p><button id='btn_" + venueBaseInfo.venueID + "_agree' onclick='agreeVenueInfoChange(this)'>同意</button>" +
+                    "<button id='btn_" + venueBaseInfo.venueID + "_disagree' onclick='disagreeVenueInfoChange()'>不同意</button></p>" +
                     "</div>" +
                     "<br/>";
                 $("#div_VenueChangeInfo").append(infoDiv);

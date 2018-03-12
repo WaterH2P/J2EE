@@ -21,23 +21,31 @@
         <div>
             <p>
                 <label>邮箱 : </label>
-                <input type="email" id="userEmail" value="${userInfo.email}" readonly />
+                <input type="email" id="userEmail" readonly />
             </p>
             <p>
                 <label>昵称 : </label>
-                <input type="text" id="userName" value="${userInfo.name}" readonly />
+                <input type="text" id="userName" readonly />
             </p>
             <p>
                 <label>VIP : </label>
-                <input type="text" value="${userInfo.vipLevel}" readonly />
+                <input type="text" id="userVIP" readonly />
             </p>
             <p>
                 <label>余额 : </label>
-                <input type="text" value="${userInfo.balance}" readonly />
+                <input type="text" id="userBalance" readonly />
+            </p>
+            <p>
+                <label>积分 : </label>
+                <input type="text" id="userPoint" readonly />
             </p>
             <p>
                 <button id="changeInfo">修改信息</button>
                 <button id="submitInfo" style="display: none">提交修改</button>
+            </p>
+            <p>
+                <button id="deleteVIP_1">注销会员</button>
+                <%--<button id="deleteVIP_2" style="display:none;">注销会员</button>--%>
             </p>
         </div>
 
@@ -51,7 +59,19 @@
     </div>
 </div>
 
-<script src="../../javascript/jquery-3.2.1.min.js" ></script>
+<script src="../../javascript/jquery/jquery-3.2.1.min.js" ></script>
+<script>
+    $(function () {
+        $.post("GetUserInfo", function (rs) {
+            var res = $.parseJSON(rs);
+            $("#userEmail").val(res.email);
+            $("#userName").val(res.name);
+            $("#userVIP").val(res.vipLevel);
+            $("#userBalance").val(res.balance);
+            $("#userPoint").val(res.point);
+        });
+    });
+</script>
 <script>
     $("#userName").blur(function(){
         var name = $("#userName").val().toString();
@@ -89,6 +109,27 @@
     function deleteSpace(str) {
         return str.replace(/\s/g, "");
     }
+
+    $("#deleteVIP_1").click(function () {
+        var cancel = confirm("注销会员将导致该账户 下线！并且以后 无法登陆 ！无法享受VIP优惠！确认注销请点击确定。");
+        if( cancel ){
+            var userEmail = $("#userEmail").val().toString();
+            var data = {"userEmail":userEmail};
+            $.post("CancelAccountVIP", data);
+        }
+        // $("#deleteVIP_1").hide();
+        // $("#deleteVIP_2").show();
+        // setTimeout(function () {
+        //     $("#deleteVIP_1").show();
+        //     $("#deleteVIP_2").hide();
+        // }, 4000);
+    });
+
+    // $("#deleteVIP_2").click(function () {
+    //     var userEmail = $("#userEmail").val().toString();
+    //     var data = {"userEmail":userEmail};
+    //     $.post("CancelAccountVIP", data);
+    // });
 </script>
 </body>
 </html>

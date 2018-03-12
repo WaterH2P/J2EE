@@ -9,6 +9,7 @@ import tickets.daoImpl.Common;
 import tickets.daoImpl.DaoHelperImpl;
 import tickets.daoImpl.ParaName;
 import tickets.rowMapper.EmailRowMapper;
+import tickets.rowMapper.IsDeletedRowMapper;
 
 import java.util.List;
 
@@ -21,7 +22,8 @@ public class UserAccountDaoImpl implements CommonAccountDao, CommonUVAccountDao,
 	public boolean loginCheck(String email, String password){
 		boolean loginResult = false;
 		boolean isConfirmed = accountIsConfirmed(email);
-		if( isConfirmed ){
+		boolean isDeleted = accountIsDeleted(email);
+		if( isConfirmed && !isDeleted ){
 			System.out.println("用户登录 Dao");
 			String primaryKey = "email";
 			loginResult = Common.loginCheckPassword(
@@ -37,6 +39,13 @@ public class UserAccountDaoImpl implements CommonAccountDao, CommonUVAccountDao,
 		String primaryKey = "email";
 		boolean isConfirmed = Common.accountIsConfirmed(primaryKey, emailOrID, ParaName.Table_userAccount);
 		return isConfirmed;
+	}
+	
+	@Override
+	public boolean accountIsDeleted(String emailOrID){
+		String primaryKey = "email";
+		boolean isDeleted = Common.accountIsDeleted(primaryKey, emailOrID, ParaName.Table_userAccount);
+		return isDeleted;
 	}
 	
 	//	===================================================================================================  //
@@ -83,10 +92,11 @@ public class UserAccountDaoImpl implements CommonAccountDao, CommonUVAccountDao,
 			final boolean isConfirmed = false;
 			final boolean isDeleted = false;
 			jdbcTemplate.update(accountSql, email, verificationCode, isConfirmed, isDeleted);
-			String userInfoSql = "INSERT INTO " + ParaName.Table_userInfo + " VALUES (?,?,?,?)";
+			String userInfoSql = "INSERT INTO " + ParaName.Table_userInfo + " VALUES (?,?,?,?,?)";
 			final int vipLevel = 0;
 			final float balance = 0;
-			jdbcTemplate.update(userInfoSql, email, name, vipLevel, balance);
+			final int point = 0;
+			jdbcTemplate.update(userInfoSql, email, name, vipLevel, balance, point);
 			return true;
 		}
 	}
@@ -103,5 +113,11 @@ public class UserAccountDaoImpl implements CommonAccountDao, CommonUVAccountDao,
 		jdbcTemplate.update(accountSql, password, email);
 		String isConfirmedSql = "UPDATE  " + ParaName.Table_userAccount + " SET isConfirmed=true WHERE email=?";
 		jdbcTemplate.update(isConfirmedSql, email);
+	}
+	
+	@Override
+	public void deleteAccountVIP(String email){
+		String sql = "UPDATE " + ParaName.Table_userAccount + " SET isDeleted=true WHERE email=?";
+		jdbcTemplate.update(sql, email);
 	}
 }

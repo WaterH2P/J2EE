@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import tickets.controller.Common;
 import tickets.model.Result;
-import tickets.model.VenueInfo;
+import tickets.model.VenueBaseInfo;
 import tickets.service.venue.VenueAccountService;
 
 import javax.annotation.Resource;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
-public class VenueAccountController {
+public class VenueAccountCon {
 	
 	@Resource(name = "venueAccountService")
 	private VenueAccountService venueAccountService;
@@ -39,10 +39,10 @@ public class VenueAccountController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/VenueRegister", method = RequestMethod.POST)
-	public Result VenueRegister(@ModelAttribute("venueInfo") VenueInfo venueInfo, String password){
+	public Result VenueRegister(@ModelAttribute("venueInfo") VenueBaseInfo venueBaseInfo, String password){
 		System.out.println("VenueRegister Controller");
 		Result result = new Result();
-		String venueID = venueAccountService.preRegister(venueInfo, password);
+		String venueID = venueAccountService.preRegister(venueBaseInfo, password);
 		result.setResult(true);
 		result.setMessage(venueID);
 		return result;

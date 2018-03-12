@@ -61,7 +61,7 @@
     </div>
 </div>
 
-<script src="../../javascript/jquery-3.2.1.min.js"></script>
+<script src="../../javascript/jquery/jquery-3.2.1.min.js"></script>
 <script src="../../javascript/password.js"></script>
 <script>
     var emailReady = false;
@@ -118,15 +118,13 @@
             var userEmail = $("#userEmail").val().toString();
             var userName = $("#userName").val().toString();
             var data = { "userEmail":userEmail, "userName":userName };
-            $.post("getVerificationCode", data, function(rs){
+            $.post("GetVerificationCode", data, function(rs){
                 var res = $.parseJSON( rs );
                 if( res.result ){
-                    $("#messageShow").val(res.message);
-                    $("#messageShow").css("color", "black");
+                    alert(res.message);
                 }
                 else {
-                    $("#messageShow").val(res.message);
-                    $("#messageShow").css("color", "red");
+                    alert(res.message);
                 }
             });
         }

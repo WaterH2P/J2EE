@@ -2,6 +2,7 @@ package tickets.daoImpl;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import tickets.rowMapper.IsConfirmedRowMapper;
+import tickets.rowMapper.IsDeletedRowMapper;
 import tickets.rowMapper.PasswordRowMapper;
 
 public class Common {
@@ -23,6 +24,13 @@ public class Common {
 		boolean isConfirmed = false;
 		isConfirmed = jdbcTemplate.queryForObject(sql, new IsConfirmedRowMapper(), primaryKeyValue);
 		return isConfirmed;
+	}
+	
+	public static boolean accountIsDeleted(String primaryKey, String primaryKeyValue, String tableName){
+		String sql = "SELECT isDeleted FROM " + tableName + " WHERE " + primaryKey + "=?";
+		boolean isDeleted = false;
+		isDeleted = jdbcTemplate.queryForObject(sql, new IsDeletedRowMapper(), primaryKeyValue);
+		return isDeleted;
 	}
 	
 }

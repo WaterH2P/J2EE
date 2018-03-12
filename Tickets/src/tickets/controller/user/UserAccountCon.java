@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import tickets.controller.Common;
+import tickets.daoImpl.ParaName;
 import tickets.model.Result;
+import tickets.model.UserInfo;
 import tickets.service.user.UserAccountService;
 
 import javax.annotation.Resource;
@@ -15,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
-public class UserAccountController {
+public class UserAccountCon {
 	
 	@Resource(name = "userAccountService" )
 	private UserAccountService userAccountService;
@@ -36,7 +38,7 @@ public class UserAccountController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/getVerificationCode", method = RequestMethod.POST)
+	@RequestMapping(value = "/GetVerificationCode", method = RequestMethod.POST)
 	public Result createCode(String userEmail, String userName){
 		Result result = new Result();
 		String message = "";
@@ -66,5 +68,24 @@ public class UserAccountController {
 			result.setMessage(message);
 		}
 		return result;
+	}
+	
+	@RequestMapping(value = "/CancelAccountVIP", method = RequestMethod.POST)
+	public String cancelAccountVIP(String userEmail){
+		HttpSession session = request.getSession(false);
+		if( Common.hasLogin(session) ){
+			String email = (String)session.getAttribute(ParaName.VerificationCode);
+			if( Common.isUser(email) && email.equals(userEmail) ){
+				System.out.println(email + " cancel VIP Controller");
+				userAccountService.cancelAccountVIP(userEmail);
+				return Common.redirectToLoginPage();
+			}
+			else{
+				return Common.redirectToInfoPage();
+			}
+		}
+		else {
+			return Common.redirectToLoginPage();
+		}
 	}
 }

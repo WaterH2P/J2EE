@@ -15,6 +15,7 @@ public class UserInfoRowMapper implements RowMapper {
 		userInfo.setName( rs.getString("name") );
 		userInfo.setVipLevel( rs.getString("vipLevel") );
 		userInfo.setBalance( rs.getInt("balance") );
+		userInfo.setPoint( rs.getInt("point") );
 		return userInfo;
 	}
 	

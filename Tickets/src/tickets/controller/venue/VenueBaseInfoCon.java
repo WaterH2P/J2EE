@@ -10,30 +10,30 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import tickets.controller.Common;
 import tickets.daoImpl.ParaName;
 import tickets.model.Result;
-import tickets.model.VenueInfo;
-import tickets.model.VenueInfoChange;
-import tickets.service.venue.VenueInfoService;
+import tickets.model.VenueBaseInfo;
+import tickets.model.VenueBaseInfoChange;
+import tickets.service.venue.VenueBaseInfoService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
-public class VenueInfoController {
+public class VenueBaseInfoCon {
 	
-	@Resource(name = "venueInfoService" )
-	private VenueInfoService venueInfoService;
+	@Resource(name = "venueBaseInfoService" )
+	private VenueBaseInfoService venueBaseInfoService;
 	
 	@Autowired
 	private HttpServletRequest request;
 	
-	@RequestMapping(value = "/VenueInfo", method = RequestMethod.GET)
+	@RequestMapping(value = "/VenueBaseInfo", method = RequestMethod.GET)
 	public String venueInfoPage(ModelMap model){
 		HttpSession session = request.getSession(false);
 		if( Common.hasLogin(session) ){
 			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
 			if( Common.isVenue(venueID) ){
-				return CommonVenue.toVenueInfoPage();
+				return CommonVenue.toVenueBaseInfoPage();
 			}
 			else{
 				return Common.redirectToInfoPage();
@@ -45,20 +45,20 @@ public class VenueInfoController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/GetVenueInfo", method = RequestMethod.POST)
-	public VenueInfo getVenueInfo(){
-		VenueInfo venueInfo = new VenueInfo();
+	@RequestMapping(value = "/GetVenueBaseInfo", method = RequestMethod.POST)
+	public VenueBaseInfo getVenueInfo(){
+		VenueBaseInfo venueBaseInfo = new VenueBaseInfo();
 		HttpSession session = request.getSession(false);
 		if( Common.hasLogin(session) ){
 			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
 			if( Common.isVenue(venueID) ){
-				venueInfo = venueInfoService.getVenueInfo(venueID);
+				venueBaseInfo = venueBaseInfoService.getVenueInfo(venueID);
 			}
 		}
-		return venueInfo;
+		return venueBaseInfo;
 	}
 	
-	@RequestMapping(value = "/VenueInfoIsChanging", method = RequestMethod.POST)
+	@RequestMapping(value = "/VenueBaseInfoIsChanging", method = RequestMethod.POST)
 	public Result venueInfoIsChanging(){
 		HttpSession session = request.getSession(false);
 		Result result = new Result();
@@ -72,15 +72,15 @@ public class VenueInfoController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/ChangeVenueInfo", method = RequestMethod.POST)
-	public Result changeVenueInfo(@ModelAttribute("venueInfo") VenueInfoChange venueInfo){
+	@RequestMapping(value = "/ChangeVenueBaseInfo", method = RequestMethod.POST)
+	public Result changeVenueInfo(@ModelAttribute("venueInfo") VenueBaseInfoChange venueInfo){
 		Result result = new Result();
 		result.setResult(false);
 		String message = "";
 		HttpSession session = request.getSession(false);
 		String venueID = (String)session.getAttribute(ParaName.VerificationCode);
 		if( Common.hasLogin(session) && Common.isVenue(venueID) ){
-			if( venueInfoService.preChangeVenueInfo(venueInfo) ){
+			if( venueBaseInfoService.preChangeVenueInfo(venueInfo) ){
 				message = "修改信息需要审核，请耐心等待！";
 				result.setResult(true);
 				result.setMessage(message);

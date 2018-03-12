@@ -1,9 +1,9 @@
 package tickets.service.venue;
 
-import tickets.model.VenueInfo;
+import tickets.model.VenueBaseInfo;
 
 public interface VenueAccountService {
 
-	String preRegister(VenueInfo venueInfo, String password);
+	String preRegister(VenueBaseInfo venueBaseInfo, String password);
 	
 }

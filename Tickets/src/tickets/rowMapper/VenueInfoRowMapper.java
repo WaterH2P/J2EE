@@ -1,23 +1,23 @@
 package tickets.rowMapper;
 
 import org.springframework.jdbc.core.RowMapper;
-import tickets.model.VenueInfo;
+import tickets.model.VenueBaseInfo;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class VenueInfoRowMapper implements RowMapper<VenueInfo>{
+public class VenueInfoRowMapper implements RowMapper<VenueBaseInfo>{
 	
 	@Override
-	public VenueInfo mapRow(ResultSet rs, int i) throws SQLException{
-		VenueInfo venueInfo = new VenueInfo();
-		venueInfo.setVenueID( rs.getString("venueID") );
-		venueInfo.setProvince( rs.getString("province") );
-		venueInfo.setCity( rs.getString("city") );
-		venueInfo.setAddress( rs.getString("address") );
-		venueInfo.setTelephone( rs.getString("telephone") );
-		venueInfo.setIsChanging(rs.getBoolean("isChanging"));
-		return venueInfo;
+	public VenueBaseInfo mapRow(ResultSet rs, int i) throws SQLException{
+		VenueBaseInfo venueBaseInfo = new VenueBaseInfo();
+		venueBaseInfo.setVenueID( rs.getString("venueID") );
+		venueBaseInfo.setProvince( rs.getString("province") );
+		venueBaseInfo.setCity( rs.getString("city") );
+		venueBaseInfo.setAddress( rs.getString("address") );
+		venueBaseInfo.setTelephone( rs.getString("telephone") );
+		venueBaseInfo.setIsChanging(rs.getBoolean("isChanging"));
+		return venueBaseInfo;
 	}
 	
 }

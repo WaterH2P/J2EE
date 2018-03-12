@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class UserOrderController {
+public class UserOrderCon {
 	
 	@Resource(name = "userInfoService" )
 	private UserInfoService userInfoService;

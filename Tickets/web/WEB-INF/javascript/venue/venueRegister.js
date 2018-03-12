@@ -120,7 +120,7 @@ for(var i =0;i<list1.length; i++)
         ddlCity.appendChild(optioncity);
     }
 }
-function indexof(obj,value)
+function indexOf(obj, value)
 {
     var k=0;
     for(;k<obj.length;k++)
@@ -130,9 +130,9 @@ function indexof(obj,value)
     }
     return k;
 }
-function selectprovince(obj) {
+function selectProvince(obj) {
     ddlCity.options.length = 0;//clear
-    var index = indexof(list1,obj.value);
+    var index = indexOf(list1,obj.value);
     var list2element = list2[index];
     for(var i =0;i<list2element.length; i++)
     {

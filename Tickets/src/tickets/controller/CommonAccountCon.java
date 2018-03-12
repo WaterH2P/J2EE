@@ -5,14 +5,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import tickets.controller.mgr.CommonMgr;
 import tickets.controller.user.CommonUser;
 import tickets.controller.venue.CommonVenue;
 import tickets.daoImpl.ParaName;
+import tickets.model.Result;
 import tickets.model.UserInfo;
-import tickets.model.VenueInfo;
+import tickets.model.VenueBaseInfo;
 import tickets.service.user.UserInfoService;
-import tickets.service.venue.VenueInfoService;
+import tickets.service.venue.VenueBaseInfoService;
 import tickets.serviceImpl.mgr.MgrAccountServiceImpl;
 import tickets.serviceImpl.user.UserAccountServiceImpl;
 import tickets.serviceImpl.venue.VenueAccountServiceImpl;
@@ -22,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
-public class CommonAccountController {
+public class CommonAccountCon {
 	
 	@Resource(name = "userAccountService" )
 	private UserAccountServiceImpl userAccountService;
@@ -33,8 +35,8 @@ public class CommonAccountController {
 	@Resource(name = "venueAccountService" )
 	private VenueAccountServiceImpl venueAccountService;
 	
-	@Resource(name = "venueInfoService")
-	private VenueInfoService venueInfoService;
+	@Resource(name = "venueBaseInfoService" )
+	private VenueBaseInfoService venueBaseInfoService;
 	
 	@Resource(name = "mgrAccountService" )
 	private MgrAccountServiceImpl mgrAccountService;
@@ -65,37 +67,44 @@ public class CommonAccountController {
 		}
 	}
 	
+	@ResponseBody
 	@RequestMapping(value = "/Login", method = RequestMethod.POST)
-	public String login(String EmailORID, String password, ModelMap model){
-		String result = "";
+	public Result login(String EmailORID, String password, ModelMap model){
+		Result result = new Result();
+		result.setResult(false);
+		String message = "";
 		if( EmailORID.length()==7 && Common.regCheck(ParaName.venueIDRegex, EmailORID) ){
 			System.out.println("场馆登录");
 			if( venueAccountService.login(EmailORID, password) ){
 				Common.createSession(request, EmailORID);
-				VenueInfo venueInfo = venueInfoService.getVenueInfo(EmailORID);
-				model.addAttribute("venueInfo", venueInfo);
-				result = CommonVenue.redirectToVenueInfoPage();
+				result.setResult(true);
+			}
+			else {
+				message = "帐号或密码错误，请重新登录！或者账号还未审核通过！";
 			}
 		}
 		else if( Common.regCheck(ParaName.emailRegex, EmailORID)){
 			System.out.println("邮箱登录");
 			if( userAccountService.login(EmailORID, password) ){
 				Common.createSession(request, EmailORID);
-				UserInfo userInfo = userInfoService.getUserInfo(EmailORID);
-				model.addAttribute("userInfo", userInfo);
-				result = CommonUser.redirectToUserInfoPage();
+				result.setResult(true);
+			}
+			else {
+				message = "帐号或密码错误，请重新登录！或者账号已注销！";
 			}
 		}
 		else {
 			System.out.println("管理员登录");
 			if( mgrAccountService.login(EmailORID, password) ){
 				Common.createSession(request, EmailORID);
-				result = CommonMgr.redirectToMgrInfoPage();
+				result.setResult(true);
+			}
+			else {
+				message = "帐号或密码错误，请重新登录!";
 			}
 		}
-		if( result.length()==0 ){
-			model.addAttribute("message", "帐号或密码失败，请重新登录!");
-			result = Common.toLoginPage();
+		if( !result.getResult() ){
+			result.setMessage(message);
 		}
 		return result;
 	}
@@ -103,8 +112,10 @@ public class CommonAccountController {
 	@RequestMapping(value = "/Logout", method = RequestMethod.POST)
 	public String logout(){
 		HttpSession session = request.getSession(false);
-		session.removeAttribute(ParaName.VerificationCode);
-		session.invalidate();
+		if( Common.hasLogin(session) ){
+			session.removeAttribute(ParaName.VerificationCode);
+			session.invalidate();
+		}
 		return Common.redirectToLoginPage();
 	}
 	
@@ -115,7 +126,7 @@ public class CommonAccountController {
 		String result = "";
 		if( EmailORID.length()==7 && Common.regCheck(ParaName.venueIDRegex, EmailORID) ){
 			System.out.println("场馆登录");
-			result = CommonVenue.redirectToVenueInfoPage();
+			result = CommonVenue.redirectToVenueBaseInfoPage();
 		}
 		else if( Common.regCheck(ParaName.emailRegex, EmailORID)){
 			System.out.println("邮箱登录");

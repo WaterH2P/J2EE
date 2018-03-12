@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import tickets.controller.Common;
 import tickets.daoImpl.ParaName;
 import tickets.model.UserInfo;
@@ -15,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
-public class UserInfoController {
+public class UserInfoCon {
 	
 	@Resource(name = "userInfoService" )
 	private UserInfoService userInfoService;
@@ -29,8 +30,6 @@ public class UserInfoController {
 		if( Common.hasLogin(session) ){
 			String email = (String)session.getAttribute(ParaName.VerificationCode);
 			if( Common.isUser(email) ){
-				UserInfo userInfo = userInfoService.getUserInfo(email);
-				model.addAttribute("userInfo", userInfo);
 				return CommonUser.toUserInfoPage();
 			}
 			else{
@@ -40,6 +39,20 @@ public class UserInfoController {
 		else {
 			return Common.redirectToLoginPage();
 		}
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/GetUserInfo", method = RequestMethod.POST)
+	public UserInfo getUserInfo(){
+		UserInfo userInfo = new UserInfo();
+		HttpSession session = request.getSession(false);
+		if( Common.hasLogin(session) ){
+			String email = (String) session.getAttribute(ParaName.VerificationCode);
+			if( Common.isUser(email) ){
+				userInfo = userInfoService.getUserInfo(email);
+			}
+		}
+		return userInfo;
 	}
 	
 	@RequestMapping(value = "/ChangeUserInfo", method = RequestMethod.POST)

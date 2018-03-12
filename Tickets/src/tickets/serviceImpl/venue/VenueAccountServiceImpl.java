@@ -4,10 +4,10 @@ import org.springframework.stereotype.Service;
 import tickets.dao.CommonAccountDao;
 import tickets.dao.CommonUVAccountDao;
 import tickets.dao.venue.VenueAccountDao;
-import tickets.model.VenueInfo;
+import tickets.model.VenueBaseInfo;
 import tickets.service.CommonAccountService;
 import tickets.service.venue.VenueAccountService;
-import tickets.service.venue.VenueInfoService;
+import tickets.service.venue.VenueBaseInfoService;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -24,8 +24,8 @@ public class VenueAccountServiceImpl implements CommonAccountService, VenueAccou
 	@Resource(name = "venueAccountDao")
 	private CommonUVAccountDao commonUVAccountDao;
 	
-	@Resource(name = "venueInfoService")
-	private VenueInfoService venueInfoService;
+	@Resource(name = "venueBaseInfoService" )
+	private VenueBaseInfoService venueBaseInfoService;
 	
 	@Override
 	public boolean login(String venueID, String password){
@@ -39,7 +39,7 @@ public class VenueAccountServiceImpl implements CommonAccountService, VenueAccou
 	}
 	
 	@Override
-	public String preRegister(VenueInfo venueInfo, String password){
+	public String preRegister(VenueBaseInfo venueBaseInfo, String password){
 		List<String> venueIDs = venueAccountDao.getAllVenusIDs();
 		
 		System.out.println("VenueID is making !");
@@ -64,12 +64,12 @@ public class VenueAccountServiceImpl implements CommonAccountService, VenueAccou
 			venueID.substring(1);
 			venueID += random;
 		}
-		venueInfo.setVenueID(venueID);
+		venueBaseInfo.setVenueID(venueID);
 		
 		System.out.println( venueID + " is register !");
 		
 		venueAccountDao.addAccount(venueID, password);
-		venueInfoService.preRegister(venueInfo);
+		venueBaseInfoService.preRegister(venueBaseInfo);
 		return venueID;
 	}
 }

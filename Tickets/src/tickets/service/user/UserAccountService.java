@@ -7,4 +7,6 @@ public interface UserAccountService {
 	boolean preRegister(String email, String name);
 	
 	boolean register(String email, String password, String verificationCode);
+	
+	void cancelAccountVIP(String email);
 }

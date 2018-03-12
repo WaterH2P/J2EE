@@ -1,23 +1,12 @@
 package tickets.model;
 
-public class VenueInfo {
-	
-	public VenueInfo(){}
-	public VenueInfo(VenueInfoChange venueInfo){
-		this.setVenueID( venueInfo.getVenueID() );
-		this.setProvince( venueInfo.getProvince() );
-		this.setCity( venueInfo.getCity() );
-		this.setAddress( venueInfo.getAddress() );
-		this.setTelephone( venueInfo.getTelephone() );
-		this.setIsChanging( false );
-	}
+public class VenueBaseInfoChange {
 	
 	private String venueID = "";
 	private String province = "";
 	private String city = "";
 	private String address = "";
 	private String telephone = "";
-	private boolean isChanging = false;
 	
 	public void setVenueID(String venueID){
 		this.venueID = venueID;
@@ -37,10 +26,6 @@ public class VenueInfo {
 	
 	public void setTelephone(String telephone){
 		this.telephone = telephone;
-	}
-	
-	public void setIsChanging(boolean isChanging){
-		this.isChanging = isChanging;
 	}
 	
 	public String getVenueID(){
@@ -63,16 +48,11 @@ public class VenueInfo {
 		return telephone;
 	}
 	
-	public boolean getIsChanging(){
-		return isChanging;
-	}
-	
 	public void show(){
 		System.out.println( this.getVenueID() );
 		System.out.println( this.getProvince() + this.getCity() );
 		System.out.println( this.getAddress() );
 		System.out.println( this.getTelephone() );
-		System.out.println( this.getIsChanging() );
 		System.out.println();
 	}
 	

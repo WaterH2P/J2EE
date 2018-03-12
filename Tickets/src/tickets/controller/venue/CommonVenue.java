@@ -9,10 +9,25 @@ public class CommonVenue {
 		return "redirect:/VenueRegister";
 	}
 	
-	public static String toVenueInfoPage(){
-		return "venue/VenueInfo";
+	public static String toVenueBaseInfoPage(){
+		return "venue/VenueBaseInfo";
 	}
-	public static String redirectToVenueInfoPage(){
-		return "redirect:/VenueInfo";
+	public static String redirectToVenueBaseInfoPage(){
+		return "redirect:/VenueBaseInfo";
 	}
+	
+	public static String toVenueHallManagePage(){
+		return "venue/VenueHallManage";
+	}
+	public static String redirectToHallManagePage(){
+		return "redirect:/VenueHallManage";
+	}
+	
+	public static String toVenuePlanManagePage(){
+		return "venue/VenuePlanManage";
+	}
+	public static String redirectToPlanManagePage(){
+		return "redirect:/VenuePlanManage";
+	}
+	
 }

@@ -8,7 +8,6 @@ import tickets.dao.venue.VenueAccountDao;
 import tickets.daoImpl.Common;
 import tickets.daoImpl.DaoHelperImpl;
 import tickets.daoImpl.ParaName;
-import tickets.model.VenueInfo;
 import tickets.rowMapper.VenueIDRowMapper;
 
 import java.util.List;
@@ -40,6 +39,13 @@ public class VenueAccountDaoImpl implements CommonAccountDao, CommonUVAccountDao
 		return isConfirmed;
 	}
 	
+	@Override
+	public boolean accountIsDeleted(String emailOrID){
+		String primaryKey = "venueID";
+		boolean isDeleted = Common.accountIsConfirmed(primaryKey, emailOrID, ParaName.Table_venueAccount);
+		return isDeleted;
+	}
+	
 	//	===================================================================================================  //
 	
 	@Override
@@ -51,9 +57,10 @@ public class VenueAccountDaoImpl implements CommonAccountDao, CommonUVAccountDao
 	
 	@Override
 	public void addAccount(String venueID, String password){
-		String accountSql = "INSERT INTO " + ParaName.Table_venueAccount + " VALUES (?,?,?)";
+		String accountSql = "INSERT INTO " + ParaName.Table_venueAccount + " VALUES (?,?,?,?)";
 		final boolean isConfirmed = false;
-		jdbcTemplate.update(accountSql, venueID, password, isConfirmed);
+		final boolean isDeleted = false;
+		jdbcTemplate.update(accountSql, venueID, password, isConfirmed, isDeleted);
 	}
 	
 	@Override

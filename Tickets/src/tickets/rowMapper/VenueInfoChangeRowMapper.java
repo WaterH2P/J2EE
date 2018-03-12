@@ -1,16 +1,16 @@
 package tickets.rowMapper;
 
 import org.springframework.jdbc.core.RowMapper;
-import tickets.model.VenueInfoChange;
+import tickets.model.VenueBaseInfoChange;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class VenueInfoChangeRowMapper implements RowMapper<VenueInfoChange> {
+public class VenueInfoChangeRowMapper implements RowMapper<VenueBaseInfoChange> {
 	
 	@Override
-	public VenueInfoChange mapRow(ResultSet rs, int i) throws SQLException{
-		VenueInfoChange venueInfo = new VenueInfoChange();
+	public VenueBaseInfoChange mapRow(ResultSet rs, int i) throws SQLException{
+		VenueBaseInfoChange venueInfo = new VenueBaseInfoChange();
 		venueInfo.setVenueID( rs.getString("venueID") );
 		venueInfo.setProvince( rs.getString("province") );
 		venueInfo.setCity( rs.getString("city") );
