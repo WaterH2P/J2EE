@@ -4,8 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import tickets.controller.Common;
-import tickets.controller.venue.CommonVenue;
+import tickets.controller.CommonCon;
 import tickets.daoImpl.ParaName;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,17 +19,17 @@ public class MgrInfoCon {
 	@RequestMapping(value = "/MgrInfo", method = RequestMethod.GET)
 	public String mgrInfoPage(){
 		HttpSession session = request.getSession(false);
-		if( Common.hasLogin(session) ){
+		if( CommonCon.hasLogin(session) ){
 			String mgrID = (String)session.getAttribute(ParaName.VerificationCode);
-			if( Common.isMgr(mgrID) ){
+			if( CommonCon.isMgr(mgrID) ){
 				return CommonMgr.toMgrInfoPage();
 			}
 			else{
-				return Common.redirectToInfoPage();
+				return CommonCon.redirectToInfoPage();
 			}
 		}
 		else {
-			return Common.redirectToLoginPage();
+			return CommonCon.redirectToLoginPage();
 		}
 	}
 }

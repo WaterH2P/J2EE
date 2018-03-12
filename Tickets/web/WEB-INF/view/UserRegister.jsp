@@ -6,13 +6,13 @@
     <meta charset="utf-8">
     <title>Register</title>
 
-    <link rel="stylesheet" type="text/css" href="../../stylesheet/sign.css">
-    <link rel="stylesheet" type="text/css" href="../../stylesheet/account/register.css">
+    <link rel="stylesheet" type="text/css" href="../stylesheet/common.css">
+    <link rel="stylesheet" type="text/css" href="../stylesheet/account/register.css">
 </head>
 
 <body>
-<div class="sign">
-    <div class="main">
+<div class="common">
+    <div class="main fixMain">
         <h4 class="title">
             <div id="aSign">
                 <a href="/Login">登录</a>
@@ -61,8 +61,8 @@
     </div>
 </div>
 
-<script src="../../javascript/jquery/jquery-3.2.1.min.js"></script>
-<script src="../../javascript/password.js"></script>
+<script src="../javascript/jquery/jquery-3.2.1.min.js"></script>
+<script src="../javascript/password.js"></script>
 <script>
     var emailReady = false;
     var nameReady = false;

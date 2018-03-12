@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="common">
-    <div class="main">
+    <div class="main fixMain">
         <div id="aSign" class="title">
             <a>订票</a>
             <b>·</b>
@@ -45,7 +45,6 @@
             </p>
             <p>
                 <button id="deleteVIP_1">注销会员</button>
-                <%--<button id="deleteVIP_2" style="display:none;">注销会员</button>--%>
             </p>
         </div>
 
@@ -86,14 +85,14 @@
         }
     });
 
-    $("#changeName").click(function () {
+    $("#changeInfo").click(function () {
         $("#userName").removeAttr("readonly");
         $("#userName").css("border", "2px solid blue");
         $("#changeInfo").hide();
         $("#submitInfo").show();
     });
 
-    $("#submitName").click(function () {
+    $("#submitInfo").click(function () {
         $("#userName").attr("readonly", "readonly");
         $("#userName").css("border", "1px solid gray");
         $("#changeInfo").show();
@@ -103,7 +102,12 @@
         userName = deleteSpace(userName);
         $("#userName").val(userName);
         var data = {"userEmail":userEmail, "userName":userName};
-        $.post("ChangeUserInfo", data);
+        $.post("ChangeUserInfo", data, function (rs) {
+            var res = $.parseJSON(rs);
+            if( !res.result ){
+                alert(res.message);
+            }
+        });
     });
 
     function deleteSpace(str) {
@@ -112,24 +116,12 @@
 
     $("#deleteVIP_1").click(function () {
         var cancel = confirm("注销会员将导致该账户 下线！并且以后 无法登陆 ！无法享受VIP优惠！确认注销请点击确定。");
-        if( cancel ){
+        if (cancel) {
             var userEmail = $("#userEmail").val().toString();
-            var data = {"userEmail":userEmail};
+            var data = {"userEmail": userEmail};
             $.post("CancelAccountVIP", data);
         }
-        // $("#deleteVIP_1").hide();
-        // $("#deleteVIP_2").show();
-        // setTimeout(function () {
-        //     $("#deleteVIP_1").show();
-        //     $("#deleteVIP_2").hide();
-        // }, 4000);
     });
-
-    // $("#deleteVIP_2").click(function () {
-    //     var userEmail = $("#userEmail").val().toString();
-    //     var data = {"userEmail":userEmail};
-    //     $.post("CancelAccountVIP", data);
-    // });
 </script>
 </body>
 </html>

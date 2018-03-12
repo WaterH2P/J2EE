@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import tickets.controller.Common;
+import tickets.controller.CommonCon;
 import tickets.daoImpl.ParaName;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,17 +19,17 @@ public class VenueHallManageCon {
 	@RequestMapping(value = "/VenueHallPage", method = RequestMethod.GET)
 	public String VenueHallManagePage(){
 		HttpSession session = request.getSession(false);
-		if( Common.hasLogin(session) ){
+		if( CommonCon.hasLogin(session) ){
 			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
-			if( Common.isVenue(venueID) ){
+			if( CommonCon.isVenue(venueID) ){
 				return CommonVenue.toVenueHallManagePage();
 			}
 			else{
-				return Common.redirectToInfoPage();
+				return CommonCon.redirectToInfoPage();
 			}
 		}
 		else {
-			return Common.redirectToLoginPage();
+			return CommonCon.redirectToLoginPage();
 		}
 	}
 	

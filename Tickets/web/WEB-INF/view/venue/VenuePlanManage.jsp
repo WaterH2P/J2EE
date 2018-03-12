@@ -11,6 +11,8 @@
 <div class="common">
     <div class="main">
         <div id="aSign" class="title">
+            <a href="/VenueSeatLevelManage">座位类别</a>
+            <b>·</b>
             <a href="/VenueHallPage">场厅管理</a>
             <b>·</b>
             <a class="active">计划管理</a>

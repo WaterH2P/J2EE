@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import tickets.controller.Common;
+import tickets.controller.CommonCon;
 import tickets.daoImpl.ParaName;
 import tickets.model.Result;
 import tickets.model.VenueBaseInfo;
@@ -30,17 +30,17 @@ public class VenueBaseInfoCon {
 	@RequestMapping(value = "/VenueBaseInfo", method = RequestMethod.GET)
 	public String venueInfoPage(ModelMap model){
 		HttpSession session = request.getSession(false);
-		if( Common.hasLogin(session) ){
+		if( CommonCon.hasLogin(session) ){
 			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
-			if( Common.isVenue(venueID) ){
+			if( CommonCon.isVenue(venueID) ){
 				return CommonVenue.toVenueBaseInfoPage();
 			}
 			else{
-				return Common.redirectToInfoPage();
+				return CommonCon.redirectToInfoPage();
 			}
 		}
 		else {
-			return Common.redirectToLoginPage();
+			return CommonCon.redirectToLoginPage();
 		}
 	}
 	
@@ -49,9 +49,9 @@ public class VenueBaseInfoCon {
 	public VenueBaseInfo getVenueInfo(){
 		VenueBaseInfo venueBaseInfo = new VenueBaseInfo();
 		HttpSession session = request.getSession(false);
-		if( Common.hasLogin(session) ){
+		if( CommonCon.hasLogin(session) ){
 			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
-			if( Common.isVenue(venueID) ){
+			if( CommonCon.isVenue(venueID) ){
 				venueBaseInfo = venueBaseInfoService.getVenueInfo(venueID);
 			}
 		}
@@ -62,9 +62,9 @@ public class VenueBaseInfoCon {
 	public Result venueInfoIsChanging(){
 		HttpSession session = request.getSession(false);
 		Result result = new Result();
-		if( Common.hasLogin(session) ){
+		if( CommonCon.hasLogin(session) ){
 			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
-			if( Common.isVenue(venueID) ){
+			if( CommonCon.isVenue(venueID) ){
 			
 			}
 		}
@@ -79,7 +79,7 @@ public class VenueBaseInfoCon {
 		String message = "";
 		HttpSession session = request.getSession(false);
 		String venueID = (String)session.getAttribute(ParaName.VerificationCode);
-		if( Common.hasLogin(session) && Common.isVenue(venueID) ){
+		if( CommonCon.hasLogin(session) && CommonCon.isVenue(venueID) ){
 			if( venueBaseInfoService.preChangeVenueInfo(venueInfo) ){
 				message = "修改信息需要审核，请耐心等待！";
 				result.setResult(true);

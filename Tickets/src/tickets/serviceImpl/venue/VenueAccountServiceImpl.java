@@ -8,6 +8,7 @@ import tickets.model.VenueBaseInfo;
 import tickets.service.CommonAccountService;
 import tickets.service.venue.VenueAccountService;
 import tickets.service.venue.VenueBaseInfoService;
+import tickets.serviceImpl.CommonService;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -46,24 +47,8 @@ public class VenueAccountServiceImpl implements CommonAccountService, VenueAccou
 		
 		String venueID = "";
 		final int venueIDLength = 7;
-		for( int i=0; i<venueIDLength; i++ ){
-			int random = (int)(Math.random()*10.5-1);
-			if( random<0 ){
-				random = 0;
-			}
-			venueID += random;
-		}
-		if( venueID.length()>7 ){
-			venueID = venueID.substring(0, 7);
-		}
-		while( venueIDs.contains(venueID) ){
-			int random = (int)(Math.random()*10.99-1);
-			if( random<0 ){
-				random = 0;
-			}
-			venueID.substring(1);
-			venueID += random;
-		}
+		
+		venueID = CommonService.getRandomString(venueIDLength, venueIDs);
 		venueBaseInfo.setVenueID(venueID);
 		
 		System.out.println( venueID + " is register !");
@@ -72,4 +57,5 @@ public class VenueAccountServiceImpl implements CommonAccountService, VenueAccou
 		venueBaseInfoService.preRegister(venueBaseInfo);
 		return venueID;
 	}
+	
 }

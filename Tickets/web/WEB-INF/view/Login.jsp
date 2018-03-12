@@ -7,12 +7,12 @@
     <meta charset="utf-8">
     <title>Login</title>
 
-    <link rel="stylesheet" type="text/css" href="../stylesheet/sign.css">
+    <link rel="stylesheet" type="text/css" href="../stylesheet/common.css">
 </head>
 
 <body>
-<div class="sign">
-    <div class="main">
+<div class="common">
+    <div class="main fixMain">
         <h4 class="title">
             <div id="aSign">
                 <a class="active" href="/Login">登录</a>

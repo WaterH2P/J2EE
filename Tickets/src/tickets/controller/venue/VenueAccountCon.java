@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import tickets.controller.Common;
+import tickets.controller.CommonCon;
 import tickets.model.Result;
 import tickets.model.VenueBaseInfo;
 import tickets.service.venue.VenueAccountService;
@@ -28,8 +28,8 @@ public class VenueAccountCon {
 	@RequestMapping(value = "/VenueRegister", method = RequestMethod.GET)
 	public String VenueRegisterPage(ModelMap model){
 		HttpSession session = request.getSession(false);
-		if( Common.hasLogin(session) ){
-			return Common.redirectToInfoPage();
+		if( CommonCon.hasLogin(session) ){
+			return CommonCon.redirectToInfoPage();
 		}
 		else {
 			model.addAttribute("message", "欢迎注册!");

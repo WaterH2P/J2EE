@@ -10,8 +10,10 @@
 </head>
 <body>
 <div class="common">
-    <div class="main">
+    <div class="main minMain">
         <div id="aSign" class="title">
+            <a href="/VenueSeatLevelManage">座位等第管理</a>
+            <b>·</b>
             <a href="/VenueHallPage">场厅管理</a>
             <b>·</b>
             <a href="/VenuePlanManage">计划管理</a>

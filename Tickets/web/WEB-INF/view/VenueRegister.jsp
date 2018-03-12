@@ -5,12 +5,12 @@
     <meta charset="utf-8">
     <title>Login</title>
 
-    <link rel="stylesheet" type="text/css" href="../../stylesheet/sign.css">
-    <link rel="stylesheet" type="text/css" href="../../stylesheet/venue/venueRegister.css">
+    <link rel="stylesheet" type="text/css" href="../stylesheet/common.css">
+    <link rel="stylesheet" type="text/css" href="../stylesheet/venue/venueRegister.css">
 </head>
 <body>
-<div class="sign">
-    <div class="main">
+<div class="common">
+    <div class="main fixMain">
         <h4 class="title">
             <div id="aSign">
                 <a href="/Login">登录</a>
@@ -59,9 +59,9 @@
     </div>
 </div>
 
-<script src="../../javascript/jquery/jquery-3.2.1.min.js"></script>
-<script src="../../javascript/venue/venueRegister.js"></script>
-<script src="../../javascript/password.js"></script>
+<script src="../javascript/jquery/jquery-3.2.1.min.js"></script>
+<script src="../javascript/venue/venueRegister.js"></script>
+<script src="../javascript/password.js"></script>
 <script>
     var addressReady = false;
     $("#address").blur(function(){

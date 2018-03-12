@@ -3,7 +3,7 @@ package tickets.controller.user;
 public class CommonUser {
 	
 	public static String toUserRegisterPage(){
-		return "user/UserRegister";
+		return "UserRegister";
 	}
 	public static String redirectToUserRegisterPage(){
 		return "redirect:/Register";

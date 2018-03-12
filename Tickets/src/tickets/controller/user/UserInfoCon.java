@@ -6,8 +6,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import tickets.controller.Common;
+import tickets.controller.CommonCon;
 import tickets.daoImpl.ParaName;
+import tickets.model.Result;
 import tickets.model.UserInfo;
 import tickets.service.user.UserInfoService;
 
@@ -27,17 +28,17 @@ public class UserInfoCon {
 	@RequestMapping(value = "/UserInfo", method = RequestMethod.GET)
 	public String userInfo(ModelMap model){
 		HttpSession session = request.getSession(false);
-		if( Common.hasLogin(session) ){
+		if( CommonCon.hasLogin(session) ){
 			String email = (String)session.getAttribute(ParaName.VerificationCode);
-			if( Common.isUser(email) ){
+			if( CommonCon.isUser(email) ){
 				return CommonUser.toUserInfoPage();
 			}
 			else{
-				return Common.redirectToInfoPage();
+				return CommonCon.redirectToInfoPage();
 			}
 		}
 		else {
-			return Common.redirectToLoginPage();
+			return CommonCon.redirectToLoginPage();
 		}
 	}
 	
@@ -46,24 +47,34 @@ public class UserInfoCon {
 	public UserInfo getUserInfo(){
 		UserInfo userInfo = new UserInfo();
 		HttpSession session = request.getSession(false);
-		if( Common.hasLogin(session) ){
+		if( CommonCon.hasLogin(session) ){
 			String email = (String) session.getAttribute(ParaName.VerificationCode);
-			if( Common.isUser(email) ){
+			if( CommonCon.isUser(email) ){
 				userInfo = userInfoService.getUserInfo(email);
 			}
 		}
 		return userInfo;
 	}
 	
+	@ResponseBody
 	@RequestMapping(value = "/ChangeUserInfo", method = RequestMethod.POST)
-	public void changeUserInfo(String userEmail, String userName){
+	public Result changeUserInfo(String userEmail, String userName){
+		Result result = new Result();
+		result.setResult(false);
 		HttpSession session = request.getSession(false);
-		if( Common.hasLogin(session) ){
+		if( CommonCon.hasLogin(session) ){
 			String email = (String) session.getAttribute(ParaName.VerificationCode);
 			if( email.equals(userEmail) ){
+				System.out.println( email + " change name to " + userName);
 				userInfoService.changeUserName(email, userName);
+				result.setResult(true);
 			}
 		}
+		if( !result.getResult() ){
+			String message = "很抱歉修改失败！";
+			result.setMessage(message);
+		}
+		return result;
 	}
 	
 }

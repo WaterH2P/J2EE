@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSession;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Common {
+public class CommonCon {
 	
 	public static String toLoginPage(){
 		return "Login";
@@ -36,15 +36,15 @@ public class Common {
 	}
 	
 	public static boolean isUser(String email){
-		return Common.regCheck(ParaName.emailRegex, email);
+		return CommonCon.regCheck(ParaName.emailRegex, email);
 	}
 	
 	public static boolean isVenue(String venueID){
-		return Common.regCheck(ParaName.venueIDRegex, venueID);
+		return CommonCon.regCheck(ParaName.venueIDRegex, venueID);
 	}
 	
 	public static boolean isMgr(String mgrID){
-		return Common.regCheck(ParaName.mgrIDRegex, mgrID);
+		return CommonCon.regCheck(ParaName.mgrIDRegex, mgrID);
 	}
 	
 	public static boolean regCheck(String regex, String testStr){

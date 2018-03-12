@@ -11,8 +11,6 @@ import tickets.controller.user.CommonUser;
 import tickets.controller.venue.CommonVenue;
 import tickets.daoImpl.ParaName;
 import tickets.model.Result;
-import tickets.model.UserInfo;
-import tickets.model.VenueBaseInfo;
 import tickets.service.user.UserInfoService;
 import tickets.service.venue.VenueBaseInfoService;
 import tickets.serviceImpl.mgr.MgrAccountServiceImpl;
@@ -47,23 +45,23 @@ public class CommonAccountCon {
 	@RequestMapping(value = "/*", method = RequestMethod.GET)
 	public String wrongURLRedirectToLoginPage(){
 		HttpSession session = request.getSession(false);
-		if( Common.hasLogin(session) ){
-			return Common.redirectToInfoPage();
+		if( CommonCon.hasLogin(session) ){
+			return CommonCon.redirectToInfoPage();
 		}
 		else {
-			return Common.redirectToLoginPage();
+			return CommonCon.redirectToLoginPage();
 		}
 	}
 	
 	@RequestMapping(value = "/Login", method = RequestMethod.GET)
 	public String loginPage(ModelMap model){
 		HttpSession session = request.getSession(false);
-		if( Common.hasLogin(session) ){
-			return Common.redirectToInfoPage();
+		if( CommonCon.hasLogin(session) ){
+			return CommonCon.redirectToInfoPage();
 		}
 		else {
 			model.addAttribute("message", "欢迎登录!");
-			return Common.toLoginPage();
+			return CommonCon.toLoginPage();
 		}
 	}
 	
@@ -73,20 +71,20 @@ public class CommonAccountCon {
 		Result result = new Result();
 		result.setResult(false);
 		String message = "";
-		if( EmailORID.length()==7 && Common.regCheck(ParaName.venueIDRegex, EmailORID) ){
+		if( EmailORID.length()==7 && CommonCon.regCheck(ParaName.venueIDRegex, EmailORID) ){
 			System.out.println("场馆登录");
 			if( venueAccountService.login(EmailORID, password) ){
-				Common.createSession(request, EmailORID);
+				CommonCon.createSession(request, EmailORID);
 				result.setResult(true);
 			}
 			else {
 				message = "帐号或密码错误，请重新登录！或者账号还未审核通过！";
 			}
 		}
-		else if( Common.regCheck(ParaName.emailRegex, EmailORID)){
+		else if( CommonCon.regCheck(ParaName.emailRegex, EmailORID)){
 			System.out.println("邮箱登录");
 			if( userAccountService.login(EmailORID, password) ){
-				Common.createSession(request, EmailORID);
+				CommonCon.createSession(request, EmailORID);
 				result.setResult(true);
 			}
 			else {
@@ -96,7 +94,7 @@ public class CommonAccountCon {
 		else {
 			System.out.println("管理员登录");
 			if( mgrAccountService.login(EmailORID, password) ){
-				Common.createSession(request, EmailORID);
+				CommonCon.createSession(request, EmailORID);
 				result.setResult(true);
 			}
 			else {
@@ -112,11 +110,11 @@ public class CommonAccountCon {
 	@RequestMapping(value = "/Logout", method = RequestMethod.POST)
 	public String logout(){
 		HttpSession session = request.getSession(false);
-		if( Common.hasLogin(session) ){
+		if( CommonCon.hasLogin(session) ){
 			session.removeAttribute(ParaName.VerificationCode);
 			session.invalidate();
 		}
-		return Common.redirectToLoginPage();
+		return CommonCon.redirectToLoginPage();
 	}
 	
 	@RequestMapping(value = "/RedirectByVerificationCode")
@@ -124,11 +122,11 @@ public class CommonAccountCon {
 		HttpSession session = request.getSession(false);
 		String EmailORID = (String)session.getAttribute( ParaName.VerificationCode );
 		String result = "";
-		if( EmailORID.length()==7 && Common.regCheck(ParaName.venueIDRegex, EmailORID) ){
+		if( EmailORID.length()==7 && CommonCon.regCheck(ParaName.venueIDRegex, EmailORID) ){
 			System.out.println("场馆登录");
 			result = CommonVenue.redirectToVenueBaseInfoPage();
 		}
-		else if( Common.regCheck(ParaName.emailRegex, EmailORID)){
+		else if( CommonCon.regCheck(ParaName.emailRegex, EmailORID)){
 			System.out.println("邮箱登录");
 			result = CommonUser.redirectToUserInfoPage();
 		}

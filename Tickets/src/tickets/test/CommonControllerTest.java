@@ -1,6 +1,6 @@
 package tickets.test;
 
-import tickets.controller.Common;
+import tickets.controller.CommonCon;
 import tickets.daoImpl.ParaName;
 
 public class CommonControllerTest {
@@ -15,11 +15,11 @@ public class CommonControllerTest {
 	
 	private static boolean emailRegexTest(){
 		String email = "z110a110@126.com";
-		return Common.regCheck(ParaName.emailRegex, email);
+		return CommonCon.regCheck(ParaName.emailRegex, email);
 	}
 	
 	private static boolean venueIDRegexTest(){
 		String venueID = "1628374";
-		return Common.regCheck(ParaName.venueIDRegex, venueID);
+		return CommonCon.regCheck(ParaName.venueIDRegex, venueID);
 	}
 }

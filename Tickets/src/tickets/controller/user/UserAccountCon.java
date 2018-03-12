@@ -6,10 +6,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import tickets.controller.Common;
+import tickets.controller.CommonCon;
 import tickets.daoImpl.ParaName;
 import tickets.model.Result;
-import tickets.model.UserInfo;
 import tickets.service.user.UserAccountService;
 
 import javax.annotation.Resource;
@@ -28,8 +27,8 @@ public class UserAccountCon {
 	@RequestMapping(value = "/UserRegister", method = RequestMethod.GET)
 	public String registerPage(ModelMap model){
 		HttpSession session = request.getSession(false);
-		if( Common.hasLogin(session) ){
-			return Common.redirectToInfoPage();
+		if( CommonCon.hasLogin(session) ){
+			return CommonCon.redirectToInfoPage();
 		}
 		else {
 			model.addAttribute("message", "欢迎注册!");
@@ -73,19 +72,19 @@ public class UserAccountCon {
 	@RequestMapping(value = "/CancelAccountVIP", method = RequestMethod.POST)
 	public String cancelAccountVIP(String userEmail){
 		HttpSession session = request.getSession(false);
-		if( Common.hasLogin(session) ){
+		if( CommonCon.hasLogin(session) ){
 			String email = (String)session.getAttribute(ParaName.VerificationCode);
-			if( Common.isUser(email) && email.equals(userEmail) ){
+			if( CommonCon.isUser(email) && email.equals(userEmail) ){
 				System.out.println(email + " cancel VIP Controller");
 				userAccountService.cancelAccountVIP(userEmail);
-				return Common.redirectToLoginPage();
+				return CommonCon.redirectToLoginPage();
 			}
 			else{
-				return Common.redirectToInfoPage();
+				return CommonCon.redirectToInfoPage();
 			}
 		}
 		else {
-			return Common.redirectToLoginPage();
+			return CommonCon.redirectToLoginPage();
 		}
 	}
 }
