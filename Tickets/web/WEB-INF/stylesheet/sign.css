@@ -6,9 +6,9 @@ body {
     padding: 0!important;
     margin: 0!important;
 
-    min-width: 768px;
     font-family: -apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
     font-size: 17px;
+    background: #f1f1f1;
 }
 
 div {
@@ -32,9 +32,6 @@ input{
 
     font: inherit;
     margin: 0;
-
-    -webkit-appearance: textfield;
-    -webkit-rtl-ordering: logical;
     cursor: auto;
 
     text-rendering: auto;
@@ -54,22 +51,6 @@ input{
     min-height: 750px;
     text-align: center;
     font-size: 14px;
-    background-color: #f1f1f1;
-}
-
-
-/* ==================== logo ==================== */
-
-.sign .logo {
-    position: absolute;
-    top: 10%;
-    margin-left: 10%;
-}
-
-.sign .logo img {
-    width: 180px;
-    vertical-align: middle;
-    border: 0;
 }
 
 

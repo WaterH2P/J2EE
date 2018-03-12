@@ -5,10 +5,10 @@
 <head>
     <meta charset="utf-8">
     <title>ExamineVenueRegister</title>
-    <link rel="stylesheet" type="text/css" href="../../stylesheet/account/sign.css">
+    <link rel="stylesheet" type="text/css" href="../../stylesheet/common.css">
 </head>
 <body>
-<div class="sign">
+<div class="common">
     <div class="main">
         <div id="aSign" class="title">
             <a class="active">审批注册</a>

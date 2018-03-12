@@ -1,17 +1,41 @@
 .demo {
-    width: 700px;
+    /*min-width: 700px;*/
+    width: fit-content;
     margin: 40px auto 0 auto;
-    min-height: 450px;
+    /*min-height: 400px;*/
+    height: fit-content;
 }
 
 .front {
-    width: 300px;
-    margin: 5px 32px 45px 32px;
+    min-width: 300px;
+    margin: 5px 16px 25px 16px;
     background-color: #f0f0f0;
     color: #666;
     text-align: center;
     padding: 3px;
     border-radius: 5px;
+}
+
+.booking-details {
+    float: right;
+    position: relative;
+    width: 200px;
+    height: 450px;
+}
+
+.booking-details h3 {
+    margin: 5px 5px 0 0;
+    font-size: 16px;
+}
+
+.booking-details p {
+    line-height: 26px;
+    font-size: 16px;
+    color: #999
+}
+
+.booking-details p span {
+    color: #666
 }
 
 div.seatCharts-cell {
@@ -58,19 +82,14 @@ div.seatCharts-seat.unavailable {
 
 div.seatCharts-container {
     border-right: 1px dotted #adadad;
-    width: 400px;
+    min-width: 400px;
     padding: 20px;
     float: left;
 }
 
 div.seatCharts-legend {
     padding-left: 0px;
-    position: absolute;
     bottom: 16px;
-}
-
-ul.seatCharts-legendList {
-    padding-left: 0px;
 }
 
 .seatCharts-legendItem {
@@ -83,4 +102,15 @@ ul.seatCharts-legendList {
 span.seatCharts-legendDescription {
     margin-left: 5px;
     line-height: 30px;
+}
+
+.checkout-button {
+    display: block;
+    width: 80px;
+    height: 24px;
+    line-height: 20px;
+    margin: 10px auto;
+    border: 1px solid #999;
+    font-size: 14px;
+    cursor: pointer
 }

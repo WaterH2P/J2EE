@@ -4,11 +4,11 @@
 <head>
     <meta charset="utf-8">
     <title>Order</title>
-    <link rel="stylesheet" type="text/css" href="../../stylesheet/account/sign.css">
+    <link rel="stylesheet" type="text/css" href="../../stylesheet/common.css">
     <link rel="stylesheet" type="text/css" href="../../stylesheet/title.css">
 </head>
 <body>
-    <div class="sign">
+    <div class="common">
         <div class="main">
             <div id="aSign" class="title">
                 <a>订票</a>

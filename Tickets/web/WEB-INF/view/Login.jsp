@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <title>Login</title>
 
-    <link rel="stylesheet" type="text/css" href="../stylesheet/account/sign.css">
+    <link rel="stylesheet" type="text/css" href="../stylesheet/sign.css">
 </head>
 
 <body>
