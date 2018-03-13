@@ -21,18 +21,18 @@ public class VenueSeatLevelServiceImpl implements VenueSeatLevelService{
 		String venueID = venueSeatLevel.getVenueID();
 		List<VenueSeatLevel> venueSeatLevels = venueSeatLevelDao.selectAllSeatLevels(venueID);
 		List<String> seatIDs = new ArrayList<>();
-		for( VenueSeatLevel seatLevel : venueSeatLevels ){
-			seatIDs.add( seatLevel.getSeatID().split("-")[1] );
+		if( seatIDs.size()<3 ){
+			for( VenueSeatLevel seatLevel : venueSeatLevels ){
+				seatIDs.add(seatLevel.getSeatID().split("-")[1]);
+			}
+			final int seatIDLen = 7;
+			String seatID = venueID + "-" + CommonService.getRandomString(seatIDLen, seatIDs);
+			venueSeatLevel.setSeatID(seatID);
+			if( venueSeatLevelDao.insertSeatLevel(venueSeatLevel) ){
+				return seatID;
+			}
 		}
-		final int seatIDLen = 7;
-		String seatID = venueID + "_" +CommonService.getRandomString(seatIDLen, seatIDs);
-		venueSeatLevel.setSeatID(seatID);
-		if( venueSeatLevelDao.insertSeatLevel(venueSeatLevel) ){
-			return seatID;
-		}
-		else {
-			return "";
-		}
+		return "";
 	}
 	
 	@Override

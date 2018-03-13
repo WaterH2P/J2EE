@@ -9,15 +9,15 @@
 </head>
 <body>
 <div class="common">
-    <div class="main">
+    <div class="main bigMain">
         <div id="aSign" class="title">
-            <a href="/VenueSeatLevelManage">座位类别</a>
+            <a href="VenueSeatLevelManage">座位等第管理</a>
             <b>·</b>
-            <a href="/VenueHallPage">场厅管理</a>
+            <a href="VenueHallPage">场厅管理</a>
             <b>·</b>
             <a class="active">计划管理</a>
             <b>·</b>
-            <a href="/VenueBaseInfo">个人信息</a>
+            <a href="VenueBaseInfo">个人信息</a>
         </div>
     </div>
 </div>

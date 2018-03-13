@@ -4,6 +4,10 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
+    <welcome-file-list>
+        <welcome-file>/Login</welcome-file>
+    </welcome-file-list>
+
     <!--处理从页面传递中文到后台而出现的中文乱码问题 -->
     <!-- encoding start -->
     <filter>

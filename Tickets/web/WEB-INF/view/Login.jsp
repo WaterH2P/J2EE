@@ -12,7 +12,7 @@
 
 <body>
 <div class="common">
-    <div class="main fixMain">
+    <div class="main fixMain smallMain">
         <h4 class="title">
             <div id="aSign">
                 <a class="active" href="/Login">登录</a>
@@ -45,6 +45,7 @@
     $("#signInSubmit").click(function() {
         var EmailORID = $("#EmailORID").val().toString();
         var password = $("#password").val().toString();
+        EmailORID = EmailORID.toLowerCase();
         var data = {"EmailORID":EmailORID, "password":password};
         $.post("Login", data, function (rs) {
             var res = $.parseJSON(rs);

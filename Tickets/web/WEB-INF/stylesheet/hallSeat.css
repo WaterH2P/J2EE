@@ -1,13 +1,11 @@
 .demo {
-    /*min-width: 700px;*/
     width: fit-content;
     margin: 40px auto 0 auto;
-    /*min-height: 400px;*/
     height: fit-content;
 }
 
 .front {
-    min-width: 300px;
+    width: 300px;
     margin: 5px 16px 25px 16px;
     background-color: #f0f0f0;
     color: #666;
@@ -19,8 +17,8 @@
 .booking-details {
     float: right;
     position: relative;
-    width: 200px;
-    height: 450px;
+    width: 150px;
+    min-height: 150px;
 }
 
 .booking-details h3 {
@@ -82,7 +80,7 @@ div.seatCharts-seat.unavailable {
 
 div.seatCharts-container {
     border-right: 1px dotted #adadad;
-    min-width: 400px;
+    min-width: 200px;
     padding: 20px;
     float: left;
 }

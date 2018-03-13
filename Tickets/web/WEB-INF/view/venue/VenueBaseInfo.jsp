@@ -10,13 +10,13 @@
 </head>
 <body>
 <div class="common">
-    <div class="main minMain">
+    <div class="main minMain bigMain">
         <div id="aSign" class="title">
-            <a href="/VenueSeatLevelManage">座位等第管理</a>
+            <a href="VenueSeatLevelManage">座位等第管理</a>
             <b>·</b>
-            <a href="/VenueHallPage">场厅管理</a>
+            <a href="VenueHallPage">场厅管理</a>
             <b>·</b>
-            <a href="/VenuePlanManage">计划管理</a>
+            <a href="VenuePlanManage">计划管理</a>
             <b>·</b>
             <a class="active">个人信息</a>
         </div>
@@ -96,7 +96,7 @@
         }
         else{
             $(".info_change").removeAttr("readonly");
-            $(".info_change").css("border", "2px solid blue");
+            $(".info_change").addClass("borderEdit");
             $("#changeInfo").hide();
             $("#submitInfo").show();
         }
@@ -104,7 +104,7 @@
 
     $("#submitInfo").click(function () {
         $(".info_change").attr("readonly", "readonly");
-        $(".info_change").css("border", "1px solid gray");
+        $(".info_change").removeClass("borderEdit");
         $("#changeInfo").show();
         $("#submitInfo").hide();
 

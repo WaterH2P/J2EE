@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="common">
-    <div class="main fixMain">
+    <div class="main fixMain bigMain">
         <div id="aSign" class="title">
             <a>订票</a>
             <b>·</b>
@@ -87,14 +87,14 @@
 
     $("#changeInfo").click(function () {
         $("#userName").removeAttr("readonly");
-        $("#userName").css("border", "2px solid blue");
+        $("#userName").addClass("borderEdit");
         $("#changeInfo").hide();
         $("#submitInfo").show();
     });
 
     $("#submitInfo").click(function () {
         $("#userName").attr("readonly", "readonly");
-        $("#userName").css("border", "1px solid gray");
+        $("#userName").removeClass("borderEdit");
         $("#changeInfo").show();
         $("#submitInfo").hide();
         var userEmail = $("#userEmail").val().toString();

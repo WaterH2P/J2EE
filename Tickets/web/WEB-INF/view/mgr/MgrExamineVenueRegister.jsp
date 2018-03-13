@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="common">
-    <div class="main fixMain">
+    <div class="main fixMain bigMain">
         <div id="aSign" class="title">
             <a class="active">审批注册</a>
             <b>·</b>

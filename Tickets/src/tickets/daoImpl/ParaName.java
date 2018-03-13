@@ -8,6 +8,7 @@ public class ParaName {
 	public final static String Table_venueBaseInfo = "venueBaseInfo";
 	public final static String Table_venueBaseInfoChange = "venueBaseInfoChange";
 	public final static String Table_venueAccount = "venueAccount";
+	public final static String Table_venueHall = "venueHall";
 	public final static String Table_venueSeatLevel = "venueSeatLevel";
 	
 	public final static String Table_mgrAccount = "mgrAccount";

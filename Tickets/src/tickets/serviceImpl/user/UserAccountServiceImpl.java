@@ -48,38 +48,28 @@ public class UserAccountServiceImpl implements CommonAccountService, UserAccount
 	
 	@Override
 	public boolean preRegister(String email, String name){
-		boolean result =false;
+		boolean result = false;
 		boolean isExist = userAccountDao.accountIsExist(email);
 		if( isExist && commonUVAccountDao.accountIsConfirmed(email) ){
 			result = false;
 		}
 		else{
 			String code = "";
-			try{
-				String string = email + Calendar.getInstance();
-				MessageDigest md5 = MessageDigest.getInstance("MD5");
-				BASE64Encoder base64en = new BASE64Encoder();
-				String newstr = base64en.encode(md5.digest(string.getBytes("utf-8")));
-				final int codeLength = 5;
-				for( int i = 0; i < codeLength; i++ ){
-					int index = (int) (Math.random() * newstr.length());
-					code += newstr.charAt(index);
-				}
-				System.out.println(code);
-				if( !isExist ){
-					userAccountDao.addAccount(email, code, name);
-				} else{
-					userAccountDao.updateAccountCode(email, code);
-				}
-				
-				String subject = "Verification";
-				String content = "Hello, your Verification Code is : " + code;
-				result = mailService.sendMail(email, subject, content);
-			}catch( NoSuchAlgorithmException e ){
-				e.printStackTrace();
-			}catch( UnsupportedEncodingException e ){
-				e.printStackTrace();
+			String string = email + Calendar.getInstance();
+			final int codeLength = 5;
+			code = randomString(string, codeLength);
+			
+			System.out.println(code);
+			if( !isExist ){
+				userAccountDao.addAccount(email, code, name);
 			}
+			else{
+				userAccountDao.updateAccountCode(email, code);
+			}
+				
+			String subject = "Verification";
+			String content = "Hello, your Verification Code is : " + code;
+			result = mailService.sendMail(email, subject, content);
 		}
 		return result;
 	}
@@ -98,6 +88,24 @@ public class UserAccountServiceImpl implements CommonAccountService, UserAccount
 	@Override
 	public void cancelAccountVIP(String email){
 		userAccountDao.deleteAccountVIP(email);
+	}
+	
+	private static String randomString(String baseStr, int strLen){
+		String result = "";
+		try{
+			MessageDigest md5 = MessageDigest.getInstance("MD5");
+			BASE64Encoder base64en = new BASE64Encoder();
+			String newStr = base64en.encode(md5.digest(baseStr.getBytes("utf-8")));
+			for( int i = 0; i < strLen; i++ ){
+				int index = (int) (Math.random() * newStr.length());
+				result += newStr.charAt(index);
+			}
+		}catch( NoSuchAlgorithmException e ){
+			e.printStackTrace();
+		}catch( UnsupportedEncodingException e ){
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 }

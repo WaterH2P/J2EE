@@ -72,7 +72,8 @@ public class VenueSeatLevelManageCon {
 				String seatID = venueSeatLevelService.addSeatLevel( venueSeatLevel );
 				if( seatID.length()>0 ){
 					result.setResult(true);
-					result.setMessage(venueID + "_" + seatID);
+					result.setMessage(venueID + "-" + seatID);
+					System.out.println( venueID + " add new seat : " + seatID);
 				}
 			}
 		}

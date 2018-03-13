@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="common">
-    <div class="main fixMain">
+    <div class="main fixMain smallMain">
         <h4 class="title">
             <div id="aSign">
                 <a href="/Login">登录</a>
@@ -70,11 +70,11 @@
         $("#address").val(address);
 
         if( address.length>0 ){
-            $("#address").css("border","1px solid grey");
+            $("#address").removeClass("borderRed");
             addressReady = true;
         }
         else {
-            $("#address").css("border","1px solid red");
+            $("#address").addClass("borderRed");
             addressReady = false;
         }
     });
@@ -86,11 +86,11 @@
         $("#telephone").val(telephone);
 
         if( telephone.length==11 || telephone.length==8 ){
-            $("#telephone").css("border","1px solid grey");
+            $("#telephone").removeClass("borderRed");
             telephoneReady = true;
         }
         else {
-            $("#telephone").css("border","1px solid red");
+            $("#telephone").addClass("borderRed");
             telephoneReady = false;
         }
     });
@@ -116,6 +116,9 @@
             message += "正确密码！";
         }
         if( message.length==0 ){
+            $("#messageShow").val(message);
+            $("#messageShow").removeClass("colorRed");
+
             var province = $("#province option:selected").text();
             var city = $("#city option:selected").text();
             var address = $("#address").val().toString();
@@ -137,7 +140,7 @@
         }
         else {
             $("#messageShow").val(message);
-            $("#messageShow").css("color", "red");
+            $("#messageShow").addClass("colorRed");
         }
     });
 

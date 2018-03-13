@@ -11,15 +11,15 @@
 </head>
 <body>
 <div class="common">
-    <div class="main">
+    <div class="main bigMain">
         <div id="aSign" class="title">
-            <a class="active" href="/VenueSeatLevelManage">座位类别</a>
+            <a class="active">座位等第管理</a>
             <b>·</b>
-            <a href="/VenueHallPage">场厅管理</a>
+            <a href="VenueHallPage">场厅管理</a>
             <b>·</b>
-            <a href="/VenuePlanManage">计划管理</a>
+            <a href="VenuePlanManage">计划管理</a>
             <b>·</b>
-            <a href="/VenueBaseInfo">个人信息</a>
+            <a href="VenueBaseInfo">个人信息</a>
         </div>
 
         <p id="addNewSeatLevel_p">
@@ -50,7 +50,7 @@
                var infoDiv = "<div id='" + seatLevel.seatID + "_info_div'>" +
                    "<p><label>名称 : </label><input type='text' value='" + seatLevel.name + "' readonly /></p>" +
                    "<p><label>价格 : </label><input type='text' value='¥" + seatLevel.price + "' readonly /></p>" +
-                   "<p><button id='btn_" + seatLevel.venueID + "_" + seatLevel.seatID + "_delete' onclick='deleteSeatLevel(this)'>删除该类别</button>" +
+                   "<button id='btn_" + seatLevel.venueID + "_" + seatLevel.seatID + "_delete' onclick='deleteSeatLevel(this)'>删除该类别</button>" +
                    "</div>";
                $("#seatLevel_div").append(infoDiv);
            }
@@ -90,12 +90,11 @@
             $("#seatLevel_div").hide();
             $("#addNewSeatLevel_div").show();
 
-            $("#seatLevelName").css("border","1px solid #c8c8c8");
-            $("#seatLevelPrice").css("border","1px solid #c8c8c8");
+            $("#seatLevelName").removeClass("borderRed");
+            $("#seatLevelPrice").removeClass("borderRed");
         }
     });
 
-    var isWrite = false;
     $("#backSeatLevelList").click(function () {
         var name = $("#seatLevelName").val().toString();
         name = deleteSpace(name);
@@ -123,11 +122,11 @@
         name = deleteSpace(name);
         $("#seatLevelName").val(name);
         if( name.length>0 ){
-            $("#seatLevelName").css("border","1px solid #c8c8c8");
+            $("#seatLevelName").removeClass("borderRed");
             nameReady = true;
         }
         else {
-            $("#seatLevelName").css("border","1px solid red");
+            $("#seatLevelName").addClass("borderRed");
             nameReady = false;
         }
     });
@@ -138,11 +137,12 @@
         $("#seatLevelPrice").val(price);
         price = deleteSpace(price);
         if( priceReg.test(price) ){
-            $("#seatLevelPrice").css("border","1px solid #c8c8c8");
+            $("#seatLevelPrice").removeClass("borderRed");
+            nameReady = true;
             priceReady = true;
         }
         else {
-            $("#seatLevelPrice").css("border","1px solid red");
+            $("#seatLevelPrice").addClass("borderRed");
             priceReady = false;
         }
     });
@@ -156,7 +156,7 @@
                 var res = $.parseJSON(rs);
                 if( res.result ){
                     var temp1 = res.message;
-                    var temp2 = temp1.split("_");
+                    var temp2 = temp1.split("-");
                     var venueID = temp2[0];
                     var seatID = temp2[1];
                     var infoDiv = "<div id='" + seatID + "_info_div'>" +
@@ -168,6 +168,7 @@
                     $("#seatLevelName").val("");
                     $("#seatLevelPrice").val("");
                     $("#backSeatLevelList").click();
+                    numOfSeatLevel++;
                 }
                 else {
                     alert(res.message);

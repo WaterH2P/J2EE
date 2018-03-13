@@ -12,7 +12,7 @@
 
 <body>
 <div class="common">
-    <div class="main fixMain">
+    <div class="main fixMain smallMain">
         <h4 class="title">
             <div id="aSign">
                 <a href="/Login">登录</a>
@@ -70,16 +70,17 @@
     $("#userEmail").blur(function(){
         var email = $("#userEmail").val().toString();
         email = deleteSpace(email);
+        email = email.toLowerCase();
         $("#userEmail").val(email);
 
         var emailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+.([a-z.])+$/;
         if( emailReg.test(email) ){
-            $("#userEmail").css("border","1px solid #c8c8c8");
-            $("#userEmail").css("border-bottom","none");
+            $("#userEmail").removeClass("borderRed");
+            $("#userEmail").addClass("noBorderBottom");
             emailReady = true;
         }
         else {
-            $("#userEmail").css("border","1px solid red");
+            $("#userEmail").addClass("borderRed");
             emailReady = false;
         }
     });
@@ -113,7 +114,7 @@
         }
         if( message.length==0 ){
             $("#messageShow").val(message);
-            $("#messageShow").css("color", "black");
+            $("#messageShow").removeClass("colorRed");
 
             var userEmail = $("#userEmail").val().toString();
             var userName = $("#userName").val().toString();
@@ -130,7 +131,7 @@
         }
         else{
             $("#messageShow").val(message);
-            $("#messageShow").css("color", "red");
+            $("#messageShow").addClass("colorRed");
         }
     });
 
@@ -140,6 +141,7 @@
             var userPassword = $("#userPassword").val().toString();
             var verificationCode = $("#verificationCode").val().toString();
             userEmail = deleteSpace(userEmail);
+            userEmail = userEmail.toLowerCase();
             userPassword = deleteSpace(userPassword);
             verificationCode = deleteSpace(verificationCode);
             var data = { "userEmail":userEmail, "userPassword":userPassword, "verificationCode":verificationCode };
@@ -151,13 +153,13 @@
                 }
                 else {
                     $("#messageShow").val(res.message);
-                    $("#messageShow").css("color", "red");
+                    $("#messageShow").addClass("colorRed");
                 }
             });
         }
         else {
             $("#messageShow").val("请输入正确密码!");
-            $("#messageShow").css("color", "red");
+            $("#messageShow").addClass("colorRed");
         }
     });
 
