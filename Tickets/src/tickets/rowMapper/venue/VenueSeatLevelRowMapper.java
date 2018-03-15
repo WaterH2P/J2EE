@@ -1,8 +1,7 @@
-package tickets.rowMapper;
+package tickets.rowMapper.venue;
 
 import org.springframework.jdbc.core.RowMapper;
-import tickets.model.VenueBaseInfo;
-import tickets.model.VenueSeatLevel;
+import tickets.model.venue.VenueSeatLevel;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +14,7 @@ public class VenueSeatLevelRowMapper  implements RowMapper<VenueSeatLevel> {
 		venueSeatLevel.setSeatID( rs.getString("seatID") );
 		venueSeatLevel.setVenueID( rs.getString("venueID") );
 		venueSeatLevel.setName( rs.getString("name") );
-		venueSeatLevel.setPrice( rs.getDouble("price") );
+		venueSeatLevel.setPercent( rs.getInt("percent") );
 		return venueSeatLevel;
 	}
 	

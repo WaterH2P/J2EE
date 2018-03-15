@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import tickets.dao.CommonAccountDao;
 import tickets.dao.CommonUVAccountDao;
 import tickets.dao.venue.VenueAccountDao;
-import tickets.model.VenueBaseInfo;
+import tickets.model.venue.VenueBaseInfo;
 import tickets.service.CommonAccountService;
 import tickets.service.venue.VenueAccountService;
 import tickets.service.venue.VenueBaseInfoService;

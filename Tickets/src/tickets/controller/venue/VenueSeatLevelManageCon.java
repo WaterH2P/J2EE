@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import tickets.controller.CommonCon;
 import tickets.daoImpl.ParaName;
 import tickets.model.Result;
-import tickets.model.VenueSeatLevel;
+import tickets.model.venue.VenueHall;
+import tickets.model.venue.VenueSeatLevel;
+import tickets.service.venue.VenueHallService;
 import tickets.service.venue.VenueSeatLevelService;
 
 import javax.annotation.Resource;
@@ -21,6 +23,9 @@ public class VenueSeatLevelManageCon {
 	
 	@Autowired
 	private HttpServletRequest request;
+	
+	@Resource(name = "venueHallService")
+	private VenueHallService venueHallService;
 	
 	@Resource(name = "venueSeatLevelService")
 	private VenueSeatLevelService venueSeatLevelService;
@@ -57,8 +62,22 @@ public class VenueSeatLevelManageCon {
 	}
 	
 	@ResponseBody
+	@RequestMapping(value = "/GetAllVenueHall", method = RequestMethod.POST)
+	public List<VenueHall> getAllVenueHall(){
+		List<VenueHall> venueHalls = null;
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isVenue(venueID) ){
+				venueHalls = venueHallService.getAllVenueHalls(venueID);
+			}
+		}
+		return venueHalls;
+	}
+	
+	@ResponseBody
 	@RequestMapping(value = "/AddNewSeatLevel", method = RequestMethod.POST)
-	public Result addNewSeatLevel(String name, String price){
+	public Result addNewSeatLevel(String name, String percent){
 		Result result = new Result();
 		result.setResult(false);
 		HttpSession session = request.getSession(false);
@@ -68,7 +87,7 @@ public class VenueSeatLevelManageCon {
 				VenueSeatLevel venueSeatLevel = new VenueSeatLevel();
 				venueSeatLevel.setVenueID(venueID);
 				venueSeatLevel.setName(name);
-				venueSeatLevel.setPrice(Double.valueOf(price));
+				venueSeatLevel.setPercent(Integer.valueOf(percent));
 				String seatID = venueSeatLevelService.addSeatLevel( venueSeatLevel );
 				if( seatID.length()>0 ){
 					result.setResult(true);
@@ -78,7 +97,7 @@ public class VenueSeatLevelManageCon {
 			}
 		}
 		if( !result.getResult() ){
-			String message = "很抱歉添加失败，请重试！";
+			String message = "很抱歉你没有权限！";
 			result.setMessage(message);
 		}
 		return result;
@@ -98,7 +117,7 @@ public class VenueSeatLevelManageCon {
 			}
 		}
 		if( !result.getResult() ){
-			String message = "很抱歉删除失败，请重试！";
+			String message = "很抱歉你没有权限！";
 			result.setMessage(message);
 		}
 		return result;

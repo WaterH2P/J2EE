@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import tickets.controller.CommonCon;
 import tickets.daoImpl.ParaName;
 import tickets.model.Result;
-import tickets.model.VenueBaseInfoRedundancy;
+import tickets.model.venue.VenueBaseInfoRedundancy;
 import tickets.service.mgr.MgrExamineVenueInfoChangeService;
 import tickets.service.venue.VenueBaseInfoService;
 

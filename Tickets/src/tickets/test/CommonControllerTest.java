@@ -12,11 +12,7 @@ public class CommonControllerTest {
 //		result = venueIDRegexTest();
 		
 		String result = "";
-		result = unifyStrTest();
 		System.out.println( result );
-		System.out.println( VenueHallManageCon.unifyStrBack(result) );
-		System.out.println( VenueHallManageCon.oneZeroToHexadecimal(result) );
-		System.out.println( VenueHallManageCon.hexadecimalToOneZero(result) );
 	}
 	
 	private static boolean emailRegexTest(){
@@ -27,11 +23,5 @@ public class CommonControllerTest {
 	private static boolean venueIDRegexTest(){
 		String venueID = "1628374";
 		return CommonCon.regCheck(ParaName.venueIDRegex, venueID);
-	}
-	
-	private static String unifyStrTest(){
-		String str = "aaaabbbbabba__aasf_faf_ad";
-		str = VenueHallManageCon.unifyStr(str);
-		return str;
 	}
 }

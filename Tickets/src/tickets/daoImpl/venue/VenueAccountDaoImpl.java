@@ -8,7 +8,7 @@ import tickets.dao.venue.VenueAccountDao;
 import tickets.daoImpl.Common;
 import tickets.daoImpl.DaoHelperImpl;
 import tickets.daoImpl.ParaName;
-import tickets.rowMapper.VenueIDRowMapper;
+import tickets.rowMapper.venue.VenueIDRowMapper;
 
 import java.util.List;
 

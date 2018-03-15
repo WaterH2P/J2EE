@@ -17,6 +17,14 @@
         </div>
 
         <div>
+            <p>
+                <label>帐号：</label>
+                <input type="text" id="venueID" value="${mgrID}" readonly />
+            </p>
+        </div>
+
+        <div>
+            <hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />
             <form action="/Logout" method="post">
                 <input type="submit" value="退出登录">
             </form>

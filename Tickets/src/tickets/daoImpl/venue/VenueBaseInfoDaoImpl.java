@@ -5,12 +5,12 @@ import org.springframework.stereotype.Repository;
 import tickets.dao.venue.VenueBaseInfoDao;
 import tickets.daoImpl.DaoHelperImpl;
 import tickets.daoImpl.ParaName;
-import tickets.model.VenueBaseInfo;
-import tickets.model.VenueBaseInfoChange;
-import tickets.model.VenueBaseInfoRedundancy;
-import tickets.rowMapper.VenueIDRowMapper;
-import tickets.rowMapper.VenueInfoChangeRowMapper;
-import tickets.rowMapper.VenueInfoRowMapper;
+import tickets.model.venue.VenueBaseInfo;
+import tickets.model.venue.VenueBaseInfoChange;
+import tickets.model.venue.VenueBaseInfoRedundancy;
+import tickets.rowMapper.venue.VenueIDRowMapper;
+import tickets.rowMapper.venue.VenueInfoChangeRowMapper;
+import tickets.rowMapper.venue.VenueInfoRowMapper;
 
 import java.util.ArrayList;
 import java.util.List;

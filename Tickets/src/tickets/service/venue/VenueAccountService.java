@@ -1,6 +1,6 @@
 package tickets.service.venue;
 
-import tickets.model.VenueBaseInfo;
+import tickets.model.venue.VenueBaseInfo;
 
 public interface VenueAccountService {
 

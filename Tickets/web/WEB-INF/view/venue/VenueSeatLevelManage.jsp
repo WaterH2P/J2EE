@@ -1,6 +1,6 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="tickets.model.VenueSeatLevel" %>
+<%@ page import="tickets.model.venue.VenueSeatLevel" %>
 <%@ page import="tickets.model.Result" %>
 <html>
 <head>
@@ -22,17 +22,18 @@
             <a href="VenueBaseInfo">个人信息</a>
         </div>
 
-        <p id="addNewSeatLevel_p">
+        <div id="addNewSeatLevel_btn_div">
             <button id="addNewSeatLevel_btn">添加新的座位类别</button>
-        </p>
+            <hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />
+        </div>
 
         <div id="seatLevel_div">
 
         </div>
         <div id="addNewSeatLevel_div" style="display: none">
             <button id="backSeatLevelList">🔙</button>
-            <p><label>名称：</label><input type="text" id="seatLevelName"></p>
-            <p><label>价格：</label><input type="text" id="seatLevelPrice" placeholder="例如：9.0"></p>
+            <p><label>座位名称：</label><input type="text" id="seatLevelName"></p>
+            <p><label>价格比例：</label><input type="text" id="seatLevelPricePercent" placeholder="例如：90"><label>%</label></p>
             <button id="submitSeatLevel">提交</button>
         </div>
     </div>
@@ -48,9 +49,10 @@
                numOfSeatLevel++;
                var seatLevel = res[i];
                var infoDiv = "<div id='" + seatLevel.seatID + "_info_div'>" +
-                   "<p><label>名称 : </label><input type='text' value='" + seatLevel.name + "' readonly /></p>" +
-                   "<p><label>价格 : </label><input type='text' value='¥" + seatLevel.price + "' readonly /></p>" +
+                   "<p><label>座位名称：</label><input type='text' value='" + seatLevel.name + "' readonly /></p>" +
+                   "<p><label>价格比例：</label><input type='text' value='" + seatLevel.percent + "%' readonly /></p>" +
                    "<button id='btn_" + seatLevel.venueID + "_" + seatLevel.seatID + "_delete' onclick='deleteSeatLevel(this)'>删除该类别</button>" +
+                   "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
                    "</div>";
                $("#seatLevel_div").append(infoDiv);
            }
@@ -79,39 +81,44 @@
         }
     }
 
+    function deleteSpace(str) {
+        return str.replace(/\s/g, "");
+    }
+</script>
+<script>
     var nameReady = false;
-    var priceReady = false;
+    var percentReady = false;
     $("#addNewSeatLevel_btn").click(function () {
         if( numOfSeatLevel>=3 ){
             alert("最多有 三种 类别座位！")
         }
         else {
-            $("#addNewSeatLevel_p").hide();
+            $("#addNewSeatLevel_btn_div").hide();
             $("#seatLevel_div").hide();
             $("#addNewSeatLevel_div").show();
 
             $("#seatLevelName").removeClass("borderRed");
-            $("#seatLevelPrice").removeClass("borderRed");
+            $("#seatLevelPricePercent").removeClass("borderRed");
         }
     });
 
     $("#backSeatLevelList").click(function () {
         var name = $("#seatLevelName").val().toString();
         name = deleteSpace(name);
-        var price = $("#seatLevelPrice").val().toString();
-        price = deleteSpace(price);
-        if( name.length>0 || price.length>0 ){
+        var percent = $("#seatLevelPricePercent").val().toString();
+        percent = deleteSpace(percent);
+        if( name.length>0 || percent.length>0 ){
             var isConfirmed = confirm("返回将丢失填写信息！请三思！");
             if( isConfirmed ){
-                $("#addNewSeatLevel_p").show();
+                $("#addNewSeatLevel_btn_div").show();
                 $("#seatLevel_div").show();
                 $("#addNewSeatLevel_div").hide();
                 $("#seatLevelName").val("");
-                $("#seatLevelPrice").val("");
+                $("#seatLevelPricePercent").val("");
             }
         }
         else {
-            $("#addNewSeatLevel_p").show();
+            $("#addNewSeatLevel_btn_div").show();
             $("#seatLevel_div").show();
             $("#addNewSeatLevel_div").hide();
         }
@@ -131,27 +138,27 @@
         }
     });
 
-    $("#seatLevelPrice").blur(function () {
-        var priceReg = /^([1-9])+([.0-9])([0-9])+$/;
-        var price = $("#seatLevelPrice").val().toString();
-        $("#seatLevelPrice").val(price);
-        price = deleteSpace(price);
-        if( priceReg.test(price) ){
-            $("#seatLevelPrice").removeClass("borderRed");
+    $("#seatLevelPricePercent").blur(function () {
+        var percentReg = /^([1-9])([0-9])*$/;
+        var percent = $("#seatLevelPricePercent").val().toString();
+        $("#seatLevelPricePercent").val(percent);
+        percent = deleteSpace(percent);
+        if( percentReg.test(percent) ){
+            $("#seatLevelPricePercent").removeClass("borderRed");
             nameReady = true;
-            priceReady = true;
+            percentReady = true;
         }
         else {
-            $("#seatLevelPrice").addClass("borderRed");
-            priceReady = false;
+            $("#seatLevelPricePercent").addClass("borderRed");
+            percentReady = false;
         }
     });
 
     $("#submitSeatLevel").click(function () {
-        if( nameReady && priceReady ){
+        if( nameReady && percentReady ){
             var name = $("#seatLevelName").val().toString();
-            var price = $("#seatLevelPrice").val().toString();
-            var data = {"name":name, "price":price};
+            var percent = $("#seatLevelPricePercent").val().toString();
+            var data = {"name":name, "percent":percent};
             $.post("AddNewSeatLevel", data, function (rs) {
                 var res = $.parseJSON(rs);
                 if( res.result ){
@@ -160,13 +167,14 @@
                     var venueID = temp2[0];
                     var seatID = temp2[1];
                     var infoDiv = "<div id='" + seatID + "_info_div'>" +
-                        "<p><label>名称 : </label><input type='text' value='" + name + "' readonly /></p>" +
-                        "<p><label>价格 : </label><input type='text' value='¥" + price + "' readonly /></p>" +
+                        "<p><label>座位名称：</label><input type='text' value='" + name + "' readonly /></p>" +
+                        "<p><label>价格比例：</label><input type='text' value='" + percent + "%' readonly /></p>" +
                         "<p><button id='btn_" + venueID + "_" + seatID + "_delete' onclick='deleteSeatLevel(this)'>删除该类别</button>" +
+                        "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
                         "</div>";
                     $("#seatLevel_div").append(infoDiv);
                     $("#seatLevelName").val("");
-                    $("#seatLevelPrice").val("");
+                    $("#seatLevelPricePercent").val("");
                     $("#backSeatLevelList").click();
                     numOfSeatLevel++;
                 }
@@ -179,10 +187,6 @@
             alert("请填写正确 名称 和 价格！")
         }
     });
-
-    function deleteSpace(str) {
-        return str.replace(/\s/g, "");
-    }
 </script>
 </body>
 </html>

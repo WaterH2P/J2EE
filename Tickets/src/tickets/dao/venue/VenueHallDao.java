@@ -1,14 +1,20 @@
 package tickets.dao.venue;
 
-import tickets.model.VenueHall;
+import tickets.model.venue.VenueHall;
+import tickets.model.venue.VenueHallSeat;
 
 import java.util.List;
-import java.util.Map;
 
 public interface VenueHallDao {
 	
-	boolean insertNewHall(VenueHall venueHall, Map<Integer, String> seatRowLevel);
+	boolean insertNewVenueHall(VenueHall venueHall, List<VenueHallSeat> venueHallSeats);
 	
 	List<String> selectAllVenueHallIDs(String venueID);
+	
+	List<VenueHall> selectAllVenueHalls(String venueID);
+	
+	void deleteVenueHall(String hallID);
+	
+	VenueHall selectVenueHall(String hallID);
 	
 }

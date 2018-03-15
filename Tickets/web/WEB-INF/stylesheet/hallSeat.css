@@ -73,6 +73,10 @@ div.seatCharts-seat.selected {
     background-color: #E6CAC4;
 }
 
+div.seatCharts-seat.none {
+    background-color: white;
+}
+
 div.seatCharts-seat.unavailable {
     background-color: #472B34;
     cursor: not-allowed;

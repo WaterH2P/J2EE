@@ -2,9 +2,9 @@ package tickets.serviceImpl.venue;
 
 import org.springframework.stereotype.Service;
 import tickets.dao.venue.VenueBaseInfoDao;
-import tickets.model.VenueBaseInfo;
-import tickets.model.VenueBaseInfoChange;
-import tickets.model.VenueBaseInfoRedundancy;
+import tickets.model.venue.VenueBaseInfo;
+import tickets.model.venue.VenueBaseInfoChange;
+import tickets.model.venue.VenueBaseInfoRedundancy;
 import tickets.service.venue.VenueBaseInfoService;
 
 import javax.annotation.Resource;
@@ -42,8 +42,8 @@ public class VenueBaseInfoServiceImpl implements VenueBaseInfoService {
 	}
 	
 	@Override
-	public boolean ChangeVenueInfo(String venueID){
-		return venueBaseInfoDao.updateVenueInfo(venueID);
+	public void ChangeVenueInfo(String venueID){
+		venueBaseInfoDao.updateVenueInfo(venueID);
 	}
 	
 }

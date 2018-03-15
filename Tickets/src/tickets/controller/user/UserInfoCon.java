@@ -71,7 +71,7 @@ public class UserInfoCon {
 			}
 		}
 		if( !result.getResult() ){
-			String message = "很抱歉修改失败！";
+			String message = "很抱歉你没有权限！";
 			result.setMessage(message);
 		}
 		return result;

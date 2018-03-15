@@ -1,8 +1,8 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="tickets.model.VenueBaseInfo" %>
-<%@ page import="tickets.model.VenueBaseInfoChange" %>
-<%@ page import="tickets.model.VenueBaseInfoRedundancy" %>
+<%@ page import="tickets.model.venue.VenueBaseInfo" %>
+<%@ page import="tickets.model.venue.VenueBaseInfoChange" %>
+<%@ page import="tickets.model.venue.VenueBaseInfoRedundancy" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -45,8 +45,8 @@
                     "<p><label>电话 : </label><input type='tel' value='" + venueBaseInfoChange.telephone + "' readonly /></p>" +
                     "<p><button id='btn_" + venueBaseInfo.venueID + "_agree' onclick='agreeVenueInfoChange(this)'>同意</button>" +
                     "<button id='btn_" + venueBaseInfo.venueID + "_disagree' onclick='disagreeVenueInfoChange()'>不同意</button></p>" +
-                    "</div>" +
-                    "<br/>";
+                    "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
+                    "</div>";
                 $("#div_VenueChangeInfo").append(infoDiv);
             }
         });

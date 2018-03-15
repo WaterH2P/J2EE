@@ -1,8 +1,8 @@
 package tickets.dao.venue;
 
-import tickets.model.VenueBaseInfo;
-import tickets.model.VenueBaseInfoChange;
-import tickets.model.VenueBaseInfoRedundancy;
+import tickets.model.venue.VenueBaseInfo;
+import tickets.model.venue.VenueBaseInfoChange;
+import tickets.model.venue.VenueBaseInfoRedundancy;
 
 import java.util.List;
 

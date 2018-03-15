@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import tickets.controller.CommonCon;
 import tickets.model.Result;
-import tickets.model.VenueBaseInfo;
+import tickets.model.venue.VenueBaseInfo;
 import tickets.service.venue.VenueAccountService;
 
 import javax.annotation.Resource;

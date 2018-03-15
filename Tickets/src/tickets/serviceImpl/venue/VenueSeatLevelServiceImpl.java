@@ -2,7 +2,7 @@ package tickets.serviceImpl.venue;
 
 import org.springframework.stereotype.Service;
 import tickets.dao.venue.VenueSeatLevelDao;
-import tickets.model.VenueSeatLevel;
+import tickets.model.venue.VenueSeatLevel;
 import tickets.service.venue.VenueSeatLevelService;
 import tickets.serviceImpl.CommonService;
 
@@ -36,8 +36,8 @@ public class VenueSeatLevelServiceImpl implements VenueSeatLevelService{
 	}
 	
 	@Override
-	public boolean deleteSeatLevel(String seatID){
-		return venueSeatLevelDao.deleteSeatLevel(seatID);
+	public void deleteSeatLevel(String seatID){
+		venueSeatLevelDao.deleteSeatLevel(seatID);
 	}
 	
 	@Override

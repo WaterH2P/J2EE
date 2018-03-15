@@ -1,4 +1,4 @@
-package tickets.model;
+package tickets.model.venue;
 
 public class VenueHall {
 	

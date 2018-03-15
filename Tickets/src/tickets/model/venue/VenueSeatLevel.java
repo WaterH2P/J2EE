@@ -1,11 +1,11 @@
-package tickets.model;
+package tickets.model.venue;
 
 public class VenueSeatLevel {
 	
 	private String seatID = "";
 	private String venueID = "";
 	private String name = "";
-	private double price = 0.0;
+	private int percent = 0;
 	
 	public String getSeatID(){
 		return seatID;
@@ -31,12 +31,12 @@ public class VenueSeatLevel {
 		this.name = name;
 	}
 	
-	public double getPrice(){
-		return price;
+	public int getPercent(){
+		return percent;
 	}
 	
-	public void setPrice(double price){
-		this.price = price;
+	public void setPercent(int percent){
+		this.percent = percent;
 	}
 	
 }

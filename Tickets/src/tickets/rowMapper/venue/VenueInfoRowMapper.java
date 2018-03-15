@@ -1,7 +1,7 @@
-package tickets.rowMapper;
+package tickets.rowMapper.venue;
 
 import org.springframework.jdbc.core.RowMapper;
-import tickets.model.VenueBaseInfo;
+import tickets.model.venue.VenueBaseInfo;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

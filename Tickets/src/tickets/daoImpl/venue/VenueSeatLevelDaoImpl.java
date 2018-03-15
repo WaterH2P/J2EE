@@ -5,8 +5,8 @@ import org.springframework.stereotype.Repository;
 import tickets.dao.venue.VenueSeatLevelDao;
 import tickets.daoImpl.DaoHelperImpl;
 import tickets.daoImpl.ParaName;
-import tickets.model.VenueSeatLevel;
-import tickets.rowMapper.VenueSeatLevelRowMapper;
+import tickets.model.venue.VenueSeatLevel;
+import tickets.rowMapper.venue.VenueSeatLevelRowMapper;
 
 import java.util.List;
 
@@ -17,25 +17,25 @@ public class VenueSeatLevelDaoImpl implements VenueSeatLevelDao {
 	
 	@Override
 	public boolean insertSeatLevel(VenueSeatLevel venueSeatLevel){
-		String sql = "INSERT INTO " + ParaName.Table_venueSeatLevel + " VALUES (?,?,?,?)";
+		String sql = "INSERT INTO " + ParaName.Table_venueSeatLevel + " VALUES (?,?,?,?,?)";
 		String seatID = venueSeatLevel.getSeatID();
 		String venueID = venueSeatLevel.getVenueID();
 		String name = venueSeatLevel.getName();
-		double price = venueSeatLevel.getPrice();
-		jdbcTemplate.update(sql, seatID, venueID, name, price);
+		int percent = venueSeatLevel.getPercent();
+		final boolean isDeleted = false;
+		jdbcTemplate.update(sql, seatID, venueID, name, percent, isDeleted);
 		return true;
 	}
 	
 	@Override
-	public boolean deleteSeatLevel(String seatID){
-		String sql = "DELETE FROM " + ParaName.Table_venueSeatLevel + " WHERE seatID=?";
+	public void deleteSeatLevel(String seatID){
+		String sql = "UPDATE " + ParaName.Table_venueSeatLevel + " SET isDeleted=TRUE WHERE seatID=?";
 		jdbcTemplate.update(sql, seatID);
-		return true;
 	}
 	
 	@Override
 	public List<VenueSeatLevel> selectAllSeatLevels(String venueID){
-		String sql = "SELECT * FROM " + ParaName.Table_venueSeatLevel + " WHERE venueID=?";
+		String sql = "SELECT * FROM " + ParaName.Table_venueSeatLevel + " WHERE venueID=? AND isDeleted=FALSE ";
 		List<VenueSeatLevel> venueSeatLevels = jdbcTemplate.query(sql, new VenueSeatLevelRowMapper(), venueID);
 		return venueSeatLevels;
 	}

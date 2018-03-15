@@ -1,6 +1,6 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="tickets.model.VenueBaseInfo" %>
+<%@ page import="tickets.model.venue.VenueBaseInfo" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -23,23 +23,23 @@
 
         <div>
             <p>
-                <label>帐号 : </label>
+                <label>帐号：</label>
                 <input type="text" id="venueID" readonly />
             </p>
             <p>
-                <label>省 : </label>
+                <label>省：</label>
                 <input type="text" id="venueProvince" readonly />
             </p>
             <p>
-                <label>市 : </label>
+                <label>市：</label>
                 <input type="text" id="venueCity" readonly />
             </p>
             <p>
-                <label>地址 : </label>
+                <label>地址：</label>
                 <input class="info_change" type="text" id="venueAddress" readonly />
             </p>
             <p>
-                <label>电话 : </label>
+                <label>电话：</label>
                 <input class="info_change" type="tel" id="venueTel" readonly />
             </p>
             <p>
@@ -48,9 +48,8 @@
             </p>
         </div>
 
-        <br />
-
         <div>
+            <hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />
             <form action="/Logout" method="post">
                 <input type="submit" value="退出登录">
             </form>
@@ -76,6 +75,11 @@
             isChanging = res.isChanging;
         });
     });
+</script>
+<script>
+    function deleteSpace(str) {
+        return str.replace(/\s/g, "");
+    }
 </script>
 <script>
     $("#venueAddress").blur(function(){
@@ -137,10 +141,6 @@
             });
         }
     });
-
-    function deleteSpace(str) {
-        return str.replace(/\s/g, "");
-    }
 </script>
 </body>
 </html>

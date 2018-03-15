@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import tickets.controller.CommonCon;
 import tickets.daoImpl.ParaName;
 import tickets.model.Result;
-import tickets.model.VenueBaseInfo;
-import tickets.model.VenueBaseInfoChange;
+import tickets.model.venue.VenueBaseInfo;
+import tickets.model.venue.VenueBaseInfoChange;
 import tickets.service.venue.VenueBaseInfoService;
 
 import javax.annotation.Resource;
