@@ -13,6 +13,9 @@ public class ParaName {
 	public final static String Table_venueHallSeat = "venueHallSeat";
 	public final static String Table_venuePlan = "venuePlan";
 	
+	public final static String Table_vipInfo = "vipInfo";
+	public final static String Table_couponInfo = "couponInfo";
+	
 	public final static String Table_mgrAccount = "mgrAccount";
 	
 	public final static String VerificationCode = "EmailORVenueID";

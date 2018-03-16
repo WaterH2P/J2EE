@@ -5,8 +5,8 @@ import org.springframework.stereotype.Repository;
 import tickets.dao.user.UserInfoDao;
 import tickets.daoImpl.DaoHelperImpl;
 import tickets.daoImpl.ParaName;
-import tickets.model.UserInfo;
-import tickets.rowMapper.UserInfoRowMapper;
+import tickets.model.user.UserInfo;
+import tickets.rowMapper.user.UserInfoRowMapper;
 
 @Repository( "userInfoDao" )
 public class UserInfoDaoImpl implements UserInfoDao {

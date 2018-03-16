@@ -1,6 +1,6 @@
 package tickets.dao.user;
 
-import tickets.model.UserInfo;
+import tickets.model.user.UserInfo;
 
 public interface UserInfoDao {
 	

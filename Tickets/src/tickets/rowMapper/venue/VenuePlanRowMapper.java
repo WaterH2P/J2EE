@@ -19,6 +19,8 @@ public class VenuePlanRowMapper implements RowMapper<VenuePlan> {
 		venuePlan.setEndTime( rs.getTime("endTime") );
 		venuePlan.setHallID( rs.getString("hallID") );
 		venuePlan.setHallName( rs.getString("hallName") );
+		venuePlan.setNumOfRow(rs.getInt("numOfRow"));
+		venuePlan.setNumOfCol(rs.getInt("numOfCol"));
 		venuePlan.setNumOfTicket(rs.getInt("numOfTicket"));
 		venuePlan.setNumOfTLeft(rs.getInt("numOfTLeft"));
 		venuePlan.setNumOfTSeated(rs.getInt("numOfTSeated"));

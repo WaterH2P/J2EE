@@ -12,6 +12,8 @@ public class VenuePlan {
 	private Date endTime;
 	private String hallID = "";
 	private String hallName = "";
+	private int numOfRow = 0;
+	private int numOfCol = 0;
 	private int numOfTicket = 0;
 	private int numOfTLeft = 0;
 	private int numOfTSeated = 0;
@@ -82,6 +84,22 @@ public class VenuePlan {
 	
 	public void setHallName(String hallName){
 		this.hallName = hallName;
+	}
+	
+	public int getNumOfRow(){
+		return numOfRow;
+	}
+	
+	public void setNumOfRow(int numOfRow){
+		this.numOfRow = numOfRow;
+	}
+	
+	public int getNumOfCol(){
+		return numOfCol;
+	}
+	
+	public void setNumOfCol(int numOfCol){
+		this.numOfCol = numOfCol;
 	}
 	
 	public int getNumOfTicket(){

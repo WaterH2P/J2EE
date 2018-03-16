@@ -29,7 +29,7 @@ public class MgrExamineVenueInfoChangeCon {
 	@Resource(name = "mgrExamineVenueInfoChangeService")
 	private MgrExamineVenueInfoChangeService mgrExamineVenueInfoChangeService;
 
-	@RequestMapping(value = "/MgrExamineVenueInfoChange", method = RequestMethod.GET)
+	@RequestMapping(value = "/Mgr/MgrExamineVenueInfoChange", method = RequestMethod.GET)
 	public String mgrExamineVenueInfoChangePage(){
 		HttpSession session = request.getSession(false);
 		if( CommonCon.hasLogin(session) ){
@@ -47,7 +47,7 @@ public class MgrExamineVenueInfoChangeCon {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/GetAllVenueInfoRedundancies", method = RequestMethod.POST)
+	@RequestMapping(value = "/Mgr/GetAllVenueInfoRedundancies", method = RequestMethod.POST)
 	public List<VenueBaseInfoRedundancy> getAllVenueInfoRedundancies(){
 		HttpSession session = request.getSession(false);
 		List<VenueBaseInfoRedundancy> venueInfoRedundancies = null;
@@ -61,7 +61,7 @@ public class MgrExamineVenueInfoChangeCon {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/AgreeWithVenueInfoChange", method = RequestMethod.POST)
+	@RequestMapping(value = "/Mgr/AgreeWithVenueInfoChange", method = RequestMethod.POST)
 	public Result agreeWithVenueRegister(String venueID){
 		Result result = new Result();
 		result.setResult(false);

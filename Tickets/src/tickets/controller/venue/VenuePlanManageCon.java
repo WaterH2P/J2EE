@@ -75,7 +75,7 @@ public class VenuePlanManageCon {
 		if( CommonCon.hasLogin(session) ){
 			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
 			if( CommonCon.isVenue(venueID) ){
-				venuePlan = venuePlanService.getAllVenuePlans(venueID);
+				venuePlan = venuePlanService.getAllVenuePlansByVenueID(venueID);
 			}
 		}
 		return venuePlan;

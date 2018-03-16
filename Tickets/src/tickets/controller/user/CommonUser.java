@@ -13,7 +13,20 @@ public class CommonUser {
 		return "user/UserInfo";
 	}
 	public static String redirectToUserInfoPage(){
-		return "redirect:/UserInfo";
+		return "redirect:/User/UserInfo";
 	}
 	
+	public static String toUserOrderPage(){
+		return "user/UserOrder";
+	}
+	public static String redirectToUserOrderPage(){
+		return "redirect:/User/UserOrder";
+	}
+	
+	public static String toUserBuyTicketOnlinePage(){
+		return "user/UserBuyTicket";
+	}
+	public static String redirectToUserBuyTicketOnlinePage(){
+		return "redirect:/User/UserBuyTicket";
+	}
 }

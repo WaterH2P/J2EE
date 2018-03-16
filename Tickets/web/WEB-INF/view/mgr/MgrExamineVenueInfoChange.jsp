@@ -11,13 +11,15 @@
 </head>
 <body>
 <div class="common">
-    <div class="main fixMain bigMain">
+    <div class="main minMain bigMain">
         <div id="aSign" class="title">
-            <a href="/MgrExamineVenueRegister">审批注册</a>
+            <a href="MgrSetVIPDiscount">VIP 优惠</a>
+            <b>·</b>
+            <a href="MgrExamineVenueRegister">审批注册</a>
             <b>·</b>
             <a class="active">审批修改信息</a>
             <b>·</b>
-            <a href="/MgrInfo">个人信息</a>
+            <a href="MgrInfo">个人信息</a>
         </div>
 
         <div id="div_VenueChangeInfo">
@@ -43,8 +45,10 @@
                     "<p><label>省市 : </label><input type='text' value='" + venueBaseInfoChange.province + venueBaseInfoChange.city + "' readonly /></p>" +
                     "<p><label>地址 : </label><input type='text' value='" + venueBaseInfoChange.address + "' readonly /></p>" +
                     "<p><label>电话 : </label><input type='tel' value='" + venueBaseInfoChange.telephone + "' readonly /></p>" +
-                    "<p><button id='btn_" + venueBaseInfo.venueID + "_agree' onclick='agreeVenueInfoChange(this)'>同意</button>" +
-                    "<button id='btn_" + venueBaseInfo.venueID + "_disagree' onclick='disagreeVenueInfoChange()'>不同意</button></p>" +
+                    "<p>" +
+                        "<button id='btn_" + venueBaseInfo.venueID + "_agree' onclick='agreeVenueInfoChange(this)'>同意</button>" +
+                        "<button id='btn_" + venueBaseInfo.venueID + "_disagree' onclick='disagreeVenueInfoChange()'>不同意</button>" +
+                    "</p>" +
                     "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
                     "</div>";
                 $("#div_VenueChangeInfo").append(infoDiv);

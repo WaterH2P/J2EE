@@ -7,11 +7,13 @@
 </head>
 <body>
 <div class="common">
-    <div class="main fixMain bigMain">
+    <div class="main minMain bigMain">
         <div id="aSign" class="title">
-            <a href="/MgrExamineVenueRegister">审批注册</a>
+            <a href="MgrSetVIPDiscount">VIP 优惠</a>
             <b>·</b>
-            <a href="/MgrExamineVenueInfoChange">审批修改信息</a>
+            <a href="MgrExamineVenueRegister">审批注册</a>
+            <b>·</b>
+            <a href="MgrExamineVenueInfoChange">审批修改信息</a>
             <b>·</b>
             <a class="active">个人信息</a>
         </div>

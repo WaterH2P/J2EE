@@ -9,24 +9,24 @@
 </head>
 <body>
     <div class="common">
-        <div class="main">
+        <div class="main bigMain">
             <div id="aSign" class="title">
-                <a>订票</a>
+                <a href="UserBuyTicket">订票</a>
                 <b>·</b>
                 <a class="active">订单查看</a>
                 <b>·</b>
-                <a href="/UserInfo">个人信息</a>
+                <a href="UserInfo">个人信息</a>
             </div>
 
             <div class="title_2">
-                <a class="active">已完成订单</a>
+                <a class="active">历史订单</a>
+                <b>·</b>
+                <a>未来订单</a>
                 <b>·</b>
                 <a>未完成订单</a>
             </div>
 
             <div>
-                <input type="text" value="历史订单" readonly />
-                <input type="text" value="未来订单" readonly />
             </div>
         </div>
     </div>

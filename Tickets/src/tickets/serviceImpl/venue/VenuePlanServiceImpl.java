@@ -51,8 +51,10 @@ public class VenuePlanServiceImpl implements VenuePlanService {
 	}
 	
 	@Override
-	public List<VenuePlan> getAllVenuePlans(String venueID){
-		return venuePlanDao.selectAllVenuePlans(venueID);
+	public List<VenuePlan> getAllVenuePlansByVenueID(String venueID){
+		List<VenuePlan> venuePlans = venuePlanDao.selectAllVenuePlansByVenueID(venueID);
+		List<VenuePlan> venuePlanUnifyBack = CommonService.venuePlanUnifyBack(venuePlans);
+		return venuePlanUnifyBack;
 	}
 	
 	

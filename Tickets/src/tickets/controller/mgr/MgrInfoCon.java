@@ -17,7 +17,7 @@ public class MgrInfoCon {
 	@Autowired
 	private HttpServletRequest request;
 
-	@RequestMapping(value = "/MgrInfo", method = RequestMethod.GET)
+	@RequestMapping(value = "/Mgr/MgrInfo", method = RequestMethod.GET)
 	public String mgrInfoPage(ModelMap model){
 		HttpSession session = request.getSession(false);
 		if( CommonCon.hasLogin(session) ){

@@ -43,7 +43,18 @@ public class CommonAccountCon {
 	private HttpServletRequest request;
 	
 	@RequestMapping(value = "/*", method = RequestMethod.GET)
-	public String wrongURLRedirectToLoginPage(){
+	public String wrongURLRedirectToLoginPage1(){
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			return CommonCon.redirectToInfoPage();
+		}
+		else {
+			return CommonCon.redirectToLoginPage();
+		}
+	}
+	
+	@RequestMapping(value = "/*/*", method = RequestMethod.GET)
+	public String wrongURLRedirectToLoginPage2(){
 		HttpSession session = request.getSession(false);
 		if( CommonCon.hasLogin(session) ){
 			return CommonCon.redirectToInfoPage();

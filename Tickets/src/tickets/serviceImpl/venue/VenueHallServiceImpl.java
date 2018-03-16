@@ -18,7 +18,7 @@ public class VenueHallServiceImpl implements VenueHallService {
 	
 	@Override
 	public VenueHall addNewVenueHall(VenueHall venueHall, String seatData, String seatLevel){
-		String seatUnify = CommonService.unifyStr(seatData);
+		String seatUnify = CommonService.strFromLetterToNum(seatData);
 		String seatDist = CommonService.oneZeroToHexadecimal(seatUnify);
 		venueHall.setSeatDist(seatDist);
 		
@@ -93,7 +93,7 @@ public class VenueHallServiceImpl implements VenueHallService {
 		int numOfSeat = venueHall.getNumOfRow() * venueHall.getNumOfCol();
 		String seatData = CommonService.hexadecimalToOneZero(venueHall.getSeatDist());
 		seatData = seatData.substring(0, numOfSeat);
-		seatData = CommonService.unifyStrBack(seatData);
+		seatData = CommonService.strFromNumToLetter(seatData);
 		venueHall.setSeatDist(seatData);
 		return venueHall;
 	}

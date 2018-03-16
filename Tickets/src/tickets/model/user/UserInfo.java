@@ -1,4 +1,4 @@
-package tickets.model;
+package tickets.model.user;
 
 public class UserInfo {
 	
@@ -7,6 +7,7 @@ public class UserInfo {
 	private String vipLevel = "";
 	private int balance = 0;
 	private int point = 0;
+	private int totalPoint = 0;
 	
 	public String getEmail(){
 		return email;
@@ -46,6 +47,14 @@ public class UserInfo {
 	
 	public void setPoint(int point){
 		this.point = point;
+	}
+	
+	public int getTotalPoint(){
+		return totalPoint;
+	}
+	
+	public void setTotalPoint(int totalPoint){
+		this.totalPoint = totalPoint;
 	}
 	
 }

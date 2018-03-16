@@ -10,6 +10,8 @@ public interface VenuePlanDao {
 	
 	void insertNewVenuePlan(VenuePlan venuePlan);
 	
-	List<VenuePlan> selectAllVenuePlans(String venueID);
+	List<VenuePlan> selectAllVenuePlansByVenueID(String venueID);
+	
+	List<VenuePlan> selectAllVenuePlansByPlanName(String planName);
 	
 }

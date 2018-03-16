@@ -8,6 +8,6 @@ public interface VenuePlanService {
 	
 	String addNewVenuePlan(VenuePlan venuePlan);
 	
-	List<VenuePlan> getAllVenuePlans(String venueID);
+	List<VenuePlan> getAllVenuePlansByVenueID(String venueID);
 	
 }

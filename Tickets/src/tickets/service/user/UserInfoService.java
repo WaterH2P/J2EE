@@ -1,6 +1,6 @@
 package tickets.service.user;
 
-import tickets.model.UserInfo;
+import tickets.model.user.UserInfo;
 
 public interface UserInfoService {
 	

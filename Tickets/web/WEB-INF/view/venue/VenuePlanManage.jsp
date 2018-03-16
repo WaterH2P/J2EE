@@ -6,7 +6,6 @@
     <title>Plan Manage</title>
 
     <link rel="stylesheet" type="text/css" href="../../stylesheet/common.css">
-    <link rel="stylesheet" type="text/css" href="../../stylesheet/jquery/jquery.seat-charts.css">
     <link rel="stylesheet" type="text/css" href="../../stylesheet/hallSeat.css">
     <link rel="stylesheet" type="text/css" href="../../stylesheet/jquery/pikaday.css">
 </head>
@@ -33,8 +32,15 @@
             </div>
         </div>
 
+        <div id="buyTicketUnderline_div" style="display: none">
+            <button id="buyTicketUnderline_back_main_div">🔙</button>
+            <div id="buyTicket_seatMap_div">
+
+            </div>
+        </div>
+
         <div id="createPlan_div" style="display: none">
-            <button id="createPlan_back_mainPlanList_btn">🔙</button>
+            <button id="createPlan_back_main_div">🔙</button>
             <hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />
             <p>
                 <label>名称：</label><input type="text" id="planName" />
@@ -65,6 +71,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 
@@ -72,6 +79,7 @@
 <script src="../../javascript/jquery/jquery.seat-charts.min.js" ></script>
 <script src="../../javascript/jquery/pikaday.js" ></script>
 <script>
+    var planInfos = [];
     $(function () {
         var types = "<option value='电影'>电影</option>" +
             "<option value='音乐会'>音乐会</option>" +
@@ -82,6 +90,7 @@
 
         $.post("Venue/GetAllVenuePlans", function (rs) {
             var res = $.parseJSON(rs);
+            planInfos = res;
             for( var i=0; i<res.length; i++ ){
                 var planInfo = res[i];
                 var infoDiv = "<div id='" + planInfo.planID + "_info_div'>" +
@@ -96,6 +105,9 @@
                     "<p><label>待配票数：</label><input type='text' value='" + planInfo.numOfTUnallocated + "' readonly /></p>" +
                     "<p><label>基准票价：</label><input type='text' value='" + planInfo.price + "' readonly /></p>" +
                     "<p><label>计划介绍：</label><textarea type='text' readonly>" + planInfo.description + "</textarea></p>" +
+                    "<p>" +
+                        "<button id='btn_" + planInfo.hallID + "_buyTickets' onclick='toBuyTicketUnderline(this)'>线下买票</button>" +
+                    "</p>" +
                     "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
                     "</div>";
                 $("#main_planList_div").append(infoDiv);
@@ -161,6 +173,66 @@
 
     function deleteSpace(str) {
         return str.replace(/\s/g, "");
+    }
+
+    function toBuyTicketUnderline(obj) {
+        $("#main_div").hide();
+        $("#buyTicketUnderline_div").show();
+        var temp1 = $(obj).attr("id");
+        var temp2 = temp1.split("_");
+        var hallID = temp2[1];
+        for( var i=0; i<planInfos.length; i++ ){
+            var planInfo = planInfos[i];
+            if( hallID==planInfo.hallID ){
+                var seatDist = planInfo.seatDist;
+                var numOfRow = parseInt(planInfo.numOfRow);
+                var numOfCol = parseInt(planInfo.numOfCol);
+                var seatData = [];
+                for( var j=0; j<numOfRow; j++ ){
+                    seatData[j] = seatDist.substring(0, numOfCol);
+                    seatDist = seatDist.substring(numOfCol);
+                }
+
+                $("#buyTicket_seatMap_div").empty();
+                var seat = "<div class='front'>屏幕</div>" +
+                    "<div id='seat-map'></div>" +
+                    "<div class='booking-details'>" +
+                    "<div id='legend'></div>" +
+                    "</div>";
+                $("#buyTicket_seatMap_div").append(seat);
+                $("#seat-map").seatCharts({
+                    map:seatData,
+                    naming: {
+                        top: true,
+                        left:true,
+                        getLabel: function(character, row, column) { //返回座位信息
+                            return column;
+                        }
+                    },
+                    legend: {
+                        node: $('#legend'),
+                        items: [
+                            [ 'a', 'available',   '可选' ],
+                            [ 'c', 'selected',   '已选' ],
+                            [ 's', 'unavailable',   '已售' ],
+                            [ '_', 'none', '过道']
+                        ]
+                    },
+                    click: function() {
+                        if (this.status() == 'available') {
+                            return 'selected';
+                        }
+                        else if(this.status() == 'selected'){
+                            return "available";
+                        }
+                        else {
+                            return this.status();
+                        }
+                    }
+                });
+            }
+        }
+
     }
 </script>
 <script>
@@ -273,7 +345,7 @@
 
     });
 
-    $("#createPlan_back_mainPlanList_btn").click(function () {
+    $("#createPlan_back_main_div").click(function () {
         var isConfirmed = confirm("返回将丢失全部信息！");
         if( isConfirmed ){
             $("#main_div").show();
@@ -358,6 +430,9 @@
                             "<p><label>待配票数：</label><input type='text' value='0' readonly /></p>" +
                             "<p><label>基准票价：</label><input type='text' value='" + price + "' readonly /></p>" +
                             "<p><label>计划介绍：</label><textarea type='text' readonly>" + description + "</textarea></p>" +
+                            "<p>" +
+                                "<button id='btn_" + hallID + "_buyTickets' onclick='toBuyTicketUnderline(this)'>线下买票</button>" +
+                            "</p>" +
                             "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
                             "</div>";
                         $("#main_planList_div").append(infoDiv);
@@ -384,6 +459,11 @@
             alert("请选择正确起始时间！");
         }
 
+    });
+
+    $("#buyTicketUnderline_back_main_div").click(function () {
+        $("#main_div").show();
+        $("#buyTicketUnderline_div").hide();
     });
 </script>
 </body>

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import tickets.controller.CommonCon;
 import tickets.daoImpl.ParaName;
 import tickets.model.Result;
-import tickets.model.UserInfo;
+import tickets.model.user.UserInfo;
 import tickets.service.user.UserInfoService;
 
 import javax.annotation.Resource;
@@ -25,7 +25,7 @@ public class UserInfoCon {
 	@Autowired
 	private HttpServletRequest request;
 	
-	@RequestMapping(value = "/UserInfo", method = RequestMethod.GET)
+	@RequestMapping(value = "/User/UserInfo", method = RequestMethod.GET)
 	public String userInfo(ModelMap model){
 		HttpSession session = request.getSession(false);
 		if( CommonCon.hasLogin(session) ){
@@ -43,7 +43,7 @@ public class UserInfoCon {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/GetUserInfo", method = RequestMethod.POST)
+	@RequestMapping(value = "/User/GetUserInfo", method = RequestMethod.POST)
 	public UserInfo getUserInfo(){
 		UserInfo userInfo = new UserInfo();
 		HttpSession session = request.getSession(false);
@@ -57,7 +57,7 @@ public class UserInfoCon {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/ChangeUserInfo", method = RequestMethod.POST)
+	@RequestMapping(value = "/User/ChangeUserInfo", method = RequestMethod.POST)
 	public Result changeUserInfo(String userEmail, String userName){
 		Result result = new Result();
 		result.setResult(false);

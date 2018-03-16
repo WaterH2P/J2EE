@@ -1,6 +1,6 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="tickets.model.UserInfo" %>
+<%@ page import="tickets.model.user.UserInfo" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -9,11 +9,11 @@
 </head>
 <body>
 <div class="common">
-    <div class="main fixMain bigMain">
+    <div class="main minMain bigMain">
         <div id="aSign" class="title">
-            <a>订票</a>
+            <a href="UserBuyTicket">订票</a>
             <b>·</b>
-            <a href="/OrderMain">订单查看</a>
+            <a href="UserOrder">订单查看</a>
             <b>·</b>
             <a class="active">个人信息</a>
         </div>
@@ -71,6 +71,11 @@
     });
 </script>
 <script>
+    function deleteSpace(str) {
+        return str.replace(/\s/g, "");
+    }
+</script>
+<script>
     $("#userName").blur(function(){
         var name = $("#userName").val().toString();
         name = deleteSpace(name);
@@ -108,10 +113,6 @@
             }
         });
     });
-
-    function deleteSpace(str) {
-        return str.replace(/\s/g, "");
-    }
 
     $("#deleteVIP_1").click(function () {
         var cancel = confirm("注销会员将导致该账户 下线！并且以后 无法登陆 ！无法享受VIP优惠！确认注销请点击确定。");

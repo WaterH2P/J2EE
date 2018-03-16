@@ -1,5 +1,8 @@
 package tickets.serviceImpl;
 
+import tickets.model.venue.VenuePlan;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +34,7 @@ public class CommonService {
 		return result;
 	}
 	
-	public static String unifyStr(String str){
+	public static String strFromLetterToNum(String str){
 		String result = "";
 		
 		Pattern patternAvailable = Pattern.compile("[a]");
@@ -52,7 +55,7 @@ public class CommonService {
 		return result;
 	}
 	
-	public static String unifyStrBack(String str){
+	public static String strFromNumToLetter(String str){
 		String result = "";
 		
 		Pattern patternAvailable = Pattern.compile("[1]");
@@ -181,4 +184,15 @@ public class CommonService {
 		return result;
 	}
 	
+	public static List<VenuePlan> venuePlanUnifyBack(List<VenuePlan> venuePlans){
+		List<VenuePlan> venuePlanUnifyBack = new ArrayList<>();
+		for( VenuePlan venuePlan : venuePlans ){
+			String seatDist = venuePlan.getSeatDist();
+			seatDist = CommonService.hexadecimalToFour(seatDist);
+			seatDist = CommonService.strFromNumToLetter(seatDist);
+			venuePlan.setSeatDist(seatDist);
+			venuePlanUnifyBack.add(venuePlan);
+		}
+		return venuePlanUnifyBack;
+	}
 }

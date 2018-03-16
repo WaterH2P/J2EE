@@ -2,7 +2,7 @@ package tickets.serviceImpl.user;
 
 import org.springframework.stereotype.Service;
 import tickets.dao.user.UserInfoDao;
-import tickets.model.UserInfo;
+import tickets.model.user.UserInfo;
 import tickets.service.user.UserInfoService;
 
 import javax.annotation.Resource;
