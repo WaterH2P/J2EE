@@ -12,6 +12,8 @@ public interface MgrCouponDao {
 	
 	List<String> selectAllCouponIDs();
 	
-	List<CouponInfo> selectAllCouponInfosExist();
+	List<CouponInfo> selectAllCouponInfosExchanged();
+	
+	CouponInfo selectCouponInfo(String couponID);
 	
 }

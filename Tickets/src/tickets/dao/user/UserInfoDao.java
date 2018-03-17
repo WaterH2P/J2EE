@@ -8,4 +8,11 @@ public interface UserInfoDao {
 	
 	void updateUserName(String email, String name);
 	
+	/**
+	 * @param:
+	 * @return:
+	 * @description: add point: pointModifyValue > 0, minus point: pointModifyValue < 0
+	 */
+	boolean updateUserPoint(String email, int pointModifyValue);
+	
 }

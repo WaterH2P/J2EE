@@ -65,10 +65,17 @@ public class MgrExamineVenueInfoChangeCon {
 	public Result agreeWithVenueRegister(String venueID){
 		Result result = new Result();
 		result.setResult(false);
-		
 		HttpSession session = request.getSession(false);
-		if(mgrExamineVenueInfoChangeService.agreeWithVenueInfoChange(venueID)){
-			result.setResult(true);
+		if( CommonCon.hasLogin(session) ){
+			String mgrID = (String) session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isMgr(mgrID) ){
+				if( mgrExamineVenueInfoChangeService.agreeWithVenueInfoChange(venueID) ){
+					result.setResult(true);
+				}
+			}
+		}
+		if( !result.getResult() && result.getMessage().length()==0 ){
+			result.setMessage(ParaName.message_ownNoAuthority);
 		}
 		return result;
 	}

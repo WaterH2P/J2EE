@@ -6,7 +6,7 @@ public class CommonUser {
 		return "UserRegister";
 	}
 	public static String redirectToUserRegisterPage(){
-		return "redirect:/Register";
+		return "redirect:/User/Register";
 	}
 	
 	public static String toUserInfoPage(){
@@ -14,6 +14,13 @@ public class CommonUser {
 	}
 	public static String redirectToUserInfoPage(){
 		return "redirect:/User/UserInfo";
+	}
+	
+	public static String toUserCouponPage(){
+		return "user/UserCoupon";
+	}
+	public static String redirectToUserCouponPage(){
+		return "redirect:/User/UserCoupon";
 	}
 	
 	public static String toUserOrderPage(){

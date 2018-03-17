@@ -5,8 +5,11 @@ import tickets.model.mgr.CouponInfo;
 import java.util.List;
 
 public interface MgrCouponService {
-
-	void addNewCoupon(CouponInfo couponInfo);
+	
+	/*
+	return couponID
+	 */
+	String addNewCoupon(CouponInfo couponInfo);
 	
 	void deleteCoupon(String couponID);
 	

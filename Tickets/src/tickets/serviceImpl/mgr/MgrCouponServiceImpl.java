@@ -16,12 +16,13 @@ public class MgrCouponServiceImpl implements MgrCouponService {
 	private MgrCouponDao mgrCouponDao;
 	
 	@Override
-	public void addNewCoupon(CouponInfo couponInfo){
+	public String addNewCoupon(CouponInfo couponInfo){
 		List<String> couponIDs = mgrCouponDao.selectAllCouponIDs();
 		final int couponIDLen = 7;
 		String couponID = CommonService.getRandomString(couponIDLen, couponIDs);
 		couponInfo.setCouponID(couponID);
 		mgrCouponDao.insertNewCoupon(couponInfo);
+		return couponID;
 	}
 	
 	@Override
@@ -31,6 +32,6 @@ public class MgrCouponServiceImpl implements MgrCouponService {
 	
 	@Override
 	public List<CouponInfo> getAllCouponInfos(){
-		return mgrCouponDao.selectAllCouponInfosExist();
+		return mgrCouponDao.selectAllCouponInfosExchanged();
 	}
 }

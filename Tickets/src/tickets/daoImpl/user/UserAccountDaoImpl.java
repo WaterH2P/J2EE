@@ -92,11 +92,12 @@ public class UserAccountDaoImpl implements CommonAccountDao, CommonUVAccountDao,
 			final boolean isConfirmed = false;
 			final boolean isDeleted = false;
 			jdbcTemplate.update(accountSql, email, verificationCode, isConfirmed, isDeleted);
-			String userInfoSql = "INSERT INTO " + ParaName.Table_userInfo + " VALUES (?,?,?,?,?)";
+			String userInfoSql = "INSERT INTO " + ParaName.Table_userInfo + " VALUES (?,?,?,?,?,?)";
 			final int vipLevel = 0;
 			final float balance = 0;
 			final int point = 0;
-			jdbcTemplate.update(userInfoSql, email, name, vipLevel, balance, point);
+			final int totalPoint = 0;
+			jdbcTemplate.update(userInfoSql, email, name, vipLevel, balance, point, totalPoint);
 			return true;
 		}
 	}

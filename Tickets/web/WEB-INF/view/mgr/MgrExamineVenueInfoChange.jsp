@@ -22,7 +22,7 @@
             <a href="MgrInfo">个人信息</a>
         </div>
 
-        <div id="div_VenueChangeInfo">
+        <div id="changeVenueInfo_div">
 
         </div>
     </div>
@@ -36,7 +36,7 @@
                 var venueBaseInfoRedundancy = res[i];
                 var venueBaseInfo = venueBaseInfoRedundancy.venueBaseInfo;
                 var venueBaseInfoChange = venueBaseInfoRedundancy.venueBaseInfoChange;
-                var infoDiv = "<div id='" + venueBaseInfo.venueID + "_info_div'>" +
+                var infoDiv = "<div id='venue_" + venueBaseInfo.venueID + "_info_div'>" +
                     "<p><label>帐号 : </label><input type='text' value='" + venueBaseInfo.venueID + "' readonly /></p>" +
                     "<p><label>省市 : </label><input type='text' value='" + venueBaseInfo.province + venueBaseInfo.city + "' readonly /></p>" +
                     "<p><label>地址 : </label><input type='text' value='" + venueBaseInfo.address + "' readonly /></p>" +
@@ -51,7 +51,7 @@
                     "</p>" +
                     "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
                     "</div>";
-                $("#div_VenueChangeInfo").append(infoDiv);
+                $("#changeVenueInfo_div").append(infoDiv);
             }
         });
     });
@@ -64,7 +64,10 @@
         $.post("AgreeWithVenueInfoChange", data, function (rs) {
             var res = $.parseJSON(rs);
             if( res.result ){
-                $("#" + venueID + "_info_div").remove();
+                $("#venue_" + venueID + "_info_div").remove();
+            }
+            else {
+                alert(rs.message);
             }
         });
     }

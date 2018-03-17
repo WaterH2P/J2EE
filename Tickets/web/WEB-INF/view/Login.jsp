@@ -15,11 +15,11 @@
     <div class="main fixMain smallMain">
         <h4 class="title">
             <div id="aSign">
-                <a class="active" href="/Login">登录</a>
+                <a class="active">登录</a>
                 <b>·</b>
-                <a href="/UserRegister">注册</a>
+                <a href="/User/UserRegister">注册</a>
                 <b>·</b>
-                <a href="/VenueRegister">场馆注册</a>
+                <a href="/Venue/VenueRegister">场馆注册</a>
             </div>
         </h4>
 

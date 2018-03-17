@@ -17,9 +17,9 @@
             <div id="aSign">
                 <a href="/Login">登录</a>
                 <b>·</b>
-                <a class="active" href="/UserRegister">注册</a>
+                <a class="active">注册</a>
                 <b>·</b>
-                <a href="/VenueRegister">场馆注册</a>
+                <a href="/Venue/VenueRegister">场馆注册</a>
             </div>
         </h4>
 

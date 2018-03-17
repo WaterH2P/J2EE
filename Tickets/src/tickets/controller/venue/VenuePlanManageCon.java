@@ -27,7 +27,7 @@ public class VenuePlanManageCon {
 	@Resource(name = "venuePlanService")
 	private VenuePlanService venuePlanService;
 	
-	@RequestMapping(value = "/VenuePlanManage", method = RequestMethod.GET)
+	@RequestMapping(value = "/Venue/VenuePlanManage", method = RequestMethod.GET)
 	public String venuePlanManage(){
 		HttpSession session = request.getSession(false);
 		if( CommonCon.hasLogin(session) ){
@@ -60,9 +60,8 @@ public class VenuePlanManageCon {
 				result.setMessage(message);
 			}
 		}
-		if( !result.getResult() ){
-			message = "很抱歉你没有权限！";
-			result.setMessage(message);
+		if( !result.getResult() && result.getMessage().length()==0 ){
+			result.setMessage(ParaName.message_ownNoAuthority);
 		}
 		return result;
 	}

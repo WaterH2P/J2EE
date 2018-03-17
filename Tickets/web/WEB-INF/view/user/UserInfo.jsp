@@ -15,6 +15,8 @@
             <b>·</b>
             <a href="UserOrder">订单查看</a>
             <b>·</b>
+            <a href="UserCoupon">优惠券</a>
+            <b>·</b>
             <a class="active">个人信息</a>
         </div>
 
@@ -119,7 +121,15 @@
         if (cancel) {
             var userEmail = $("#userEmail").val().toString();
             var data = {"userEmail": userEmail};
-            $.post("CancelAccountVIP", data);
+            $.post("CancelAccountVIP", data, function (rs) {
+               var res = $.parseJSON(rs);
+               if( res.result ){
+                   window.location.replace("/Login");
+               }
+               else {
+                   alert(res.message);
+               }
+            });
         }
     });
 </script>

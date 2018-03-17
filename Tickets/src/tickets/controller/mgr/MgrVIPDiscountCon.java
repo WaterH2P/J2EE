@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -84,9 +85,8 @@ public class MgrVIPDiscountCon {
 				}
 			}
 		}
-		if( !result.getResult() ){
-			String message = "很抱歉修改失败，请重新尝试！";
-			result.setMessage(message);
+		if( !result.getResult() && result.getMessage().length()==0 ){
+			result.setMessage(ParaName.message_failToChange);
 		}
 		return result;
 	}
@@ -100,12 +100,29 @@ public class MgrVIPDiscountCon {
 			String mgrID = (String)session.getAttribute(ParaName.VerificationCode);
 			if( CommonCon.isMgr(mgrID) ){
 				couponInfos = mgrCouponService.getAllCouponInfos();
-				if( couponInfos==null ){
-					couponInfos = new ArrayList<>();
-				}
 			}
 		}
 		return couponInfos;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/Mgr/AddNewCoupon", method = RequestMethod.POST)
+	public Result addNewCoupon(@ModelAttribute("couponInfo") CouponInfo couponInfo){
+		Result result = new Result();
+		result.setResult(false);
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String mgrID = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isMgr(mgrID) ){
+				String couponID = mgrCouponService.addNewCoupon(couponInfo);
+				result.setResult(true);
+				result.setMessage(couponID);
+			}
+		}
+		if( !result.getResult() && result.getMessage().length()==0 ){
+			result.setMessage(ParaName.message_ownNoAuthority);
+		}
+		return result;
 	}
 	
 	@ResponseBody
@@ -121,9 +138,8 @@ public class MgrVIPDiscountCon {
 				result.setResult(true);
 			}
 		}
-		if( !result.getResult() ){
-			String message = "很抱歉你没有权限！";
-			result.setMessage(message);
+		if( !result.getResult() && result.getMessage().length()==0 ){
+			result.setMessage(ParaName.message_ownNoAuthority);
 		}
 		return result;
 	}

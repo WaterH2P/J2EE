@@ -20,7 +20,7 @@
             <a href="MgrInfo">个人信息</a>
         </div>
 
-        <div class="title_2">
+        <div class="title_2" id="title_2">
             <a class="active" id="show_VIPLevelDiscount_a" onclick="show_VIPLevelDiscount_div()">等级优惠</a>
             <b>·</b>
             <a id="show_couponDiscount_a" onclick="show_couponDiscount_div()">优惠券</a>
@@ -44,15 +44,35 @@
 
         <div id="couponDiscount_div" style="display: none">
             <div id="Coupon_div">
-                <p>
+                <div id="createCoupon_div">
                     <button id="createCoupon_btn">添加优惠券</button>
-                </p>
-                <hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />
+                    <hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />
+                </div>
 
                 <div id="showCouponDiscount_div">
                 </div>
 
                 <div id="setCouponDiscount_div" style="display: none">
+                    <div>
+                        <button onclick='setCouponDiscount_back_showCouponDiscount()'>🔙</button>
+                        <hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />
+                    </div>
+                    <div id='createNewCoupon_div'>
+                        <p>
+                            <label>名称：</label>
+                            <input type='text' id='newCouponName_input' onblur='nameValidTest(this)'/>
+                        </p>
+                        <p>
+                            <label>优惠金额：</label>
+                            <input type='text' id='newCouponDiscount_input' onblur='discountValidTest(this)'/>
+                        </p>
+                        <p>
+                            <label>所需积分：</label>
+                            <input type='text' id='newCouponPoint_input' onclick='pointValidTest(this)'/>
+                        </p>
+                        <button onclick='submitNewCoupon()'>提交</button>
+                        <hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />
+                    </div>
                 </div>
             </div>
         </div>
@@ -121,9 +141,9 @@
         }
     }
 
+    var percentReg = /^[1-9]([0-9]){0,1}(0){0,1}$/;
     function percentValidTest(obj) {
         var percent = $(obj).val().toString();
-        var percentReg = /^[1-9]([0-9]){0,1}(0){0,1}$/;
         if( percentReg.test(percent) ){
             $(obj).removeClass("borderRed");
         }
@@ -132,9 +152,9 @@
         }
     }
 
+    var pointReg = /^[1-9]([0-9])*$/;
     function pointValidTest(obj) {
         var point = $(obj).val().toString();
-        var pointReg = /^[1-9]([0-9])*$/;
         if( pointReg.test(point) ){
             $(obj).removeClass("borderRed");
         }
@@ -173,6 +193,7 @@
                 var res = $.parseJSON(rs);
                 if( res.result ){
                     getAllVIPLevelInfosAndShow();
+                    $("#title_2").show();
                     $("#showVIPLevelDiscount_div").show();
                     $("#setVIPLevelDiscount_div").empty();
                     $("#setVIPLevelDiscount_div").hide();
@@ -276,19 +297,22 @@
     }
 
     function deleteCoupon(obj) {
-        var temp1 = $(obj).attr("id");
-        var temp2 = temp1.split("_");
-        var couponID = temp2[1];
-        var data = {"couponID":couponID};
-        $.post("DeleteCoupon", data, function (rs) {
-            var res = $.parseJSON(rs);
-            if( res.result ){
-                $("#coupon_" + couponID + "_info_div").remove();
-            }
-            else {
-                alert(res.message);
-            }
-        });
+        var isConfirmed = confirm("确认删除？");
+        if( isConfirmed ){
+            var temp1 = $(obj).attr("id");
+            var temp2 = temp1.split("_");
+            var couponID = temp2[1];
+            var data = {"couponID":couponID};
+            $.post("DeleteCoupon", data, function (rs) {
+                var res = $.parseJSON(rs);
+                if( res.result ){
+                    $("#coupon_" + couponID + "_info_div").remove();
+                }
+                else {
+                    alert(res.message);
+                }
+            });
+        }
     }
 
     function setCouponDiscount_back_showCouponDiscount() {
@@ -301,9 +325,9 @@
         }
     }
 
+    var discountReg = /^((0.)[1-9]*)|[1-9]+[0-9]*([.]{0,1})[0-9]*$/;
     function discountValidTest(obj) {
         var discount = $(obj).val().toString();
-        var discountReg = /^((0.)[1-9]*)|[1-9]+[0-9]*([.]{0,1})[0-9]*$/;
         if( discountReg.test(discount) ){
             $(obj).removeClass("borderRed");
         }
@@ -312,31 +336,75 @@
         }
     }
 
-    function submitNewCoupon() {
+    var nameReady = false;
+    function nameValidTest(obj) {
+        var name = $(obj).val().toString();
+        name = deleteSpace(name);
+        if( name.length>0 ){
+            $(obj).removeClass("borderRed");
+            nameReady = true;
+        }
+        else {
+            $(obj).addClass("borderRed");
+            nameReady = false;
+        }
+    }
 
+    function submitNewCoupon() {
+        var name = $("#newCouponName_input").val().toString();
+        name = deleteSpace(name);
+        $("#newCouponName_input").val(name);
+        var discount = $("#newCouponDiscount_input").val().toString();
+        discount = deleteSpace(discount);
+        $("#newCouponDiscount_input").val(discount);
+        var point = $("#newCouponPoint_input").val().toString();
+        point = deleteSpace(point);
+        $("#newCouponPoint_input").val(point);
+        if( nameReady && discountReg.test(discount) && pointReg.test(point) ){
+            var data = {"name":name, "discount":discount, "point":point};
+            $.post("AddNewCoupon", data, function (rs) {
+                var res = $.parseJSON(rs);
+                if( res.result ){
+                    $("#title_2").show();
+                    $("#showCouponDiscount_div").show();
+                    $("#setCouponDiscount_div").hide();
+                    $("#createCoupon_div").show();
+
+                    emptyCreateNewCouponInput();
+                    var couponID = res.message;
+                    var infoDiv = "<div id='coupon_" + couponID + "_info_div'>" +
+                        "<p><label>优惠券：</label><input type='text' value='" + name + "' readonly/></p>" +
+                        "<p><label>优惠金额：</label><input type='text' value='" + discount + "' readonly/></p>" +
+                        "<p><label>所需积分：</label><input type='text' value='" + point + "' readonly/></p>" +
+                        "<button id='btn_" + couponID + "_delete' onclick='deleteCoupon(this)'>删除优惠券</button>" +
+                        "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
+                        "</div>";
+                    $("#showCouponDiscount_div").append(infoDiv);
+                }
+                else {
+                    alert(res.message);
+                }
+            });
+        }
+        else {
+            alert("请输入正确信息！");
+        }
+    }
+
+    function emptyCreateNewCouponInput() {
+        $("#newCouponName_input").val("");
+        $("#newCouponDiscount_input").val("");
+        $("#newCouponPoint_input").val("");
     }
 </script>
 <script>
     $("#createCoupon_btn").click(function () {
         $("#title_2").hide();
         $("#showCouponDiscount_div").hide();
-        $("#setCouponDiscount_div").empty();
         $("#setCouponDiscount_div").show();
+        $("#createCoupon_div").hide();
 
-        var backBtn = "<div>" +
-            "<button onclick='setCouponDiscount_back_showCouponDiscount()'>🔙</button>" +
-            "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
-            "</div>";
-        $("#setCouponDiscount_div").append(backBtn);
-
-        var infoDiv = "<div id='createNewCoupon_div'>" +
-            "<p><label>名称：</label><input type='text'/></p>" +
-            "<p><label>优惠金额：</label><input type='text' onblur='discountValidTest(this)'/></p>" +
-            "<p><label>所需积分：</label><input type='text' onclick='pointValidTest(this)'/></p>" +
-            "<button onclick='submitNewCoupon()'>提交</button>" +
-            "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
-            "</div>";
-        $("#setCouponDiscount_div").append(infoDiv);
+        emptyCreateNewCouponInput();
     });
 </script>
 </body>

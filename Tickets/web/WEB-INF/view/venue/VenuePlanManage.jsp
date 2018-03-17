@@ -88,7 +88,7 @@
             "<option value='体育比赛'>体育比赛</option>";
         $("#planType").append(types);
 
-        $.post("Venue/GetAllVenuePlans", function (rs) {
+        $.post("GetAllVenuePlans", function (rs) {
             var res = $.parseJSON(rs);
             planInfos = res;
             for( var i=0; i<res.length; i++ ){
@@ -289,7 +289,7 @@
             i18n:i18n,
         });
 
-        $.post("Venue/GetAllVenueHalls", function (rs) {
+        $.post("GetAllVenueHalls", function (rs) {
             var res = $.parseJSON(rs);
             hallInfos = res;
             for( var i=0; i<res.length; i++ ){
@@ -414,7 +414,7 @@
                 var data = {"name":name, "type":type, "beginTime":beginTime, "endTime":endTime,
                     "hallID":hallID, "hallName":hallName, "numOfTicket":numOfTicket, "price":price,
                     "description":description};
-                $.post("Venue/AddNewVenuePlan", data, function (rs) {
+                $.post("AddNewVenuePlan", data, function (rs) {
                     var res = $.parseJSON(rs);
                     var planID = res.message;
                     if( res.result ){

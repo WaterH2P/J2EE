@@ -15,6 +15,8 @@
             <b>·</b>
             <a href="UserOrder">订单查看</a>
             <b>·</b>
+            <a href="UserCoupon">优惠券</a>
+            <b>·</b>
             <a href="UserInfo">个人信息</a>
         </div>
 

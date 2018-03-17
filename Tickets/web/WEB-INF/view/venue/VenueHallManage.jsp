@@ -82,7 +82,7 @@
             $("#numOfCol").append(rol);
         }
 
-        $.post("Venue/GetAllVenueHalls", function (rs) {
+        $.post("GetAllVenueHalls", function (rs) {
             var res = $.parseJSON(rs);
             hallInfos = res;
             for( var i=0; i<res.length; i++ ){
@@ -165,7 +165,7 @@
             var temp2 = temp1.split("_");
             var hallID = temp2[2];
             var data = {"hallID": hallID};
-            $.post("Venue/DeleteVenueHall", data, function (rs) {
+            $.post("DeleteVenueHall", data, function (rs) {
                 var res = $.parseJSON(rs);
                 if (res.result) {
                     $("#" + hallID + "_info_div").remove();
@@ -234,7 +234,7 @@
                             seatData += seatMap[i];
                         }
                         var data = {"name":name, "numOfRow":numOfRow, "numOfCol":numOfCol, "seatData":seatData, "seatLevel":seatLevel};
-                        $.post("Venue/AddVenueNewHall", data, function (rs) {
+                        $.post("AddVenueNewHall", data, function (rs) {
                             var venueHall = $.parseJSON(rs);
                             hallInfos[hallInfos.length] = venueHall;
                             var hallID = venueHall.hallID;

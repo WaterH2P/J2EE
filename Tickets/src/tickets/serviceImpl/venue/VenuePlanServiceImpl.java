@@ -23,7 +23,7 @@ public class VenuePlanServiceImpl implements VenuePlanService {
 	
 	@Override
 	public String addNewVenuePlan(VenuePlan venuePlan){
-		final int numOfTLeft = 0;
+		final int numOfTLeft = venuePlan.getNumOfTicket();
 		final int numOfTSeated = 0;
 		final int numOfTUnallocated = 0;
 		venuePlan.setNumOfTLeft(numOfTLeft);

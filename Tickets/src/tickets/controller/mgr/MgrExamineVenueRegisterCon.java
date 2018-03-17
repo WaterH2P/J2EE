@@ -15,6 +15,7 @@ import tickets.service.venue.VenueBaseInfoService;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -49,15 +50,15 @@ public class MgrExamineVenueRegisterCon {
 	@ResponseBody
 	@RequestMapping(value = "/Mgr/GetAllUnconfirmedVenues", method = RequestMethod.POST)
 	public List<VenueBaseInfo> getAllUnconfirmedVenues(){
+		List<VenueBaseInfo> venueRegisters = new ArrayList<>();
 		HttpSession session = request.getSession(false);
 		if( CommonCon.hasLogin(session) ){
 			String mgrID = (String) session.getAttribute(ParaName.VerificationCode);
 			if( CommonCon.isMgr(mgrID) ){
-				List<VenueBaseInfo> venueRegisters = venueBaseInfoService.getAllUnconfirmedVenueInfos();
-				return venueRegisters;
+				venueRegisters = venueBaseInfoService.getAllUnconfirmedVenueInfos();
 			}
 		}
-		return null;
+		return venueRegisters;
 	}
 	
 	@ResponseBody
@@ -65,10 +66,17 @@ public class MgrExamineVenueRegisterCon {
 	public Result agreeWithVenueRegister(String venueID){
 		Result result = new Result();
 		result.setResult(false);
-		
 		HttpSession session = request.getSession(false);
-		if( mgrExamineVenueRegisterService.agreeWithVenueRegister(venueID) ){
-			result.setResult(true);
+		if( CommonCon.hasLogin(session) ){
+			String mgrID = (String) session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isMgr(mgrID) ){
+				if( mgrExamineVenueRegisterService.agreeWithVenueRegister(venueID) ){
+					result.setResult(true);
+				}
+			}
+		}
+		if( !result.getResult() && result.getMessage().length()==0 ){
+			result.setMessage(ParaName.message_ownNoAuthority);
 		}
 		return result;
 	}

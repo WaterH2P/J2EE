@@ -6,6 +6,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import tickets.controller.CommonAccountCon;
 import tickets.controller.CommonCon;
 import tickets.daoImpl.ParaName;
 import tickets.model.Result;
@@ -24,7 +25,7 @@ public class UserAccountCon {
 	@Autowired
 	private HttpServletRequest request;
 	
-	@RequestMapping(value = "/UserRegister", method = RequestMethod.GET)
+	@RequestMapping(value = "/User/UserRegister", method = RequestMethod.GET)
 	public String registerPage(ModelMap model){
 		HttpSession session = request.getSession(false);
 		if( CommonCon.hasLogin(session) ){
@@ -37,7 +38,7 @@ public class UserAccountCon {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/GetVerificationCode", method = RequestMethod.POST)
+	@RequestMapping(value = "/User/GetVerificationCode", method = RequestMethod.POST)
 	public Result createCode(String userEmail, String userName){
 		Result result = new Result();
 		String message = "";
@@ -55,7 +56,7 @@ public class UserAccountCon {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/UserRegister", method = RequestMethod.POST)
+	@RequestMapping(value = "/User/UserRegister", method = RequestMethod.POST)
 	public Result register(String userEmail, String userPassword, String verificationCode){
 		Result result = new Result();
 		if( userAccountService.register(userEmail, userPassword, verificationCode) ){
@@ -69,22 +70,27 @@ public class UserAccountCon {
 		return result;
 	}
 	
-	@RequestMapping(value = "/CancelAccountVIP", method = RequestMethod.POST)
-	public String cancelAccountVIP(String userEmail){
+	@ResponseBody
+	@RequestMapping(value = "/User/CancelAccountVIP", method = RequestMethod.POST)
+	public Result cancelAccountVIP(String userEmail){
+		Result result = new Result();
+		result.setResult(false);
 		HttpSession session = request.getSession(false);
 		if( CommonCon.hasLogin(session) ){
 			String email = (String)session.getAttribute(ParaName.VerificationCode);
 			if( CommonCon.isUser(email) && email.equals(userEmail) ){
 				System.out.println(email + " cancel VIP Controller");
 				userAccountService.cancelAccountVIP(userEmail);
-				return CommonCon.redirectToLoginPage();
-			}
-			else{
-				return CommonCon.redirectToInfoPage();
+				
+				session.removeAttribute(ParaName.VerificationCode);
+				session.invalidate();
+				
+				result.setResult(true);
 			}
 		}
-		else {
-			return CommonCon.redirectToLoginPage();
+		if( !result.getResult() && result.getMessage().length()==0 ){
+			result.setMessage(ParaName.message_ownNoAuthority);
 		}
+		return result;
 	}
 }

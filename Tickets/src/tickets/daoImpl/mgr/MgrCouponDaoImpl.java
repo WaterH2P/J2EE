@@ -20,7 +20,7 @@ public class MgrCouponDaoImpl implements MgrCouponDao{
 	@Override
 	public void insertNewCoupon(CouponInfo couponInfo){
 		String couponID = couponInfo.getCouponID();
-		String name = couponInfo.getCouponID();
+		String name = couponInfo.getName();
 		double discount = couponInfo.getDiscount();
 		int point = couponInfo.getPoint();
 		final boolean isDeleted = false;
@@ -42,10 +42,17 @@ public class MgrCouponDaoImpl implements MgrCouponDao{
 	}
 	
 	@Override
-	public List<CouponInfo> selectAllCouponInfosExist(){
+	public List<CouponInfo> selectAllCouponInfosExchanged(){
 		String sql = "SELECT * FROM " + ParaName.Table_couponInfo + " WHERE isDeleted=FALSE ";
 		List<CouponInfo> couponInfos = jdbcTemplate.query(sql, new CouponInfoRowMapper());
-		return null;
+		return couponInfos;
+	}
+	
+	@Override
+	public CouponInfo selectCouponInfo(String couponID){
+		String sql = "SELECT * FROM " + ParaName.Table_couponInfo + " WHERE couponID=? ";
+		CouponInfo couponInfo = (CouponInfo) jdbcTemplate.queryForObject(sql, new CouponInfoRowMapper(), couponID);
+		return couponInfo;
 	}
 	
 }

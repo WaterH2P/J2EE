@@ -30,7 +30,7 @@ public class VenueSeatLevelManageCon {
 	@Resource(name = "venueSeatLevelService")
 	private VenueSeatLevelService venueSeatLevelService;
 	
-	@RequestMapping(value = "/VenueSeatLevelManage", method = RequestMethod.GET)
+	@RequestMapping(value = "/Venue/VenueSeatLevelManage", method = RequestMethod.GET)
 	public String venueSeatLevelManage(){
 		HttpSession session = request.getSession(false);
 		if( CommonCon.hasLogin(session) ){
@@ -48,7 +48,7 @@ public class VenueSeatLevelManageCon {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/GetAllSeatLevels", method = RequestMethod.POST)
+	@RequestMapping(value = "/Venue/GetAllSeatLevels", method = RequestMethod.POST)
 	public List<VenueSeatLevel> getAllSeatLevels(){
 		List<VenueSeatLevel> venueSeatLevels = null;
 		HttpSession session = request.getSession(false);
@@ -62,7 +62,7 @@ public class VenueSeatLevelManageCon {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/GetAllVenueHall", method = RequestMethod.POST)
+	@RequestMapping(value = "/Venue/GetAllVenueHall", method = RequestMethod.POST)
 	public List<VenueHall> getAllVenueHall(){
 		List<VenueHall> venueHalls = null;
 		HttpSession session = request.getSession(false);
@@ -76,7 +76,7 @@ public class VenueSeatLevelManageCon {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/AddNewSeatLevel", method = RequestMethod.POST)
+	@RequestMapping(value = "/Venue/AddNewSeatLevel", method = RequestMethod.POST)
 	public Result addNewSeatLevel(String name, String percent){
 		Result result = new Result();
 		result.setResult(false);
@@ -96,15 +96,14 @@ public class VenueSeatLevelManageCon {
 				}
 			}
 		}
-		if( !result.getResult() ){
-			String message = "很抱歉你没有权限！";
-			result.setMessage(message);
+		if( !result.getResult() && result.getMessage().length()==0 ){
+			result.setMessage(ParaName.message_ownNoAuthority);
 		}
 		return result;
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/DeleteSeatLevel", method = RequestMethod.POST)
+	@RequestMapping(value = "/Venue/DeleteSeatLevel", method = RequestMethod.POST)
 	public Result deleteSeatLevel(String venueID, String seatID){
 		Result result = new Result();
 		result.setResult(false);
@@ -116,9 +115,8 @@ public class VenueSeatLevelManageCon {
 				result.setResult(true);
 			}
 		}
-		if( !result.getResult() ){
-			String message = "很抱歉你没有权限！";
-			result.setMessage(message);
+		if( !result.getResult() && result.getMessage().length()==0 ){
+			result.setMessage(ParaName.message_ownNoAuthority);
 		}
 		return result;
 	}

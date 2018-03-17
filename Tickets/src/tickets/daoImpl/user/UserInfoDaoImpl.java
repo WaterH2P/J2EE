@@ -26,4 +26,17 @@ public class UserInfoDaoImpl implements UserInfoDao {
 		jdbcTemplate.update(sql, name, email);
 	}
 	
+	@Override
+	public boolean updateUserPoint(String email, int pointModifyValue){
+		UserInfo userInfo = selectUserInfo(email);
+		if( userInfo.getPoint()+pointModifyValue>0 ){
+			String sql = "UPDATE " + ParaName.Table_userInfo + " SET point=point+? WHERE email=?";
+			jdbcTemplate.update(sql, pointModifyValue, email);
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
 }

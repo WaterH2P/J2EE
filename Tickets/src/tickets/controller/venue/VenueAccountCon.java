@@ -25,7 +25,7 @@ public class VenueAccountCon {
 	@Autowired
 	private HttpServletRequest request;
 	
-	@RequestMapping(value = "/VenueRegister", method = RequestMethod.GET)
+	@RequestMapping(value = "/Venue/VenueRegister", method = RequestMethod.GET)
 	public String VenueRegisterPage(ModelMap model){
 		HttpSession session = request.getSession(false);
 		if( CommonCon.hasLogin(session) ){
@@ -38,7 +38,7 @@ public class VenueAccountCon {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/VenueRegister", method = RequestMethod.POST)
+	@RequestMapping(value = "/Venue/VenueRegister", method = RequestMethod.POST)
 	public Result VenueRegister(@ModelAttribute("venueInfo") VenueBaseInfo venueBaseInfo, String password){
 		System.out.println("VenueRegister Controller");
 		Result result = new Result();

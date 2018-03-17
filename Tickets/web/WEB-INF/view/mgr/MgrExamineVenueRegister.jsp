@@ -30,21 +30,21 @@
     $(function () {
         $.post("GetAllUnconfirmedVenues", function (rs) {
             var res = $.parseJSON(rs);
-            for( var i=0; i<res.length; i++ ){
-                var venueBaseInfo = res[i];
-                var infoDiv = "<div id='" + venueBaseInfo.venueID + "_info_div'>" +
-                    "<p><label>帐号 : </label><input type='text' value='" + venueBaseInfo.venueID + "' readonly /></p>" +
-                    "<p><label>省市 : </label><input type='text' value='" + venueBaseInfo.province + venueBaseInfo.city + "' readonly /></p>" +
-                    "<p><label>地址 : </label><input type='text' value='" + venueBaseInfo.address + "' readonly /></p>" +
-                    "<p><label>电话 : </label><input type='tel' value='" + venueBaseInfo.telephone + "' readonly /></p>" +
+            $("#div_VenueRegister").empty();
+            $.each(res, function (index, value, array) {
+                var infoDiv = "<div id='venue_" + value.venueID + "_info_div'>" +
+                    "<p><label>帐号 : </label><input type='text' value='" + value.venueID + "' readonly /></p>" +
+                    "<p><label>省市 : </label><input type='text' value='" + value.province + value.city + "' readonly /></p>" +
+                    "<p><label>地址 : </label><input type='text' value='" + value.address + "' readonly /></p>" +
+                    "<p><label>电话 : </label><input type='tel' value='" + value.telephone + "' readonly /></p>" +
                     "<p>" +
-                        "<button id='btn_" + venueBaseInfo.venueID + "_agree' onclick='agreeVenueRegister(this)'>同意</button>" +
-                        "<button id='btn_" + venueBaseInfo.venueID + "_disagree' onclick='disagreeVenueRegister()'>不同意</button>" +
+                        "<button id='btn_" + value.venueID + "_agree' onclick='agreeVenueRegister(this)'>同意</button>" +
+                        "<button id='btn_" + value.venueID + "_disagree' onclick='disagreeVenueRegister()'>不同意</button>" +
                     "</p>" +
                     "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
-                    "</div>" +
-                $("#div_VenueRegister").append(infoDiv);
-            }
+                    "</div>";
+                    $("#div_VenueRegister").append(infoDiv);
+            });
         });
     });
 
@@ -56,7 +56,10 @@
         $.post("AgreeWithVenueRegister", data, function (rs) {
             var res = $.parseJSON(rs);
             if( res.result ){
-                $("#" + venueID + "_info_div").remove();
+                $("#venue_" + venueID + "_info_div").remove();
+            }
+            else {
+                alert(rs.message);
             }
         });
     }
