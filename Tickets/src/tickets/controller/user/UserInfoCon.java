@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import tickets.controller.CommonCon;
 import tickets.daoImpl.ParaName;
 import tickets.model.Result;
+import tickets.model.mgr.VIPLevelInfo;
 import tickets.model.user.UserInfo;
 import tickets.service.user.UserInfoService;
 
@@ -74,6 +75,20 @@ public class UserInfoCon {
 			result.setMessage(ParaName.message_ownNoAuthority);
 		}
 		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/User/GetUserVIPDiscount", method = RequestMethod.POST)
+	public VIPLevelInfo getUserVIPDiscount(){
+		VIPLevelInfo vipLevelInfo = new VIPLevelInfo();
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String email = (String) session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isUser(email) ){
+				vipLevelInfo = userInfoService.getUserVIPDiscount(email);
+			}
+		}
+		return vipLevelInfo;
 	}
 	
 }

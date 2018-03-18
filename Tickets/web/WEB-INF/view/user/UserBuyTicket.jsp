@@ -47,8 +47,33 @@
                 <p><label>座位：</label><input style="visibility: hidden"/></p>
                 <ul class='selected-seats' id='seatSelected_ul'></ul>
                 <p><label>总价：</label><input id="totalPrice_input" type="text" readonly></p>
-                <button>确认买票</button>
+                <button id="submitSeat_btn">确认购票</button>
             </div>
+        </div>
+
+        <div id="payTicket_div" style="display: none">
+            <button onclick="payTicket_back_main_div()">🔙</button>
+            <div id="Od_Info_div" style="display: none">
+                <p><label>影片：</label><input id="Od_nameOfPlan_input" type='text' readonly/></p>
+                <p><label>时间：</label></p>
+                <p><input id="Od_beginTimeOfPlan_div" type='text' readonly/></p>
+                <p>-></p>
+                <p><input id="Od_endTimeOfPlan_div" type='text' readonly/></p>
+                <p><label>座位：</label><input style="visibility: hidden"/></p>
+                <ul id='Od_seatSelected_ul'></ul>
+                <p><label>总价：</label><input id="Od_totalPrice_input" type="text" readonly></p>
+                <p><label>VIP优惠：</label><input id="Od_vipDiscount_input" type="text" readonly></p>
+                <p>
+                    <label>优惠券：</label>
+                    <select id="Od_coupon_select" onchange="showCouponDiscountAndChangeTotalPay()"></select>
+                    <input id="Od_couponDiscount_input" type="text" readonly>
+                </p>
+                <p><label>实付：</label><input id="Od_totalPay_input" type="text" readonly></p>
+            </div>
+            <div id="Od_pay_div">
+
+            </div>
+            <button onclick="payTicket_back_main_div()">稍后付款</button>
         </div>
     </div>
 </div>
@@ -60,11 +85,20 @@
         return str.replace(/\s/g, "");
     }
 
-    var numOfTSelected = 0;
+    var planSelected = {};
+    var seatSelectedRowAndCols = "";
+    var totalPrice = 0;
 
     function buyTicketSelectSeat(obj) {
         $("#main_div").hide();
         $("#buyTicket_div").show();
+        $("#showInfoOfTicketSelected_div").show();
+
+        seatSelectedRowAndCols = "";
+        var numOfTSelected = 0;
+        var seatInfos = [];
+        var seatRowPercent = {};
+        totalPrice = 0;
 
         var temp1 = $(obj).attr("id");
         var temp2 = temp1.split("_");
@@ -73,9 +107,28 @@
         for( var i=0; i<planInfos.length; i++ ){
             var planInfo = planInfos[i];
             if( hallID==planInfo.hallID ){
+                planSelected = planInfo;
+
+                var data = {"hallID":hallID};
                 var seatDist = planInfo.seatDist;
                 var numOfRow = parseInt(planInfo.numOfRow);
                 var numOfCol = parseInt(planInfo.numOfCol);
+                var price = parseInt(planInfo.price);
+                $.post("GetPlanHallSeatInfo", data, function (rs) {
+                    var res = $.parseJSON(rs);
+                    seatInfos = res;
+                    seatRowPercent = {};
+                    for( var i=0; i<numOfRow; i++ ){
+                        for( var j=0; j<seatInfos.length; j++ ){
+                            var seatInfo = seatInfos[j];
+                            if( seatInfo.row==(i+1) ){
+                                seatRowPercent[(i+1)] = seatInfo.percent;
+                                break;
+                            }
+                        }
+                    }
+                });
+
                 var seatData = [];
                 for( var j=0; j<numOfRow; j++ ){
                     seatData[j] = seatDist.substring(0, numOfCol);
@@ -85,7 +138,8 @@
                 $("#nameOfPlan_input").val(planInfo.name);
                 $("#beginTimeOfPlan_div").val(new Date(planInfo.beginTime));
                 $("#endTimeOfPlan_div").val(new Date(planInfo.endTime));
-                $("#totalPrice_input").val("");
+                $("#totalPrice_input").val(totalPrice);
+                $("#seatSelected_ul").empty();
 
                 $("#buyTicket_seatMap_div").empty();
                 var seat = "<div class='front'>屏幕</div>" +
@@ -115,10 +169,17 @@
                     click: function() {
                         if (this.status() == 'available') {
                             if( numOfTSelected<6 ){
-                                numOfTSelected++;
                                 var seatLi = "<li id='seatSelected_" + this.settings.id + "_li'>" +
                                     (this.settings.row+1) + "排" + this.settings.label + "座" + "</li>";
                                 $("#seatSelected_ul").append(seatLi);
+
+                                numOfTSelected++;
+                                var priceOfTicket = price * parseInt( seatRowPercent[this.settings.row+1] ) / 100.0;
+                                priceOfTicket = parseFloat( priceOfTicket.toFixed(2) );
+                                addSeatSelectedRowAndCol(this.settings.row+1, this.settings.label, priceOfTicket);
+                                totalPrice += priceOfTicket;
+                                totalPrice = parseFloat( totalPrice.toFixed(2) );
+                                $("#totalPrice_input").val(totalPrice);
 
                                 return 'selected';
                             }
@@ -128,10 +189,17 @@
                             }
                         }
                         else if(this.status() == 'selected'){
-                            numOfTSelected--;
-
                             //删除已预订座位
                             $('#seatSelected_' + this.settings.id + "_li").remove();
+
+                            numOfTSelected--;
+                            var priceOfTicket = price * parseInt( seatRowPercent[this.settings.row+1] ) / 100.0;
+                            priceOfTicket = parseFloat( priceOfTicket.toFixed(2) );
+                            deleteSeatSelectedRowAndCol(this.settings.row+1, this.settings.label, priceOfTicket);
+                            totalPrice -= priceOfTicket;
+                            totalPrice = parseFloat( totalPrice.toFixed(2) );
+                            $("#totalPrice_input").val(totalPrice);
+
                             return "available";
                         }
                         else {
@@ -139,6 +207,18 @@
                         }
                     }
                 });
+                // 设置已经售出的位置
+                for( var i=0; i<seatData.length; i++ ){
+                    var row = i + 1;
+                    var rowInfo = seatData[i];
+                    for( var j=0; j<rowInfo.length; j++ ){
+                        var col = j + 1;
+                        if( rowInfo.charAt(j)=='s' ){
+                            var seatCoordinate = row + "_" + col;
+                            seatMap.status(seatCoordinate, 'unavailable');
+                        }
+                    }
+                }
 
                 break;
             }
@@ -148,6 +228,7 @@
     function buyTicketNotSelectSeat(obj) {
         $("#main_div").hide();
         $("#buyTicket_div").show();
+        $("#showInfoOfTicketSelected_div").hide();
 
         var temp1 = $(obj).attr("id");
         var temp2 = temp1.split("_");
@@ -180,7 +261,7 @@
                     "<div id='legend'></div>" +
                     "</div>";
                 $("#buyTicket_seatMap_div").append(seat);
-                $("#seat-map").seatCharts({
+                var seatMap = $("#seat-map").seatCharts({
                     map:seatData,
                     naming: {
                         top: true,
@@ -202,14 +283,97 @@
                         return this.status();
                     }
                 });
+                // 设置已经售出的位置
+                for( var i=0; i<seatData.length; i++ ){
+                    var row = i + 1;
+                    var rowInfo = seatData[i];
+                    for( var j=0; j<rowInfo.length; j++ ){
+                        var col = j + 1;
+                        if( rowInfo.charAt(j)=='s' ){
+                            var seatCoordinate = row + "_" + col;
+                            seatMap.status(seatCoordinate, 'unavailable');
+                        }
+                    }
+                }
+
                 break;
             }
+        }
+    }
+
+    function addSeatSelectedRowAndCol(row, col, price) {
+        if( seatSelectedRowAndCols.length>0 ){
+            seatSelectedRowAndCols += "==" + row + "--" + col + "--" + price;
+        }
+        else {
+            seatSelectedRowAndCols += row + "--" + col + "--" + price;
+        }
+    }
+
+    function deleteSeatSelectedRowAndCol(row, col, price) {
+        var temp1 = seatSelectedRowAndCols.split("==");
+        var seatRowAndCol = "";
+        $.each(temp1, function (index, value, array) {
+            if( value.length>0 ){
+                var temp2 = value.split("--");
+                if( temp2[0]!=row && temp2[1]!=col ){
+                    seatRowAndCol += value + "==";
+                }
+            }
+        });
+        seatSelectedRowAndCols = seatRowAndCol;
+    }
+
+    function payTicket_back_main_div() {
+        $("#main_div").show();
+        $("#payTicket_div").hide();
+    }
+
+    function payOdImmediately(obj) {
+        var temp1 = $(obj).attr("id");
+        var temp2 = temp1.split("_");
+        var OdID = temp2[1];
+        var couponID = $("#Od_coupon_select option:selected").val().toString();
+        var data = {"OdID":OdID, "couponID":couponID};
+        $.post("PayOrder", data, function (rs) {
+            var res = $.parseJSON(rs);
+            if( res.result ){
+                alert(res.message);
+                payTicket_back_main_div();
+            }
+            else {
+                alert(res.message);
+            }
+        })
+    }
+
+    function showCouponDiscountAndChangeTotalPay() {
+        var couponID = $("#Od_coupon_select option:selected").val().toString();
+        if( couponID.length>0 ){
+            for( var i=0; i<coupons.length; i++ ){
+                var coupon = coupons[i];
+                if( coupon.couponID==couponID ){
+                    $("#Od_couponDiscount_input").val(coupon.discount);
+                    var totalPay = totalPrice - parseFloat($("#Od_vipDiscount_input").val().toString()) - parseFloat(coupon.discount);
+                    totalPay = parseFloat(totalPay.toFixed(2));
+                    if( totalPay<0 ){
+                        totalPay = 0;
+                    }
+                    $("#Od_totalPay_input").val(totalPay);
+                    break;
+                }
+            }
+        }
+        else {
+            $("#Od_couponDiscount_input").val("");
+            var totalPay = totalPrice - parseFloat($("#Od_vipDiscount_input").val().toString());
+            totalPay = parseFloat(totalPay.toFixed(2));
+            $("#Od_totalPay_input").val(totalPay);
         }
     }
 </script>
 <script>
     var planInfos = [];
-
     var planNameReady = false;
 
     $("#searchPlan_input").blur(function () {
@@ -265,6 +429,78 @@
         $("#main_div").show();
         $("#buyTicket_div").hide();
     });
+
+    var coupons = [];
+    $("#submitSeat_btn").click(function () {
+        var isConfirmed = confirm("确认购买？");
+        if( isConfirmed ){
+            var planID = planSelected.planID;
+            var seatSelected = seatSelectedRowAndCols;
+            var data = {"planID":planID, "seatSelected":seatSelected, "totalPrice":totalPrice};
+
+            // 创建新订单
+            $.post("MakeNewOd", data, function (rs) {
+                var res = $.parseJSON(rs);
+                if( res.result ){
+                    $("#searchPlan_input").val("");
+                    $("#searchResult_div").empty();
+
+                    $("#buyTicket_div").hide();
+                    $("#payTicket_div").show();
+
+                    $("#Od_pay_div").empty();
+                    var submitBtn = "<button id='btn_" + res.message +"_payOdImmediately' onclick='payOdImmediately(this)'>立即付款</button>";
+                    $("#Od_pay_div").append(submitBtn);
+
+                    $("#Od_nameOfPlan_input").val(planSelected.name);
+                    $("#Od_beginTimeOfPlan_div").val(planSelected.beginTime);
+                    $("#Od_endTimeOfPlan_div").val(planSelected.endTime);
+
+                    $("#Od_seatSelected_ul").empty();
+                    var seatSelectedRowAndCol = seatSelectedRowAndCols.split("==");
+                    for( var i=0; i<seatSelectedRowAndCol.length; i++ ){
+                        var seatRowAndCol = seatSelectedRowAndCol[i];
+                        if( seatRowAndCol.length>0 ){
+                            var temp = seatRowAndCol.split("--");
+                            var seatLi = "<li>" + temp[0] + "排" + temp[1] + "座  ¥" + temp[2] + "</li>";
+                            $("#Od_seatSelected_ul").append(seatLi);
+                        }
+                    }
+
+                    $("#Od_totalPrice_input").val(totalPrice);
+                }
+                else {
+                    alert(res.message);
+                }
+            });
+
+            // 获得所有优惠券
+            $.post("GetAllUserCoupons", function (rs) {
+                var res = $.parseJSON(rs);
+                coupons = res;
+
+                var nullOption = "<option value='' selected></option>";
+                $("#Od_coupon_select").append(nullOption);
+                $.each(res, function (index, value, array) {
+                    var option = "<option value='" + value.couponID + "'>" + value.name + "</option>";
+                    $("#Od_coupon_select").append(option);
+                });
+            });
+
+            // 获得 VIP 等级对应优惠，并计算优惠金额
+            $.post("GetUserVIPDiscount", function (rs) {
+                var res = $.parseJSON(rs);
+                var percent = parseInt(res.percent);
+                var discount = (100 - percent)*totalPrice/100.0;
+                discount = parseFloat(discount.toFixed(2));
+                $("#Od_vipDiscount_input").val(discount);
+
+                var totalPay = totalPrice - discount;
+                $("#Od_totalPay_input").val(totalPay);
+            });
+        }
+    });
+
 </script>
 </body>
 </html>

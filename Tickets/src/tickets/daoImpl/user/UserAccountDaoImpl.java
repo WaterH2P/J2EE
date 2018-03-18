@@ -93,7 +93,7 @@ public class UserAccountDaoImpl implements CommonAccountDao, CommonUVAccountDao,
 			final boolean isDeleted = false;
 			jdbcTemplate.update(accountSql, email, verificationCode, isConfirmed, isDeleted);
 			String userInfoSql = "INSERT INTO " + ParaName.Table_userInfo + " VALUES (?,?,?,?,?,?)";
-			final int vipLevel = 0;
+			final int vipLevel = 1;
 			final float balance = 0;
 			final int point = 0;
 			final int totalPoint = 0;

@@ -51,4 +51,19 @@ public class VenuePlanDaoImpl implements VenuePlanDao {
 		return venuePlans;
 	}
 	
+	@Override
+	public VenuePlan selectVenuePlanInfo(String planID){
+		String sql = "SELECT * FROM " + ParaName.Table_venuePlan + " as plan," +
+				" (SELECT hallID, numOfRow, numOfCol FROM " + ParaName.Table_venueHall + ")as hall" +
+				" WHERE plan.planID=? AND plan.hallID=hall.hallID";
+		VenuePlan venuePlan = jdbcTemplate.queryForObject(sql, new VenuePlanRowMapper(), planID);
+		return venuePlan;
+	}
+	
+	@Override
+	public void updateVenuePlanSeatDist(String planID, String seatDist){
+		String sql = "UPDATE " + ParaName.Table_venuePlan + " SET seatDist=? WHERE planID=?";
+		jdbcTemplate.update(sql, seatDist, planID);
+	}
+	
 }

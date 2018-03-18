@@ -11,4 +11,6 @@ public interface MgrVIPLevelDao {
 
 	List<VIPLevelInfo> selectAllVIPLevelInfos();
 
+	VIPLevelInfo selectVIPInfoByLevel(String vipLevel);
+	
 }

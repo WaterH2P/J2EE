@@ -14,4 +14,9 @@ public interface VenuePlanDao {
 	
 	List<VenuePlan> selectAllVenuePlansByPlanName(String planName);
 	
+	VenuePlan selectVenuePlanInfo(String planID);
+	
+	void updateVenuePlanSeatDist(String planID, String seatDist);
+
+//	plan kill2 55555005514551455005555551455145
 }

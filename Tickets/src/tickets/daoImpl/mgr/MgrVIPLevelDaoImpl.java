@@ -53,6 +53,13 @@ public class MgrVIPLevelDaoImpl implements MgrVIPLevelDao {
 		return vipLevelInfos;
 	}
 	
+	@Override
+	public VIPLevelInfo selectVIPInfoByLevel(String vipLevel){
+		String sql = "SELECT * FROM " + ParaName.Table_vipInfo + " WHERE vipLevel=?";
+		VIPLevelInfo vipLevelInfo = (VIPLevelInfo)jdbcTemplate.queryForObject(sql, new VIPLevelInfoRowMapper(), vipLevel);
+		return vipLevelInfo;
+	}
+	
 	private void deletedAllVIPLevelInfos(){
 		String sql = "UPDATE " + ParaName.Table_vipInfo + " SET isDeleted=TRUE ";
 		jdbcTemplate.update(sql);

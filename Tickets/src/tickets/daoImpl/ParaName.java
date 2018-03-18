@@ -5,6 +5,8 @@ public class ParaName {
 	public final static String Table_userInfo = "userInfo";
 	public final static String Table_userAccount = "userAccount";
 	public final static String Table_userCoupon = "userCoupon";
+	public final static String Table_userOd = "userOd";
+	public final static String Table_userOdSeat = "userOdSeat";
 	
 	public final static String Table_venueBaseInfo = "venueBaseInfo";
 	public final static String Table_venueBaseInfoChange = "venueBaseInfoChange";
@@ -30,4 +32,11 @@ public class ParaName {
 	public final static String message_failToChange = "很抱歉修改失败，请重新尝试！";
 	public final static String message_failToAdd = "很抱歉新增失败，请重新尝试！";
 	public final static String message_failToDelete = "很抱歉删除失败，请重新尝试！";
+	
+	public final static String return_false = "false";
+	
+	public final static String seat_none = "0";
+	public final static String seat_available = "1";
+	public final static String seat_selected = "2";
+	public final static String seat_unavailable = "3";
 }

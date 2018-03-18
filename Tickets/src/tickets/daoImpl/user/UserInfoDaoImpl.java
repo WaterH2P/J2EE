@@ -39,4 +39,19 @@ public class UserInfoDaoImpl implements UserInfoDao {
 		}
 	}
 	
+	@Override
+	public boolean updateUserBalance(String email, double balanceModifyValue){
+		UserInfo userInfo = selectUserInfo(email);
+		int pointModifyValue = (int)balanceModifyValue;
+		if( userInfo.getBalance()-balanceModifyValue>0 ){
+			String updateBalance = "UPDATE " + ParaName.Table_userInfo +
+					" SET balance=balance-?, point=point+?, totalPoint=totalPoint+?";
+			jdbcTemplate.update(updateBalance, balanceModifyValue, pointModifyValue, pointModifyValue);
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
 }

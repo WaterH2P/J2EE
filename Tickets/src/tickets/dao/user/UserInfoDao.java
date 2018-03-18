@@ -15,4 +15,6 @@ public interface UserInfoDao {
 	 */
 	boolean updateUserPoint(String email, int pointModifyValue);
 	
+	boolean updateUserBalance(String email, double balanceModifyValue);
+	
 }

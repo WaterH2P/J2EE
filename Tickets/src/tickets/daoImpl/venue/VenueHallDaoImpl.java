@@ -7,8 +7,10 @@ import tickets.daoImpl.DaoHelperImpl;
 import tickets.daoImpl.ParaName;
 import tickets.model.venue.VenueHall;
 import tickets.model.venue.VenueHallSeat;
+import tickets.model.venue.VenuePlanSeat;
 import tickets.rowMapper.venue.VenueHallIDRowMapper;
 import tickets.rowMapper.venue.VenueHallRowMapper;
+import tickets.rowMapper.venue.VenuePlanSeatRowMapper;
 
 import java.util.List;
 
@@ -66,5 +68,13 @@ public class VenueHallDaoImpl implements VenueHallDao {
 		String sql = "SELECT * FROM " + ParaName.Table_venueHall + " WHERE hallID=?";
 		VenueHall venueHall = jdbcTemplate.queryForObject(sql, new VenueHallRowMapper(), hallID);
 		return venueHall;
+	}
+	
+	@Override
+	public List<VenuePlanSeat> selectPlanHallSeatInfo(String hallID){
+		String sql = "SELECT hallID, row, col, percent FROM " + ParaName.Table_venueHallSeat + " AS hall, " +
+				ParaName.Table_venueSeatLevel + " AS seat WHERE hallID=? AND hall.seatID=seat.seatID";
+		List<VenuePlanSeat> venuePlanSeats = jdbcTemplate.query(sql, new VenuePlanSeatRowMapper(), hallID);
+		return venuePlanSeats;
 	}
 }

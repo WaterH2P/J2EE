@@ -3,6 +3,8 @@ package tickets.serviceImpl.venue;
 import org.springframework.stereotype.Service;
 import tickets.dao.venue.VenueHallDao;
 import tickets.dao.venue.VenuePlanDao;
+import tickets.daoImpl.Common;
+import tickets.daoImpl.ParaName;
 import tickets.model.venue.VenueHall;
 import tickets.model.venue.VenuePlan;
 import tickets.service.venue.VenuePlanService;
@@ -55,6 +57,24 @@ public class VenuePlanServiceImpl implements VenuePlanService {
 		List<VenuePlan> venuePlans = venuePlanDao.selectAllVenuePlansByVenueID(venueID);
 		List<VenuePlan> venuePlanUnifyBack = CommonService.venuePlanUnifyBack(venuePlans);
 		return venuePlanUnifyBack;
+	}
+	
+	@Override
+	public void updateVenuePlanSeatDist(String planID, String[] seats){
+		VenuePlan venuePlan = venuePlanDao.selectVenuePlanInfo(planID);
+		int col = venuePlan.getNumOfCol();
+		String seatDist = venuePlan.getSeatDist();
+		seatDist = CommonService.hexadecimalToFour(seatDist);
+		for( String seat : seats ){
+			String[] rowAndCol = seat.split("--");
+			int seatRow = Integer.valueOf( rowAndCol[0] );
+			int seatCol = Integer.valueOf( rowAndCol[1] );
+			String front = seatDist.substring(0, (seatRow-1)*col + (seatCol-1));
+			String back = seatDist.substring((seatRow-1)*col + seatCol, seatDist.length());
+			seatDist = front + ParaName.seat_unavailable + back;
+		}
+		seatDist = CommonService.fourToHexadecimal(seatDist);
+		venuePlanDao.updateVenuePlanSeatDist(planID, seatDist);
 	}
 	
 	

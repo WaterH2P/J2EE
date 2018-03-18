@@ -10,4 +10,6 @@ public interface VenuePlanService {
 	
 	List<VenuePlan> getAllVenuePlansByVenueID(String venueID);
 	
+	void updateVenuePlanSeatDist(String planID, String[] seats);
+	
 }
