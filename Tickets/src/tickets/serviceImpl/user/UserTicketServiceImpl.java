@@ -7,7 +7,6 @@ import tickets.service.user.UserTicketService;
 import tickets.serviceImpl.CommonService;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service("userTicketService")

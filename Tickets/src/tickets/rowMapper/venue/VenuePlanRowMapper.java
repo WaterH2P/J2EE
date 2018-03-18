@@ -15,8 +15,8 @@ public class VenuePlanRowMapper implements RowMapper<VenuePlan> {
 		venuePlan.setVenueID( rs.getString("venueID") );
 		venuePlan.setName( rs.getString("name") );
 		venuePlan.setType( rs.getString("type") );
-		venuePlan.setBeginTime( rs.getTime("beginTime") );
-		venuePlan.setEndTime( rs.getTime("endTime") );
+		venuePlan.setBeginTime( rs.getDate("beginTime") );
+		venuePlan.setEndTime( rs.getDate("endTime") );
 		venuePlan.setHallID( rs.getString("hallID") );
 		venuePlan.setHallName( rs.getString("hallName") );
 		venuePlan.setNumOfRow(rs.getInt("numOfRow"));

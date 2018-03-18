@@ -1,6 +1,5 @@
 package tickets.service.venue;
 
-import tickets.model.venue.VenuePlan;
 import tickets.model.venue.VenueSeatLevel;
 
 import java.util.List;

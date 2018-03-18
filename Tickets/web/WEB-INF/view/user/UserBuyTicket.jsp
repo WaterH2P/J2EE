@@ -6,6 +6,7 @@
     <title>Buy Ticket</title>
     <link rel="stylesheet" type="text/css" href="../../stylesheet/common.css">
     <link rel="stylesheet" type="text/css" href="../../stylesheet/hallSeat.css">
+    <link rel="stylesheet" type="text/css" href="../../stylesheet/venue/venueHallManage.css">
 </head>
 <body>
 <div class="common">
@@ -37,6 +38,17 @@
             <div class="demo" id="buyTicket_seatMap_div">
 
             </div>
+            <div class="fixRight" id="showInfoOfTicketSelected_div">
+                <p><label>影片：</label><input id="nameOfPlan_input" type='text' readonly/></p>
+                <p><label>时间：</label></p>
+                <p><input id="beginTimeOfPlan_div" type='text' readonly/></p>
+                <p>-></p>
+                <p><input id="endTimeOfPlan_div" type='text' readonly/></p>
+                <p><label>座位：</label><input style="visibility: hidden"/></p>
+                <ul class='selected-seats' id='seatSelected_ul'></ul>
+                <p><label>总价：</label><input id="totalPrice_input" type="text" readonly></p>
+                <button>确认买票</button>
+            </div>
         </div>
     </div>
 </div>
@@ -47,6 +59,8 @@
     function deleteSpace(str) {
         return str.replace(/\s/g, "");
     }
+
+    var numOfTSelected = 0;
 
     function buyTicketSelectSeat(obj) {
         $("#main_div").hide();
@@ -68,14 +82,19 @@
                     seatDist = seatDist.substring(numOfCol);
                 }
 
+                $("#nameOfPlan_input").val(planInfo.name);
+                $("#beginTimeOfPlan_div").val(new Date(planInfo.beginTime));
+                $("#endTimeOfPlan_div").val(new Date(planInfo.endTime));
+                $("#totalPrice_input").val("");
+
                 $("#buyTicket_seatMap_div").empty();
                 var seat = "<div class='front'>屏幕</div>" +
                     "<div id='seat-map'></div>" +
                     "<div class='booking-details'>" +
-                    "<div id='legend'></div>" +
+                        "<div id='legend'></div>" +
                     "</div>";
                 $("#buyTicket_seatMap_div").append(seat);
-                $("#seat-map").seatCharts({
+                var seatMap = $("#seat-map").seatCharts({
                     map:seatData,
                     naming: {
                         top: true,
@@ -95,9 +114,24 @@
                     },
                     click: function() {
                         if (this.status() == 'available') {
-                            return 'selected';
+                            if( numOfTSelected<6 ){
+                                numOfTSelected++;
+                                var seatLi = "<li id='seatSelected_" + this.settings.id + "_li'>" +
+                                    (this.settings.row+1) + "排" + this.settings.label + "座" + "</li>";
+                                $("#seatSelected_ul").append(seatLi);
+
+                                return 'selected';
+                            }
+                            else {
+                                alert("最多选购 6 张票！");
+                                return this.status();
+                            }
                         }
                         else if(this.status() == 'selected'){
+                            numOfTSelected--;
+
+                            //删除已预订座位
+                            $('#seatSelected_' + this.settings.id + "_li").remove();
                             return "available";
                         }
                         else {
