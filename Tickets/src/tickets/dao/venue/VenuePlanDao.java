@@ -10,7 +10,11 @@ public interface VenuePlanDao {
 	
 	void insertNewVenuePlan(VenuePlan venuePlan);
 	
-	List<VenuePlan> selectAllVenuePlansByVenueID(String venueID);
+	List<VenuePlan> selectAllVenuePlansIsNotCheckedByVenueID(String venueID);
+	
+	List<VenuePlan> selectAllVenuePlansIsCheckingByVenueID(String venueID);
+	
+	List<VenuePlan> selectAllVenuePlansIsCheckedByVenueID(String venueID);
 	
 	List<VenuePlan> selectAllVenuePlansByPlanName(String planName);
 	

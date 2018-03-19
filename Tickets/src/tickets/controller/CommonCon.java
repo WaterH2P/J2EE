@@ -1,6 +1,7 @@
 package tickets.controller;
 
 import tickets.daoImpl.ParaName;
+import tickets.model.Result;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -59,6 +60,20 @@ public class CommonCon {
 		HttpSession session = request.getSession(true);
 		session.setMaxInactiveInterval(600);
 		session.setAttribute(ParaName.VerificationCode, EmailORID);
+	}
+	
+	public static Result strCheck(String strChecked, String strChecking){
+		Result result = new Result();
+		if( !strChecked.equals(strChecking) ){
+			result.setResult(true);
+			result.setMessage(strChecked);
+		}
+		else {
+			result.setResult(false);
+			String message = "购票冲突，请刷新重试！";
+			result.setMessage(message);
+		}
+		return result;
 	}
 	
 }

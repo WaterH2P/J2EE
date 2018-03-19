@@ -34,10 +34,28 @@ public class VenuePlanDaoImpl implements VenuePlanDao {
 	}
 	
 	@Override
-	public List<VenuePlan> selectAllVenuePlansByVenueID(String venueID){
+	public List<VenuePlan> selectAllVenuePlansIsNotCheckedByVenueID(String venueID){
 		String sql = "SELECT * FROM " + ParaName.Table_venuePlan + " as plan," +
 				" (SELECT hallID, numOfRow, numOfCol FROM " + ParaName.Table_venueHall + " WHERE venueID=?)as hall" +
-				" WHERE plan.hallID=hall.hallID";
+				" WHERE plan.hallID=hall.hallID AND isChecked=FALSE AND isChecking=FALSE ";
+		List<VenuePlan> venuePlans = jdbcTemplate.query(sql, new VenuePlanRowMapper(), venueID);
+		return venuePlans;
+	}
+	
+	@Override
+	public List<VenuePlan> selectAllVenuePlansIsCheckingByVenueID(String venueID){
+		String sql = "SELECT * FROM " + ParaName.Table_venuePlan + " as plan," +
+				" (SELECT hallID, numOfRow, numOfCol FROM " + ParaName.Table_venueHall + " WHERE venueID=?)as hall" +
+				" WHERE plan.hallID=hall.hallID AND isChecking=TRUE ";
+		List<VenuePlan> venuePlans = jdbcTemplate.query(sql, new VenuePlanRowMapper(), venueID);
+		return venuePlans;
+	}
+	
+	@Override
+	public List<VenuePlan> selectAllVenuePlansIsCheckedByVenueID(String venueID){
+		String sql = "SELECT * FROM " + ParaName.Table_venuePlan + " as plan," +
+				" (SELECT hallID, numOfRow, numOfCol FROM " + ParaName.Table_venueHall + " WHERE venueID=?)as hall" +
+				" WHERE plan.hallID=hall.hallID AND isChecked=TRUE ";
 		List<VenuePlan> venuePlans = jdbcTemplate.query(sql, new VenuePlanRowMapper(), venueID);
 		return venuePlans;
 	}

@@ -132,7 +132,7 @@ public class UserOdCon {
 			if( CommonCon.isUser(email) ){
 				final boolean isOnline = true;
 				String OdID = userOdService.makeNewOrderSeated(email, planID, seatSelected, totalPrice, isOnline);
-				result = strCheck(OdID, ParaName.return_false);
+				result = CommonCon.strCheck(OdID, ParaName.return_false);
 			}
 		}
 		if( !result.getResult() && result.getMessage().length()==0 ){
@@ -152,25 +152,11 @@ public class UserOdCon {
 			if( CommonCon.isUser(email) ){
 				final boolean isOnline = true;
 				String OdID = userOdService.makeNewOrderUnseated(email, planID, numOfTSelected, isOnline);
-				result = strCheck(OdID, ParaName.return_false);
+				result = CommonCon.strCheck(OdID, ParaName.return_false);
 			}
 		}
 		if( !result.getResult() && result.getMessage().length()==0 ){
 			result.setMessage(ParaName.message_ownNoAuthority);
-		}
-		return result;
-	}
-	
-	private Result strCheck(String strChecked, String strChecking){
-		Result result = new Result();
-		if( !strChecked.equals(strChecking) ){
-			result.setResult(true);
-			result.setMessage(strChecked);
-		}
-		else {
-			result.setResult(false);
-			String message = "购票冲突，请刷新重试！";
-			result.setMessage(message);
 		}
 		return result;
 	}

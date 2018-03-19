@@ -61,7 +61,7 @@ public class MgrVIPLevelDaoImpl implements MgrVIPLevelDao {
 	}
 	
 	private void deletedAllVIPLevelInfos(){
-		String sql = "UPDATE " + ParaName.Table_vipInfo + " SET isDeleted=TRUE ";
+		String sql = "UPDATE " + ParaName.Table_vipInfo + " SET isDeleted=TRUE WHERE vipLevel!=0";
 		jdbcTemplate.update(sql);
 	}
 	

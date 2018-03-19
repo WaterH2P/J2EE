@@ -133,12 +133,6 @@
                     }
                 });
 
-                var seatData = [];
-                for( var j=0; j<numOfRow; j++ ){
-                    seatData[j] = seatDist.substring(0, numOfCol);
-                    seatDist = seatDist.substring(numOfCol);
-                }
-
                 $("#nameOfPlan_input").val(planInfo.name);
                 var beginTime = new Date(planInfo.beginTime);
                 $("#beginTimeOfPlan_div").val(beginTime.format(dateFormat));
@@ -146,6 +140,21 @@
                 $("#endTimeOfPlan_div").val(endTime.format(dateFormat));
                 $("#totalPrice_input").val(totalPrice);
                 $("#seatSelected_ul").empty();
+
+                var seatData = [];
+                var seatSelected = new Array();
+                for( var j=0; j<numOfRow; j++ ){
+                    seatData[j] = seatDist.substring(0, numOfCol);
+                    seatDist = seatDist.substring(numOfCol);
+                    var seatRow = seatData[j];
+                    for( var k=0; k<seatRow.length; k++ ){
+                        if( seatRow.charAt(k)=='s' ){
+                            var row = j + 1;
+                            var col = k + 1;
+                            seatSelected[seatSelected.length] = row + "_" + col;
+                        }
+                    }
+                }
 
                 $("#buyTicket_seatMap_div").empty();
                 var seat = "<div class='front'>屏幕</div>" +
@@ -214,17 +223,7 @@
                     }
                 });
                 // 设置已经售出的位置
-                for( var i=0; i<seatData.length; i++ ){
-                    var row = i + 1;
-                    var rowInfo = seatData[i];
-                    for( var j=0; j<rowInfo.length; j++ ){
-                        var col = j + 1;
-                        if( rowInfo.charAt(j)=='s' ){
-                            var seatCoordinate = row + "_" + col;
-                            seatMap.status(seatCoordinate, 'unavailable');
-                        }
-                    }
-                }
+                seatMap.status(seatSelected, 'unavailable');
 
                 break;
             }
@@ -251,9 +250,18 @@
                 var numOfRow = parseInt(planInfo.numOfRow);
                 var numOfCol = parseInt(planInfo.numOfCol);
                 var seatData = [];
+                var seatSelected = new Array();
                 for( var j=0; j<numOfRow; j++ ){
                     seatData[j] = seatDist.substring(0, numOfCol);
                     seatDist = seatDist.substring(numOfCol);
+                    var seatRow = seatData[j];
+                    for( var k=0; k<seatRow.length; k++ ){
+                        if( seatRow.charAt(k)=='s' ){
+                            var row = j + 1;
+                            var col = k + 1;
+                            seatSelected[seatSelected.length] = row + "_" + col;
+                        }
+                    }
                 }
 
                 $("#buyTicket_seatMap_div").empty();
@@ -298,18 +306,7 @@
                     }
                 });
                 // 设置已经售出的位置
-                for( var i=0; i<seatData.length; i++ ){
-                    var row = i + 1;
-                    var rowInfo = seatData[i];
-                    for( var j=0; j<rowInfo.length; j++ ){
-                        var col = j + 1;
-                        if( rowInfo.charAt(j)=='s' ){
-                            var seatCoordinate = row + "_" + col;
-                            seatMap.status(seatCoordinate, 'unavailable');
-                        }
-                    }
-                }
-
+                seatMap.status(seatSelected, 'unavailable');
                 break;
             }
         }

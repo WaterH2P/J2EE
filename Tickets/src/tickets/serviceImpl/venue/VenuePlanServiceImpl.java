@@ -3,11 +3,10 @@ package tickets.serviceImpl.venue;
 import org.springframework.stereotype.Service;
 import tickets.dao.venue.VenueHallDao;
 import tickets.dao.venue.VenuePlanDao;
-import tickets.daoImpl.Common;
-import tickets.daoImpl.ParaName;
 import tickets.model.user.UserOdSeat;
 import tickets.model.venue.VenueHall;
 import tickets.model.venue.VenuePlan;
+import tickets.model.venue.VenuePlanSeat;
 import tickets.service.venue.VenuePlanService;
 import tickets.serviceImpl.CommonService;
 
@@ -54,8 +53,22 @@ public class VenuePlanServiceImpl implements VenuePlanService {
 	}
 	
 	@Override
-	public List<VenuePlan> getAllVenuePlansByVenueID(String venueID){
-		List<VenuePlan> venuePlans = venuePlanDao.selectAllVenuePlansByVenueID(venueID);
+	public List<VenuePlan> getAllVenuePlansIsNotCheckedByVenueID(String venueID){
+		List<VenuePlan> venuePlans = venuePlanDao.selectAllVenuePlansIsNotCheckedByVenueID(venueID);
+		List<VenuePlan> venuePlanUnifyBack = CommonService.venuePlanUnifyBack(venuePlans);
+		return venuePlanUnifyBack;
+	}
+	
+	@Override
+	public List<VenuePlan> getAllVenuePlansIsCheckingByVenueID(String venueID){
+		List<VenuePlan> venuePlans = venuePlanDao.selectAllVenuePlansIsCheckingByVenueID(venueID);
+		List<VenuePlan> venuePlanUnifyBack = CommonService.venuePlanUnifyBack(venuePlans);
+		return venuePlanUnifyBack;
+	}
+	
+	@Override
+	public List<VenuePlan> getAllVenuePlansIsCheckedByVenueID(String venueID){
+		List<VenuePlan> venuePlans = venuePlanDao.selectAllVenuePlansIsCheckedByVenueID(venueID);
 		List<VenuePlan> venuePlanUnifyBack = CommonService.venuePlanUnifyBack(venuePlans);
 		return venuePlanUnifyBack;
 	}
@@ -78,5 +91,9 @@ public class VenuePlanServiceImpl implements VenuePlanService {
 		venuePlanDao.updateVenuePlanSeatDist(planID, seatDist);
 	}
 	
+	@Override
+	public List<VenuePlanSeat> getPlanHallSeatInfo(String hallID){
+		return venueHallDao.selectPlanHallSeatInfo(hallID);
+	}
 	
 }

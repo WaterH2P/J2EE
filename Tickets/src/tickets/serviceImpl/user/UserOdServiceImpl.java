@@ -2,6 +2,7 @@ package tickets.serviceImpl.user;
 
 import org.springframework.stereotype.Service;
 import tickets.dao.mgr.MgrVIPLevelDao;
+import tickets.dao.user.UserAccountDao;
 import tickets.dao.user.UserCouponDao;
 import tickets.dao.user.UserInfoDao;
 import tickets.dao.user.UserOdDao;
@@ -61,6 +62,9 @@ public class UserOdServiceImpl implements UserOdService {
 	@Resource(name = "userInfoDao")
 	private UserInfoDao userInfoDao;
 	
+	@Resource(name = "userAccountDao")
+	private UserAccountDao userAccountDao;
+	
 	private DecimalFormat df = new DecimalFormat("#0.00");
 	
 	@Override
@@ -83,6 +87,9 @@ public class UserOdServiceImpl implements UserOdService {
 	
 	@Override
 	public String makeNewOrderSeated(String email, String planID, String seatSelected, String totalPrice, boolean isOnline){
+		if( email==null || email.length()==0 || !userAccountDao.accountIsExist(email) ){
+			email = ParaName.account_fictitious;
+		}
 		UserOd userOd = new UserOd();
 		List<UserOdSeat> userOdSeats = new ArrayList<>();
 		
@@ -175,59 +182,107 @@ public class UserOdServiceImpl implements UserOdService {
 	
 	@Override
 	public boolean payOd(String email, String OdID, String couponID){
+		if( couponID==null ){
+			couponID = "";
+		}
 		UserInfo userInfo = new UserInfo();
 		userInfo = userInfoService.getUserInfo(email);
 		UserOd userOd = new UserOd();
 		userOd = userOdDao.selectUserOdInfo(OdID);
-		UserCoupon userCoupon = new UserCoupon();
-		if( userInfo.getEmail().equals(userOd.getEmail()) ){
-			List<UserCoupon> couponInfos = userCouponDao.selectAllUserCoupon(email);
-			boolean isExist = false;
-			for( int i=0; i<couponInfos.size(); i++ ){
-				if( couponInfos.get(i).getCouponID().equals(couponID) ){
-					userCoupon = couponInfos.get(i);
-					isExist = true;
-					break;
-				}
-			}
-			if( isExist ){
-//				更新优惠券数量
-				userCouponDao.deleteOneUserCoupon(email, couponID);
-				
-				VIPLevelInfo vipLevelInfo = mgrVIPLevelDao.selectVIPInfoByLevel(userInfo.getVipLevel());
-				int percent = vipLevelInfo.getPercent();
-				double vipDiscount = (100 - percent) * userOd.getTotalPrice() / 100.0;
-				vipDiscount = Double.valueOf( df.format(vipDiscount) );
-				int couponDiscount = userCoupon.getDiscount();
-				double totalPay = userOd.getTotalPrice() - vipDiscount - couponDiscount;
-				totalPay = Double.valueOf( df.format(totalPay) );
-				if( totalPay<0 ){
-					totalPay = 0;
-				}
-				if( userInfo.getBalance()>totalPay ){
-					if( userInfoDao.updateUserBalance(email, -totalPay) ){
-						userOdDao.updateUserOdIsPaid(OdID, vipDiscount, couponDiscount, totalPay);
-						return true;
+		if( !email.equals(ParaName.account_fictitious) ){
+			UserCoupon userCoupon = new UserCoupon();
+			if( userInfo.getEmail().equals(userOd.getEmail()) ){
+				List<UserCoupon> couponInfos = userCouponDao.selectAllUserCoupon(email);
+				boolean isExist = false;
+				if( couponID.length()>0 ){
+					for( int i = 0; i < couponInfos.size(); i++ ){
+						if( couponInfos.get(i).getCouponID().equals(couponID) ){
+							userCoupon = couponInfos.get(i);
+							isExist = true;
+							break;
+						}
 					}
-					else {
+				}
+				if( isExist ){
+//				    更新优惠券数量
+					userCouponDao.deleteOneUserCoupon(email, couponID);
+					
+					VIPLevelInfo vipLevelInfo = mgrVIPLevelDao.selectVIPInfoByLevel(userInfo.getVipLevel());
+					int percent = vipLevelInfo.getPercent();
+					double vipDiscount = (100 - percent) * userOd.getTotalPrice() / 100.0;
+					vipDiscount = Double.valueOf(df.format(vipDiscount));
+					int couponDiscount = userCoupon.getDiscount();
+					double totalPay = userOd.getTotalPrice() - vipDiscount - couponDiscount;
+					totalPay = Double.valueOf(df.format(totalPay));
+					if( totalPay < 0 ){
+						totalPay = 0;
+					}
+					if( userInfo.getBalance() > totalPay ){
+						if( userInfoDao.updateUserBalance(email, -totalPay) ){
+							userOdDao.updateUserOdIsPaid(OdID, vipDiscount, couponDiscount, totalPay);
+							return true;
+						}
+						else{
+							System.out.println("A");
+							return false;
+						}
+					}
+					else{
+						System.out.println("B");
 						return false;
 					}
 				}
-				else {
+				else if( couponID.length()==0 ){
+					VIPLevelInfo vipLevelInfo = mgrVIPLevelDao.selectVIPInfoByLevel(userInfo.getVipLevel());
+					int percent = vipLevelInfo.getPercent();
+					double vipDiscount = (100 - percent) * userOd.getTotalPrice() / 100.0;
+					vipDiscount = Double.valueOf(df.format(vipDiscount));
+					double totalPay = userOd.getTotalPrice() - vipDiscount;
+					totalPay = Double.valueOf(df.format(totalPay));
+					if( totalPay < 0 ){
+						totalPay = 0;
+					}
+					if( userInfo.getBalance() > totalPay ){
+						if( userInfoDao.updateUserBalance(email, -totalPay) ){
+							final int couponDiscount = 0;
+							userOdDao.updateUserOdIsPaid(OdID, vipDiscount, couponDiscount, totalPay);
+							return true;
+						}
+						else{
+							System.out.println("C");
+							return false;
+						}
+					}
+					else{
+						System.out.println("D");
+						return false;
+					}
+				}
+				else{
+					System.out.println("E");
 					return false;
 				}
 			}
 			else{
+				System.out.println("F");
 				return false;
 			}
 		}
-		else{
-			return false;
+		else {
+			double totalPay = userOd.getTotalPrice();
+			totalPay = Double.valueOf(df.format(totalPay));
+			final double vipDiscount = 0;
+			final int couponDiscount = 0;
+			userOdDao.updateUserOdIsPaid(OdID, vipDiscount, couponDiscount, totalPay);
+			return true;
 		}
 	}
 	
 	@Override
 	public boolean deleteOd(String email, String OdID){
+		if( email==null || email.length()==0 || !userAccountDao.accountIsExist(email) ){
+			email = ParaName.account_fictitious;
+		}
 		UserInfo userInfo = new UserInfo();
 		userInfo = userInfoService.getUserInfo(email);
 		UserOd userOd = new UserOd();
@@ -237,7 +292,7 @@ public class UserOdServiceImpl implements UserOdService {
 			userOdDao.updateUserOdIsDeleted(OdID);
 			
 			String planID = userOd.getPlanID();
-			if( userOd.isPaid() ){
+			if( userOd.isPaid() && !email.equals(ParaName.account_fictitious) ){
 //			更新用户余额和积分
 				double balanceModifyValue = userOd.getTotalPay();
 				userInfoDao.updateUserBalance(email, balanceModifyValue);

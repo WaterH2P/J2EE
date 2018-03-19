@@ -39,4 +39,6 @@ public class ParaName {
 	public final static String seat_available = "1";
 	public final static String seat_selected = "2";
 	public final static String seat_unavailable = "3";
+	
+	public final static String account_fictitious = "fictitious@fictitious.com";
 }

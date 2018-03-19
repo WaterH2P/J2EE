@@ -1,33 +1,7 @@
 
 function show_userOd_future() {
-    $("#userOd_historical").removeClass("active");
-    $("#userOd_timeout").removeClass("active");
-    $("#userOd_deleted").removeClass("active");
+    getInfoAndShow("GetAllFutureUserOd", "showUserOd_future_info(this)");
     $("#userOd_future").addClass("active");
-    $("#userOd_unfinished").removeClass("active");
-    $.post("GetAllFutureUserOd", function (rs) {
-        var res = $.parseJSON(rs);
-        OdInfos = res;
-        $("#OdList_show_div").empty();
-        if( res.length>0 ){
-            $.each(res, function (index, value, array) {
-                var infoDiv = "<div>" +
-                    "<p><label>计划ID：</label><input type='text' value='" + value.planID + "' readonly/></p>" +
-                    "<p><label>总价：</label><input type='text' value='" + value.totalPrice + "' readonly></p>\n" +
-                    "<p><label>VIP优惠：</label><input type='text' value='" + value.vipDiscount + "' readonly></p>" +
-                    "<p><label>优惠券节省：</label><input type='text' value='" + value.couponDiscount + "' readonly></p>" +
-                    "<p><label>实付：</label><input type='text' value='" + value.totalPay + "' readonly></p>" +
-                    "<button id='btn_" + value.odID + "_" + value.planID + "_check_info' onclick='showUserOd_future_info(this)'>详细信息</button>" +
-                    "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
-                    "</div>";
-                $("#OdList_show_div").append(infoDiv);
-            });
-        }
-        else {
-            var infoDiv = "<input type='text' value='没有该类型订单！' readonly />";
-            $("#OdList_show_div").append(infoDiv);
-        }
-    });
 }
 
 function showUserOd_future_info(obj) {

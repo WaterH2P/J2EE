@@ -10,6 +10,7 @@ import tickets.controller.CommonCon;
 import tickets.daoImpl.ParaName;
 import tickets.model.Result;
 import tickets.model.venue.VenuePlan;
+import tickets.model.venue.VenuePlanSeat;
 import tickets.service.venue.VenuePlanService;
 
 import javax.annotation.Resource;
@@ -67,17 +68,71 @@ public class VenuePlanManageCon {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/Venue/GetAllVenuePlans", method = RequestMethod.POST)
-	public List<VenuePlan> getAllVenuePlan(){
+	@RequestMapping(value = "/Venue/GetAllVenuePlansIsNotChecked", method = RequestMethod.POST)
+	public List<VenuePlan> getAllVenuePlansIsNotChecked(){
 		List<VenuePlan> venuePlan = new ArrayList<>();
 		HttpSession session = request.getSession(false);
 		if( CommonCon.hasLogin(session) ){
 			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
 			if( CommonCon.isVenue(venueID) ){
-				venuePlan = venuePlanService.getAllVenuePlansByVenueID(venueID);
+				venuePlan = venuePlanService.getAllVenuePlansIsNotCheckedByVenueID(venueID);
+			}
+			else {
+				System.out.println(venueID + " " + ParaName.message_ownNoAuthority);
 			}
 		}
 		return venuePlan;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/Venue/GetAllVenuePlansIsChecking", method = RequestMethod.POST)
+	public List<VenuePlan> getAllVenuePlansIsChecking(){
+		List<VenuePlan> venuePlan = new ArrayList<>();
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isVenue(venueID) ){
+				venuePlan = venuePlanService.getAllVenuePlansIsCheckingByVenueID(venueID);
+			}
+			else {
+				System.out.println(venueID + " " + ParaName.message_ownNoAuthority);
+			}
+		}
+		return venuePlan;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/Venue/GetAllVenuePlansIsChecked", method = RequestMethod.POST)
+	public List<VenuePlan> getAllVenuePlansIsChecked(){
+		List<VenuePlan> venuePlan = new ArrayList<>();
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isVenue(venueID) ){
+				venuePlan = venuePlanService.getAllVenuePlansIsCheckedByVenueID(venueID);
+			}
+			else {
+				System.out.println(venueID + " " + ParaName.message_ownNoAuthority);
+			}
+		}
+		return venuePlan;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/Venue/GetPlanHallSeatInfo", method = RequestMethod.POST)
+	public List<VenuePlanSeat> getPlanHallSeatInfo(String hallID){
+		List<VenuePlanSeat> venuePlanSeats = new ArrayList<>();
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isVenue(venueID) ){
+				venuePlanSeats = venuePlanService.getPlanHallSeatInfo(hallID);
+			}
+			else {
+				System.out.println(venueID + " " + ParaName.message_ownNoAuthority);
+			}
+		}
+		return venuePlanSeats;
 	}
 	
 }
