@@ -80,10 +80,12 @@
 
 <script src="../../javascript/jquery/jquery-3.2.1.min.js" ></script>
 <script src="../../javascript/jquery/jquery.seat-charts.min.js" ></script>
+<script src="../../javascript/date-format.js" ></script>
 <script>
     function deleteSpace(str) {
         return str.replace(/\s/g, "");
     }
+    var dateFormat = "yyyy-MM-dd hh:mm:ss";
 
     var planSelected = {};
     var seatSelectedRowAndCols = "";
@@ -138,8 +140,10 @@
                 }
 
                 $("#nameOfPlan_input").val(planInfo.name);
-                $("#beginTimeOfPlan_div").val(new Date(planInfo.beginTime));
-                $("#endTimeOfPlan_div").val(new Date(planInfo.endTime));
+                var beginTime = new Date(planInfo.beginTime);
+                $("#beginTimeOfPlan_div").val(beginTime.format(dateFormat));
+                var endTime = new Date(planInfo.endTime);
+                $("#endTimeOfPlan_div").val(endTime.format(dateFormat));
                 $("#totalPrice_input").val(totalPrice);
                 $("#seatSelected_ul").empty();
 
@@ -394,13 +398,13 @@
         $("#Od_pay_div").append(submitBtn);
 
         $("#Od_nameOfPlan_input").val(planSelected.name);
-        $("#Od_beginTimeOfPlan_div").val(planSelected.beginTime);
-        $("#Od_endTimeOfPlan_div").val(planSelected.endTime);
+        var beginTime = new Date(planSelected.beginTime);
+        $("#Od_beginTimeOfPlan_div").val(beginTime.format(dateFormat));
+        var endTime = new Date(planSelected.endTime);
+        $("#Od_endTimeOfPlan_div").val(endTime.format(dateFormat));
 
         $("#Od_seatSelected_ul").empty();
         if( isSeated ){
-            $("#Od_seat_input").attr("visibility", "hidden");
-            $("#Od_seat_input").val("");
             var seatSelectedRowAndCol = seatSelectedRowAndCols.split("==");
             for( var i=0; i<seatSelectedRowAndCol.length; i++ ){
                 var seatRowAndCol = seatSelectedRowAndCol[i];
@@ -412,8 +416,8 @@
             }
         }
         else {
-            $("#Od_seat_input").removeAttr("visibility");
-            $("#Od_seat_input").val("还未分配座位！");
+            var seatLi = "<li>还未分配座位！</li>";
+            $("#Od_seatSelected_ul").append(seatLi);
         }
 
         totalPrice = parseFloat(totalPrice.toFixed(2));
@@ -516,11 +520,13 @@
                 var res = $.parseJSON(rs);
                 planInfos = res;
                 $.each(res, function (index, value, array) {
-                   var infoDiv = "<div id='" + value.planID + "_info_div'>" +
+                    var beginTime = new Date(value.beginTime);
+                    var endTime = new Date(value.endTime);
+                    var infoDiv = "<div id='" + value.planID + "_info_div'>" +
                        "<p><label>计划名称：</label><input type='text' value='" + value.name + "' readonly /></p>" +
                        "<p><label>计划类型：</label><input type='text' value='" + value.type + "' readonly /></p>" +
-                       "<p><label>开始时间：</label><input type='text' value='" + value.beginTime + "' readonly /></p>" +
-                       "<p><label>结束时间：</label><input type='text' value='" + value.endTime + "' readonly /></p>" +
+                       "<p><label>开始时间：</label><input type='text' value='" + beginTime.format(dateFormat) + "' readonly /></p>" +
+                       "<p><label>结束时间：</label><input type='text' value='" + endTime.format(dateFormat) + "' readonly /></p>" +
                        "<p><label>安排场厅：</label><input type='text' value='" + value.hallName + "' readonly /></p>" +
                        "<p><label>总卖票数：</label><input type='text' value='" + value.numOfTicket + "' readonly /></p>" +
                        "<p><label>剩余票数：</label><input type='text' value='" + value.numOfTLeft + "' readonly /></p>" +

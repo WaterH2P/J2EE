@@ -27,7 +27,7 @@ public class UserCouponDaoImpl implements UserCouponDao {
 	}
 	
 	@Override
-	public void insertUserCoupon(String email, String couponID){
+	public void insertOneUserCoupon(String email, String couponID){
 		String selectCouponIDSql = "SELECT couponID FROM " + ParaName.Table_userCoupon + " WHERE email=?";
 		List<String> couponIDs = jdbcTemplate.query(selectCouponIDSql, new CouponIDRowMapper(), email);
 		if( couponIDs.contains(couponID) ){
@@ -42,7 +42,7 @@ public class UserCouponDaoImpl implements UserCouponDao {
 	}
 	
 	@Override
-	public boolean deleteUserCoupon(String email, String couponID){
+	public boolean deleteOneUserCoupon(String email, String couponID){
 		String selectCouponNumSql = "SELECT number FROM " + ParaName.Table_userCoupon + " WHERE email=? AND couponID=?";
 		int couponNum = jdbcTemplate.queryForObject(selectCouponNumSql, new UserCouponNumRowMapper(), email, couponID);
 		if( couponNum>0 ){

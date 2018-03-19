@@ -8,8 +8,8 @@ public interface UserCouponDao {
 	
 	List<UserCoupon> selectAllUserCoupon(String email);
 	
-	void insertUserCoupon(String email, String couponID);
+	void insertOneUserCoupon(String email, String couponID);
 	
-	boolean deleteUserCoupon(String email, String couponID);
+	boolean deleteOneUserCoupon(String email, String couponID);
 	
 }

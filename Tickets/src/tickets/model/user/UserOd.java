@@ -24,8 +24,8 @@ public class UserOd {
 		return OdID;
 	}
 	
-	public void setOdID(String odID){
-		OdID = odID;
+	public void setOdID(String OdID){
+		this.OdID = OdID;
 	}
 	
 	public String getEmail(){

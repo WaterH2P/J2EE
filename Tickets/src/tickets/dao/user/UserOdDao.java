@@ -17,5 +17,18 @@ public interface UserOdDao {
 	
 	List<UserOdSeat> selectPlanAllOdSeat(String planID);
 	
+	List<UserOdSeat> selectUserOdAllSeatSelectedInfo(String OdID);
+	
 	void updateUserOdIsPaid(String OdID, double vipDiscount, int couponDiscount, double totalPay);
+	
+	List<UserOd> selectAllHistoricalUserOd(String email);
+	
+	List<UserOd> selectAllUserOdTimeout(String email);
+	
+	List<UserOd> selectAllUserOdDeleted(String email);
+	
+	List<UserOd> selectAllFutureUserOd(String email);
+	
+	List<UserOd> selectAllUserOdUnfinished(String email);
+	
 }

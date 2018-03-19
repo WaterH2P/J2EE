@@ -183,6 +183,9 @@ public class UserOdServiceImpl implements UserOdService {
 				}
 			}
 			if( isExist ){
+//				更新优惠券数量
+				userCouponDao.deleteOneUserCoupon(email, couponID);
+				
 				VIPLevelInfo vipLevelInfo = mgrVIPLevelDao.selectVIPInfoByLevel(userInfo.getVipLevel());
 				int percent = vipLevelInfo.getPercent();
 				double vipDiscount = (100 - percent) * userOd.getTotalPrice() / 100.0;
@@ -213,6 +216,41 @@ public class UserOdServiceImpl implements UserOdService {
 		else{
 			return false;
 		}
+	}
+	
+	@Override
+	public List<UserOd> getAllHistoricalUserOd(String email){
+		return userOdDao.selectAllHistoricalUserOd(email);
+	}
+	
+	@Override
+	public List<UserOd> getAllUserOdTimeout(String email){
+		return userOdDao.selectAllUserOdTimeout(email);
+	}
+	
+	@Override
+	public List<UserOd> getAllUserOdDeleted(String email){
+		return userOdDao.selectAllUserOdDeleted(email);
+	}
+	
+	@Override
+	public List<UserOd> getAllFutureUserOd(String email){
+		return userOdDao.selectAllFutureUserOd(email);
+	}
+	
+	@Override
+	public List<UserOd> getAllUserOdUnfinished(String email){
+		return userOdDao.selectAllUserOdUnfinished(email);
+	}
+	
+	@Override
+	public VenuePlan getUserOdPlanInfo(String planID){
+		return venuePlanDao.selectVenuePlanInfo(planID);
+	}
+	
+	@Override
+	public List<UserOdSeat> getUserOdAllSeatSelectedInfo(String OdID){
+		return userOdDao.selectUserOdAllSeatSelectedInfo(OdID);
 	}
 	
 }

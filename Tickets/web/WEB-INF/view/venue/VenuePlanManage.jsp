@@ -47,11 +47,11 @@
                 <label>类型：</label><select id="planType"></select>
             </p>
             <p>
-                <label>开始日期：</label><input type="date" id="beginTime" />
-                <label>时间：</label><input type="date" />
+                <label>开始日期：</label><input type="date" id="beginDate"/>
+                <label>时间：</label><input type="date" id=""/>
             </p>
             <p>
-                <label>结束日期：</label><input type="date" id="endTime" />
+                <label>结束日期：</label><input type="date" id="endDate" />
                 <label>时间：</label><input type="date" />
             </p>
             <p><label>场厅：</label><select id="planHall_select" onchange="changeHallSeat()"></select></p>
@@ -78,7 +78,10 @@
 <script src="../../javascript/jquery/jquery-3.2.1.min.js" ></script>
 <script src="../../javascript/jquery/jquery.seat-charts.min.js" ></script>
 <script src="../../javascript/jquery/pikaday.js" ></script>
+<script src="../../javascript/date-format.js" ></script>
 <script>
+    var dateFormat = "yyyy-MM-dd hh:mm:ss";
+
     var planInfos = [];
     $(function () {
         var types = "<option value='电影'>电影</option>" +
@@ -91,27 +94,74 @@
         $.post("GetAllVenuePlans", function (rs) {
             var res = $.parseJSON(rs);
             planInfos = res;
-            for( var i=0; i<res.length; i++ ){
-                var planInfo = res[i];
-                var infoDiv = "<div id='" + planInfo.planID + "_info_div'>" +
-                    "<p><label>计划名称：</label><input type='text' value='" + planInfo.name + "' readonly /></p>" +
-                    "<p><label>计划类型：</label><input type='text' value='" + planInfo.type + "' readonly /></p>" +
-                    "<p><label>开始时间：</label><input type='text' value='" + planInfo.beginTime + "' readonly /></p>" +
-                    "<p><label>结束时间：</label><input type='text' value='" + planInfo.endTime + "' readonly /></p>" +
-                    "<p><label>安排场厅：</label><input type='text' value='" + planInfo.hallName + "' readonly /></p>" +
-                    "<p><label>总卖票数：</label><input type='text' value='" + planInfo.numOfTicket + "' readonly /></p>" +
-                    "<p><label>剩余票数：</label><input type='text' value='" + planInfo.numOfTLeft + "' readonly /></p>" +
-                    "<p><label>有座票数：</label><input type='text' value='" + planInfo.numOfTSeated + "' readonly /></p>" +
-                    "<p><label>待配票数：</label><input type='text' value='" + planInfo.numOfTUnallocated + "' readonly /></p>" +
-                    "<p><label>基准票价：</label><input type='text' value='" + planInfo.price + "' readonly /></p>" +
-                    "<p><label>计划介绍：</label><textarea type='text' readonly>" + planInfo.description + "</textarea></p>" +
+            $.each(res, function (index, value, array) {
+                var beginDate = new Date(value.beginTime);
+                var endDate = new Date(value.endTime);
+                var infoDiv = "<div id='" + value.planID + "_info_div'>" +
+                    "<p><label>计划名称：</label><input type='text' value='" + value.name + "' readonly /></p>" +
+                    "<p><label>计划类型：</label><input type='text' value='" + value.type + "' readonly /></p>" +
+                    "<p><label>开始时间：</label><input type='text' value='" + beginDate.format(dateFormat) + "' readonly /></p>" +
+                    "<p><label>结束时间：</label><input type='text' value='" + endDate.format(dateFormat) + "' readonly /></p>" +
+                    "<p><label>安排场厅：</label><input type='text' value='" + value.hallName + "' readonly /></p>" +
+                    "<p><label>总卖票数：</label><input type='text' value='" + value.numOfTicket + "' readonly /></p>" +
+                    "<p><label>剩余票数：</label><input type='text' value='" + value.numOfTLeft + "' readonly /></p>" +
+                    "<p><label>有座票数：</label><input type='text' value='" + value.numOfTSeated + "' readonly /></p>" +
+                    "<p><label>待配票数：</label><input type='text' value='" + value.numOfTUnallocated + "' readonly /></p>" +
+                    "<p><label>基准票价：</label><input type='text' value='" + value.price + "' readonly /></p>" +
+                    "<p><label>计划介绍：</label><textarea type='text' readonly>" + value.description + "</textarea></p>" +
                     "<p>" +
-                        "<button id='btn_" + planInfo.hallID + "_buyTickets' onclick='toBuyTicketUnderline(this)'>线下买票</button>" +
+                    "<button id='btn_" + value.hallID + "_buyTickets' onclick='toBuyTicketUnderline(this)'>线下买票</button>" +
                     "</p>" +
                     "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
                     "</div>";
                 $("#main_planList_div").append(infoDiv);
-            }
+            });
+        });
+
+        // 初始化新建 Plan beginTime 和 endTime
+        var today = new Date();
+        var futureDay = new Date(today.getTime()+6*4*7*24*3600*1000);
+        var i18n = {
+            previousMonth : '上个月',
+            nextMonth   : '下个月',
+            months      : ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
+            weekdays    : ['周日','周一','周二','周三','周四','周五','周六'],
+            weekdaysShort : ['日','一','二','三','四','五','六']
+        };
+
+
+        var beginPicker = new Pikaday({
+            field:$("#beginDate")[0],
+            position: 'bottom right',
+            format: 'YYYY-M-D',
+            toString:function(date, format) {
+                // you should do formatting based on the passed format,
+                // but we will just return 'D/M/YYYY' for simplicity
+                var day = date.getDate();
+                var month = date.getMonth() + 1;
+                var year = date.getFullYear();
+                return year + "/" + month + "/" + day;
+            },
+            minDate:today,
+            maxDate:futureDay,
+            i18n:i18n,
+        });
+
+        var endPicker = new Pikaday({
+            field:$("#endDate")[0],
+            position: 'bottom right',
+            format: 'YYYY-M-D',
+            toString:function(date, format) {
+                // you should do formatting based on the passed format,
+                // but we will just return 'D/M/YYYY' for simplicity
+                var day = date.getDate();
+                var month = date.getMonth() + 1;
+                var year = date.getFullYear();
+                return year + "/" + month + "/" + day;
+            },
+            minDate:new Date(),
+            maxDate:futureDay,
+            i18n:i18n,
         });
     });
 </script>
@@ -245,53 +295,13 @@
         $("#main_div").hide();
         $("#createPlan_div").show();
 
-        var today = new Date();
-        var futureDay = new Date(today.getTime()+6*4*7*24*3600*1000);
-        var i18n = {
-            previousMonth : '上个月',
-            nextMonth   : '下个月',
-            months      : ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
-            weekdays    : ['周日','周一','周二','周三','周四','周五','周六'],
-            weekdaysShort : ['日','一','二','三','四','五','六']
-        };
-
-        var beginPicker = new Pikaday({
-            field:$("#beginTime")[0],
-            position: 'bottom right',
-            format: 'YYYY-M-D',
-            toString:function(date, format) {
-                // you should do formatting based on the passed format,
-                // but we will just return 'D/M/YYYY' for simplicity
-                var day = date.getDate();
-                var month = date.getMonth() + 1;
-                var year = date.getFullYear();
-                return year + "/" + month + "/" + day;
-            },
-            minDate:today,
-            maxDate:futureDay,
-            i18n:i18n,
-        });
-
-        var endPicker = new Pikaday({
-            field:$("#endTime")[0],
-            position: 'bottom right',
-            format: 'YYYY-M-D',
-            toString:function(date, format) {
-                // you should do formatting based on the passed format,
-                // but we will just return 'D/M/YYYY' for simplicity
-                var day = date.getDate();
-                var month = date.getMonth() + 1;
-                var year = date.getFullYear();
-                return year + "/" + month + "/" + day;
-            },
-            minDate:new Date(),
-            maxDate:futureDay,
-            i18n:i18n,
-        });
+        $("#beginDate").val("");
+        $("#endDate").val("");
 
         $.post("GetAllVenueHalls", function (rs) {
             var res = $.parseJSON(rs);
             hallInfos = res;
+            $("#planHall_select").empty();
             for( var i=0; i<res.length; i++ ){
                 var hallInfo = res[i];
                 var option = "<option value='" + hallInfo.hallID + "'>" + hallInfo.name + "</option>";
@@ -395,10 +405,10 @@
     });
 
     $("#submitPlan_btn").click(function () {
-        var beginTime = $("#beginTime").val().toString();
-        var endTime = $("#endTime").val().toString();
-        var beginTimeM = new Date(beginTime).getTime();
-        var endTimeM = new Date(endTime).getTime();
+        var beginDate = $("#beginDate").val().toString();
+        var endDate = $("#endDate").val().toString();
+        var beginTimeM = new Date(beginDate).getTime();
+        var endTimeM = new Date(endDate).getTime();
         if( endTimeM>beginTimeM ){
             if( nameReady && priceReady && descReady ){
                 var name = $("#planName").val().toString();
@@ -411,7 +421,7 @@
                 var description = $("#planDesc").val().toString();
                 description = deleteSpace(description);
 
-                var data = {"name":name, "type":type, "beginTime":beginTime, "endTime":endTime,
+                var data = {"name":name, "type":type, "beginTime":beginDate, "endTime":endDate,
                     "hallID":hallID, "hallName":hallName, "numOfTicket":numOfTicket, "price":price,
                     "description":description};
                 $.post("AddNewVenuePlan", data, function (rs) {
@@ -421,8 +431,8 @@
                         var infoDiv = "<div id='" + planID + "_info_div'>" +
                             "<p><label>计划名称：</label><input type='text' value='" + name + "' readonly /></p>" +
                             "<p><label>计划类型：</label><input type='text' value='" + type + "' readonly /></p>" +
-                            "<p><label>开始时间：</label><input type='text' value='" + beginTime + "' readonly /></p>" +
-                            "<p><label>结束时间：</label><input type='text' value='" + endTime + "' readonly /></p>" +
+                            "<p><label>开始时间：</label><input type='text' value='" + beginDate + "' readonly /></p>" +
+                            "<p><label>结束时间：</label><input type='text' value='" + endDate + "' readonly /></p>" +
                             "<p><label>安排场厅：</label><input type='text' value='" + hallName + "' readonly /></p>" +
                             "<p><label>总卖票数：</label><input type='text' value='" + numOfTicket + "' readonly /></p>" +
                             "<p><label>剩余票数：</label><input type='text' value='" + numOfTicket + "' readonly /></p>" +
@@ -438,8 +448,8 @@
                         $("#main_planList_div").append(infoDiv);
 
                         $("#planName").val("");
-                        $("#beginTime").val("");
-                        $("#endTime").val("");
+                        $("#beginDate").val("");
+                        $("#endDate").val("");
                         $("#priceOfTicket").val("");
                         $("#planDesc").val("");
 

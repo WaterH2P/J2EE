@@ -35,7 +35,7 @@ public class UserCouponServiceImpl implements UserCouponService {
 		CouponInfo couponInfo = mgrCouponDao.selectCouponInfo(couponID);
 		int point = couponInfo.getPoint();
 		if( userInfo.getPoint()>point ){
-			userCouponDao.insertUserCoupon(email, couponID);
+			userCouponDao.insertOneUserCoupon(email, couponID);
 			return userInfoDao.updateUserPoint(email, -point);
 		}
 		return false;

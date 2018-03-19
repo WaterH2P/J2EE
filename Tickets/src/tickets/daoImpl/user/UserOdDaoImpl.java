@@ -14,6 +14,7 @@ import tickets.rowMapper.user.UserOdSeatRowMapper;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +23,8 @@ import java.util.List;
 public class UserOdDaoImpl implements UserOdDao {
 	
 	private static JdbcTemplate jdbcTemplate = DaoHelperImpl.getJdbcTemplate();
+	
+	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	@Override
 	public void insertNewUserOdSeated(UserOd userOd, List<UserOdSeat> userOdSeats){
@@ -99,11 +102,66 @@ public class UserOdDaoImpl implements UserOdDao {
 	}
 	
 	@Override
+	public List<UserOdSeat> selectUserOdAllSeatSelectedInfo(String OdID){
+		String sql = "SELECT * FROM " + ParaName.Table_userOdSeat + " WHERE OdID=?";
+		List<UserOdSeat> userOdSeats = jdbcTemplate.query(sql, new UserOdSeatRowMapper(), OdID);
+		return userOdSeats;
+	}
+	
+	@Override
 	public void updateUserOdIsPaid(String OdID, double vipDiscount, int couponDiscount, double totalPay){
 		final boolean isPaid = true;
 		String sql = "UPDATE " + ParaName.Table_userOd +
 				" SET vipDiscount=?, couponDiscount=?, totalPay=?, isPaid=? WHERE OdID=?";
 		jdbcTemplate.update(sql, vipDiscount, couponDiscount, totalPay, isPaid, OdID);
+	}
+	
+	@Override
+	public List<UserOd> selectAllHistoricalUserOd(String email){
+		Date date = new Date();
+		String now = sdf.format(date);
+		String sql = "SELECT * FROM " + ParaName.Table_userOd + " AS Od," +
+				"(SELECT planID, beginTime FROM " + ParaName.Table_venuePlan + ")AS plan" +
+				" WHERE email=? AND Od.planID=plan.planID" +
+					" AND isTimeOut=FALSE AND isDeleted=FALSE" +
+					" AND beginTime<?";
+		List<UserOd> userOds = jdbcTemplate.query(sql, new UserOdRowMapper(), email, now);
+		return userOds;
+	}
+	
+	@Override
+	public List<UserOd> selectAllUserOdTimeout(String email){
+		String sql = "SELECT * FROM " + ParaName.Table_userOd + " WHERE email=? AND isTimeOut=TRUE ";
+		List<UserOd> userOds = jdbcTemplate.query(sql, new UserOdRowMapper(), email);
+		return userOds;
+	}
+	
+	@Override
+	public List<UserOd> selectAllUserOdDeleted(String email){
+		String sql = "SELECT * FROM " + ParaName.Table_userOd + " WHERE email=? AND isDeleted=TRUE ";
+		List<UserOd> userOds = jdbcTemplate.query(sql, new UserOdRowMapper(), email);
+		return userOds;
+	}
+	
+	@Override
+	public List<UserOd> selectAllFutureUserOd(String email){
+		Date date = new Date();
+		String now = sdf.format(date);
+		String sql = "SELECT * FROM " + ParaName.Table_userOd + " AS Od," +
+				"(SELECT planID, beginTime FROM " + ParaName.Table_venuePlan + ")AS plan" +
+				" WHERE email=? AND Od.planID=plan.planID" +
+				" AND isPaid=TRUE AND isDeleted=FALSE" +
+				" AND beginTime>?";
+		List<UserOd> userOds = jdbcTemplate.query(sql, new UserOdRowMapper(), email, now);
+		return userOds;
+	}
+	
+	@Override
+	public List<UserOd> selectAllUserOdUnfinished(String email){
+		String sql = "SELECT * FROM " + ParaName.Table_userOd + " WHERE email=?" +
+				" AND isPaid=FALSE AND isTimeOut=FALSE AND isDeleted=FALSE";
+		List<UserOd> userOds = jdbcTemplate.query(sql, new UserOdRowMapper(), email);
+		return userOds;
 	}
 	
 }

@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import tickets.controller.CommonCon;
 import tickets.daoImpl.ParaName;
 import tickets.model.Result;
+import tickets.model.user.UserOd;
+import tickets.model.user.UserOdSeat;
 import tickets.model.venue.VenuePlan;
 import tickets.model.venue.VenuePlanSeat;
 import tickets.service.user.UserOdService;
@@ -170,5 +172,101 @@ public class UserOdCon {
 		return result;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/User/GetAllHistoricalUserOd", method = RequestMethod.POST)
+	public List<UserOd> getAllHistoricalUserOd(){
+		List<UserOd> userOds = new ArrayList<>();
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String email = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isUser(email) ){
+				userOds = userOdService.getAllHistoricalUserOd(email);
+			}
+		}
+		return userOds;
+	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/User/GetAllUserOdTimeout", method = RequestMethod.POST)
+	public List<UserOd> getAllUserOdTimeOut(){
+		List<UserOd> userOds = new ArrayList<>();
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String email = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isUser(email) ){
+				userOds = userOdService.getAllUserOdTimeout(email);
+			}
+		}
+		return userOds;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/User/GetAllUserOdDeleted", method = RequestMethod.POST)
+	public List<UserOd> getAllUserOdDeleted(){
+		List<UserOd> userOds = new ArrayList<>();
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String email = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isUser(email) ){
+				userOds = userOdService.getAllUserOdDeleted(email);
+			}
+		}
+		return userOds;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/User/GetAllFutureUserOd", method = RequestMethod.POST)
+	public List<UserOd> getAllFutureUserOd(){
+		List<UserOd> userOds = new ArrayList<>();
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String email = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isUser(email) ){
+				userOds = userOdService.getAllFutureUserOd(email);
+			}
+		}
+		return userOds;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/User/GetAllUserOdUnfinished", method = RequestMethod.POST)
+	public List<UserOd> getAllUserOdUnfinished(){
+		List<UserOd> userOds = new ArrayList<>();
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String email = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isUser(email) ){
+				userOds = userOdService.getAllUserOdUnfinished(email);
+			}
+		}
+		return userOds;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/User/GetUserOdPlanInfo", method = RequestMethod.POST)
+	public VenuePlan getUserOdPlanInfo(String planID){
+		VenuePlan venuePlan = new VenuePlan();
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String email = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isUser(email) ){
+				venuePlan = userOdService.getUserOdPlanInfo(planID);
+			}
+		}
+		return venuePlan;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/User/GetUserOdAllSeatSelectedInfo", method = RequestMethod.POST)
+	public List<UserOdSeat> getUserOdAllSeatSelectedInfo(String OdID){
+		List<UserOdSeat> userOdSeats = new ArrayList<>();
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String email = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isUser(email) ){
+				userOdSeats = userOdService.getUserOdAllSeatSelectedInfo(OdID);
+			}
+		}
+		return userOdSeats;
+	}
 }
