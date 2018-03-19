@@ -14,7 +14,7 @@ public class UserCouponRowMapper implements RowMapper {
 		UserCoupon userCoupon = new UserCoupon();
 		userCoupon.setCouponID( rs.getString("couponID") );
 		userCoupon.setName( rs.getString("name") );
-		userCoupon.setDiscount( rs.getDouble("discount") );
+		userCoupon.setDiscount( rs.getInt("discount") );
 		userCoupon.setNumber( rs.getInt("number") );
 		return userCoupon;
 	}

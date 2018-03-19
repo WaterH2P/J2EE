@@ -59,7 +59,13 @@ public class UserOdServiceImpl implements UserOdService {
 	public List<VenuePlan> searchPlanByPlanName(String planName){
 		List<VenuePlan> venuePlans = venuePlanDao.selectAllVenuePlansByPlanName(planName);
 		List<VenuePlan> venuePlanUnifyBack = CommonService.venuePlanUnifyBack(venuePlans);
-		return venuePlanUnifyBack;
+		List<VenuePlan> venuePlansOwnBlankSeat = new ArrayList<>();
+		for( VenuePlan venuePlan : venuePlanUnifyBack ){
+			if( venuePlan.getNumOfTLeft()>0 ){
+				venuePlansOwnBlankSeat.add(venuePlan);
+			}
+		}
+		return venuePlansOwnBlankSeat;
 	}
 	
 	@Override
@@ -68,7 +74,7 @@ public class UserOdServiceImpl implements UserOdService {
 	}
 	
 	@Override
-	public String makeNewOrder(String email, String planID, String seatSelected, String totalPrice){
+	public String makeNewOrderSeated(String email, String planID, String seatSelected, String totalPrice, boolean isOnline){
 		UserOd userOd = new UserOd();
 		List<UserOdSeat> userOdSeats = new ArrayList<>();
 		
@@ -98,6 +104,7 @@ public class UserOdServiceImpl implements UserOdService {
 		userOd.setNumOfTicket(numOfTicket);
 		userOd.setTotalPrice( Double.valueOf(totalPrice) );
 		userOd.setMakeTime( new Date() );
+		userOd.setOnline(isOnline);
 		
 		List<UserOdSeat> planOdSeats = userOdDao.selectPlanAllOdSeat(planID);
 		boolean isExist = false;
@@ -117,8 +124,44 @@ public class UserOdServiceImpl implements UserOdService {
 		}
 		else {
 			userOdDao.insertNewUserOdSeated(userOd, userOdSeats);
+//			更新计划中座位数量信息
+			venuePlanDao.updateVenuePlanNumOfT(planID, -numOfTicket, numOfTicket, 0);
+//			更新计划的座位图
 			venuePlanService.updateVenuePlanSeatDist(planID, seatRowAndCols);
 			return OdID;
+		}
+	}
+	
+	@Override
+	public String makeNewOrderUnseated(String email, String planID, String numOfTBought, boolean isOnline){
+		UserOd userOd = new UserOd();
+		
+		final int OdIDLen = 14;
+		List<String> OdIDs = userOdDao.selectAllUserOdIDs(email);
+		String OdID = CommonService.getRandomString(OdIDLen, OdIDs);
+		userOd.setOdID(OdID);
+		
+		userOd.setEmail(email);
+		userOd.setPlanID(planID);
+		
+		VenuePlan venuePlan = venuePlanDao.selectVenuePlanInfo(planID);
+		int numOfTicket = Integer.valueOf(numOfTBought);
+		if( numOfTicket<=venuePlan.getNumOfTLeft() ){
+			double totalPrice = numOfTicket * venuePlan.getPrice();
+			
+			userOd.setNumOfTicket(numOfTicket);
+			userOd.setTotalPrice(totalPrice);
+			userOd.setMakeTime(new Date());
+			userOd.setOnline(isOnline);
+			
+			userOdDao.insertNewUserOdUnseated(userOd);
+//			更新计划中座位数量信息
+			venuePlanDao.updateVenuePlanNumOfT(planID, -numOfTicket, 0, numOfTicket);
+			
+			return OdID;
+		}
+		else {
+			return ParaName.return_false;
 		}
 	}
 	
@@ -142,11 +185,17 @@ public class UserOdServiceImpl implements UserOdService {
 			if( isExist ){
 				VIPLevelInfo vipLevelInfo = mgrVIPLevelDao.selectVIPInfoByLevel(userInfo.getVipLevel());
 				int percent = vipLevelInfo.getPercent();
-				double discount = (100 - percent) * userOd.getTotalPrice() / 100.0;
-				discount = Double.valueOf( df.format(discount) );
-				double totalPay = userOd.getTotalPrice() - discount - userCoupon.getDiscount();
+				double vipDiscount = (100 - percent) * userOd.getTotalPrice() / 100.0;
+				vipDiscount = Double.valueOf( df.format(vipDiscount) );
+				int couponDiscount = userCoupon.getDiscount();
+				double totalPay = userOd.getTotalPrice() - vipDiscount - couponDiscount;
+				totalPay = Double.valueOf( df.format(totalPay) );
+				if( totalPay<0 ){
+					totalPay = 0;
+				}
 				if( userInfo.getBalance()>totalPay ){
-					if( userInfoDao.updateUserBalance(email, totalPay) ){
+					if( userInfoDao.updateUserBalance(email, -totalPay) ){
+						userOdDao.updateUserOdIsPaid(OdID, vipDiscount, couponDiscount, totalPay);
 						return true;
 					}
 					else {
@@ -158,7 +207,7 @@ public class UserOdServiceImpl implements UserOdService {
 				}
 			}
 			else{
-				return true;
+				return false;
 			}
 		}
 		else{

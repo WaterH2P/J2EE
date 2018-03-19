@@ -9,6 +9,8 @@ public interface UserOdDao {
 	
 	void insertNewUserOdSeated(UserOd userOd, List<UserOdSeat> userOdSeats);
 	
+	void insertNewUserOdUnseated(UserOd userOd);
+	
 	UserOd selectUserOdInfo(String OdID);
 	
 	List<String> selectAllUserOdIDs(String email);

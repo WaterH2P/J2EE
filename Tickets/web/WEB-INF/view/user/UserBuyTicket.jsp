@@ -53,13 +53,13 @@
 
         <div id="payTicket_div" style="display: none">
             <button onclick="payTicket_back_main_div()">🔙</button>
-            <div id="Od_Info_div" style="display: none">
+            <div id="Od_Info_div">
                 <p><label>影片：</label><input id="Od_nameOfPlan_input" type='text' readonly/></p>
                 <p><label>时间：</label></p>
                 <p><input id="Od_beginTimeOfPlan_div" type='text' readonly/></p>
                 <p>-></p>
                 <p><input id="Od_endTimeOfPlan_div" type='text' readonly/></p>
-                <p><label>座位：</label><input style="visibility: hidden"/></p>
+                <p><label>座位：</label><input id="Od_seat_input" style="visibility: hidden"/></p>
                 <ul id='Od_seatSelected_ul'></ul>
                 <p><label>总价：</label><input id="Od_totalPrice_input" type="text" readonly></p>
                 <p><label>VIP优惠：</label><input id="Od_vipDiscount_input" type="text" readonly></p>
@@ -88,6 +88,7 @@
     var planSelected = {};
     var seatSelectedRowAndCols = "";
     var totalPrice = 0;
+    var numOfTLeft = 0;
 
     function buyTicketSelectSeat(obj) {
         $("#main_div").hide();
@@ -102,12 +103,13 @@
 
         var temp1 = $(obj).attr("id");
         var temp2 = temp1.split("_");
-        var hallID = temp2[1];
+        var planID = temp2[1];
 
         for( var i=0; i<planInfos.length; i++ ){
             var planInfo = planInfos[i];
-            if( hallID==planInfo.hallID ){
+            if( planID==planInfo.planID ){
                 planSelected = planInfo;
+                var hallID = temp2[2];
 
                 var data = {"hallID":hallID};
                 var seatDist = planInfo.seatDist;
@@ -232,11 +234,15 @@
 
         var temp1 = $(obj).attr("id");
         var temp2 = temp1.split("_");
-        var hallID = temp2[1];
+        var planID = temp2[1];
 
         for( var i=0; i<planInfos.length; i++ ){
             var planInfo = planInfos[i];
-            if( hallID==planInfo.hallID ){
+            if( planID==planInfo.planID ){
+                var hallID = temp2[1];
+
+                planSelected = planInfo;
+                numOfTLeft = planSelected.numOfTLeft;
                 var seatDist = planInfo.seatDist;
                 var numOfRow = parseInt(planInfo.numOfRow);
                 var numOfCol = parseInt(planInfo.numOfCol);
@@ -250,8 +256,12 @@
                 var numOfTicketDiv = "<div>" +
                     "<p>" +
                         "<input type='text' id='numOfTicket_input' placeholder='购票数量' />" +
-                        "<button id='numOfTicket_submit'>确认购买</button>" +
+                        "<button onclick='buyTicketUnseated_submitNumofTicket()'>确认购买</button>" +
                     "</p>" +
+                    "<p>" +
+                        "<label>剩余票数：</label>" +
+                        "<input type='text' value='" + numOfTLeft + "' readonly>" +
+                    "</p>"
                     "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
                     "</div>";
                 $("#buyTicket_seatMap_div").append(numOfTicketDiv);
@@ -371,6 +381,112 @@
             $("#Od_totalPay_input").val(totalPay);
         }
     }
+
+    function showOdInfo(res, isSeated) {
+        $("#searchPlan_input").val("");
+        $("#searchResult_div").empty();
+
+        $("#buyTicket_div").hide();
+        $("#payTicket_div").show();
+
+        $("#Od_pay_div").empty();
+        var submitBtn = "<button id='btn_" + res.message +"_payOdImmediately' onclick='payOdImmediately(this)'>立即付款</button>";
+        $("#Od_pay_div").append(submitBtn);
+
+        $("#Od_nameOfPlan_input").val(planSelected.name);
+        $("#Od_beginTimeOfPlan_div").val(planSelected.beginTime);
+        $("#Od_endTimeOfPlan_div").val(planSelected.endTime);
+
+        $("#Od_seatSelected_ul").empty();
+        if( isSeated ){
+            $("#Od_seat_input").attr("visibility", "hidden");
+            $("#Od_seat_input").val("");
+            var seatSelectedRowAndCol = seatSelectedRowAndCols.split("==");
+            for( var i=0; i<seatSelectedRowAndCol.length; i++ ){
+                var seatRowAndCol = seatSelectedRowAndCol[i];
+                if( seatRowAndCol.length>0 ){
+                    var temp = seatRowAndCol.split("--");
+                    var seatLi = "<li>" + temp[0] + "排" + temp[1] + "座  ¥" + temp[2] + "</li>";
+                    $("#Od_seatSelected_ul").append(seatLi);
+                }
+            }
+        }
+        else {
+            $("#Od_seat_input").removeAttr("visibility");
+            $("#Od_seat_input").val("还未分配座位！");
+        }
+
+        totalPrice = parseFloat(totalPrice.toFixed(2));
+        $("#Od_totalPrice_input").val(totalPrice);
+    }
+
+    var coupons = [];
+    function getAndShowVIPCouponDiscount() {
+        // 获得所有优惠券
+        $.post("GetAllUserCoupons", function (rs) {
+            var res = $.parseJSON(rs);
+            coupons = res;
+
+            $("#Od_coupon_select").empty();
+
+            var nullOption = "<option value='' selected></option>";
+            $("#Od_coupon_select").append(nullOption);
+            $.each(res, function (index, value, array) {
+                var option = "<option value='" + value.couponID + "'>" + value.name + "</option>";
+                $("#Od_coupon_select").append(option);
+            });
+
+            $("#Od_couponDiscount_input").val("");
+        });
+
+        // 获得 VIP 等级对应优惠，并计算优惠金额
+        $.post("GetUserVIPDiscount", function (rs) {
+            var res = $.parseJSON(rs);
+            var percent = parseInt(res.percent);
+            var discount = (100 - percent)*totalPrice/100.0;
+            discount = parseFloat(discount.toFixed(2));
+            $("#Od_vipDiscount_input").val(discount);
+
+            var totalPay = totalPrice - discount;
+            $("#Od_totalPay_input").val(totalPay);
+        });
+    }
+    
+    function buyTicketUnseated_submitNumofTicket() {
+        var isConfirmed = confirm("确认购买？");
+        if( isConfirmed ){
+            var numOfTBoughtInput = $("#numOfTicket_input").val().toString();
+            numOfTBoughtInput = deleteSpace(numOfTBoughtInput);
+            $("#numOfTicket_input").val(numOfTBoughtInput);
+            var numOfTBoughtReg = /^[1-9]([0-9])*$/;
+            if( numOfTBoughtReg.test(numOfTBoughtInput) ){
+                var numOfBought = parseInt(numOfTBoughtInput);
+                if( numOfBought<=numOfTLeft && numOfBought<=20 ){
+                    var planID = planSelected.planID;
+                    var numOfTSelected = numOfBought;
+                    var data = {"planID":planID, "numOfTSelected":numOfTSelected};
+                    $.post("MakeNewOdUnseated", data, function (rs) {
+                        var res = $.parseJSON(rs);
+                        if( res.result ){
+                            totalPrice = numOfBought * planSelected.price;
+                            showOdInfo(res, false);
+                        }
+                        else {
+                            alert(res.message);
+                        }
+                    });
+
+                    getAndShowVIPCouponDiscount();
+                }
+                else {
+                    alert("没有足够票！");
+                }
+            }
+            else {
+                alert("请输入正确数量！");
+            }
+        }
+    }
 </script>
 <script>
     var planInfos = [];
@@ -411,8 +527,8 @@
                        "<p><label>基准票价：</label><input type='text' value='" + value.price + "' readonly /></p>" +
                        "<p><label>计划介绍：</label><textarea type='text' readonly>" + value.description + "</textarea></p>" +
                        "<p>" +
-                            "<button id='btn_" + value.hallID + "_buyTickets_selectSeat' onclick='buyTicketSelectSeat(this)'>选座买票</button>" +
-                            "<button id='btn_" + value.hallID + "_buyTickets_notSelect' onclick='buyTicketNotSelectSeat(this)'>不选座座买票</button>" +
+                            "<button id='btn_" + value.planID + "_" + value.hallID + "_buyTickets_selectSeat' onclick='buyTicketSelectSeat(this)'>选座买票</button>" +
+                            "<button id='btn_" + value.planID + "_"  + value.hallID + "_buyTickets_notSelect' onclick='buyTicketNotSelectSeat(this)'>不选座座买票</button>" +
                        "</p>" +
                        "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
                        "</div>";
@@ -430,74 +546,30 @@
         $("#buyTicket_div").hide();
     });
 
-    var coupons = [];
     $("#submitSeat_btn").click(function () {
         var isConfirmed = confirm("确认购买？");
         if( isConfirmed ){
-            var planID = planSelected.planID;
-            var seatSelected = seatSelectedRowAndCols;
-            var data = {"planID":planID, "seatSelected":seatSelected, "totalPrice":totalPrice};
+            if( seatSelectedRowAndCols.length!=0 ){
+                var planID = planSelected.planID;
+                var seatSelected = seatSelectedRowAndCols;
+                var data = {"planID":planID, "seatSelected":seatSelected, "totalPrice":totalPrice};
 
-            // 创建新订单
-            $.post("MakeNewOd", data, function (rs) {
-                var res = $.parseJSON(rs);
-                if( res.result ){
-                    $("#searchPlan_input").val("");
-                    $("#searchResult_div").empty();
-
-                    $("#buyTicket_div").hide();
-                    $("#payTicket_div").show();
-
-                    $("#Od_pay_div").empty();
-                    var submitBtn = "<button id='btn_" + res.message +"_payOdImmediately' onclick='payOdImmediately(this)'>立即付款</button>";
-                    $("#Od_pay_div").append(submitBtn);
-
-                    $("#Od_nameOfPlan_input").val(planSelected.name);
-                    $("#Od_beginTimeOfPlan_div").val(planSelected.beginTime);
-                    $("#Od_endTimeOfPlan_div").val(planSelected.endTime);
-
-                    $("#Od_seatSelected_ul").empty();
-                    var seatSelectedRowAndCol = seatSelectedRowAndCols.split("==");
-                    for( var i=0; i<seatSelectedRowAndCol.length; i++ ){
-                        var seatRowAndCol = seatSelectedRowAndCol[i];
-                        if( seatRowAndCol.length>0 ){
-                            var temp = seatRowAndCol.split("--");
-                            var seatLi = "<li>" + temp[0] + "排" + temp[1] + "座  ¥" + temp[2] + "</li>";
-                            $("#Od_seatSelected_ul").append(seatLi);
-                        }
+                // 创建新订单
+                $.post("MakeNewOdSeated", data, function (rs) {
+                    var res = $.parseJSON(rs);
+                    if( res.result ){
+                        showOdInfo(res, true);
                     }
-
-                    $("#Od_totalPrice_input").val(totalPrice);
-                }
-                else {
-                    alert(res.message);
-                }
-            });
-
-            // 获得所有优惠券
-            $.post("GetAllUserCoupons", function (rs) {
-                var res = $.parseJSON(rs);
-                coupons = res;
-
-                var nullOption = "<option value='' selected></option>";
-                $("#Od_coupon_select").append(nullOption);
-                $.each(res, function (index, value, array) {
-                    var option = "<option value='" + value.couponID + "'>" + value.name + "</option>";
-                    $("#Od_coupon_select").append(option);
+                    else {
+                        alert(res.message);
+                    }
                 });
-            });
 
-            // 获得 VIP 等级对应优惠，并计算优惠金额
-            $.post("GetUserVIPDiscount", function (rs) {
-                var res = $.parseJSON(rs);
-                var percent = parseInt(res.percent);
-                var discount = (100 - percent)*totalPrice/100.0;
-                discount = parseFloat(discount.toFixed(2));
-                $("#Od_vipDiscount_input").val(discount);
-
-                var totalPay = totalPrice - discount;
-                $("#Od_totalPay_input").val(totalPay);
-            });
+                getAndShowVIPCouponDiscount();
+            }
+            else {
+                alert("请选择座位！");
+            }
         }
     });
 

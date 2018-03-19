@@ -11,7 +11,9 @@ public interface UserOdService {
 	
 	List<VenuePlanSeat> getPlanHallSeatInfo(String hallID);
 	
-	String makeNewOrder(String email, String planID, String seatSelected, String totalPrice);
+	String makeNewOrderSeated(String email, String planID, String seatSelected, String totalPrice, boolean isOnline);
+	
+	String makeNewOrderUnseated(String email, String planID, String numOfTBought, boolean isOnline);
 	
 	boolean payOd(String email, String OdID, String couponID);
 	

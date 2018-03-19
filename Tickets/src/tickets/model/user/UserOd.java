@@ -18,6 +18,7 @@ public class UserOd {
 	private boolean isDeleted = false;
 	private boolean isSeated = false;
 	private boolean isChecked = false;
+	private boolean isOnline = false;
 	
 	public String getOdID(){
 		return OdID;
@@ -129,6 +130,14 @@ public class UserOd {
 	
 	public void setChecked(boolean checked){
 		isChecked = checked;
+	}
+	
+	public boolean isOnline(){
+		return isOnline;
+	}
+	
+	public void setOnline(boolean online){
+		isOnline = online;
 	}
 	
 }

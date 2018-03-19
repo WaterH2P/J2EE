@@ -25,6 +25,7 @@ public class UserOdRowMapper implements RowMapper {
 		userOd.setDeleted( rs.getBoolean("isDeleted") );
 		userOd.setSeated( rs.getBoolean("isSeated") );
 		userOd.setChecked( rs.getBoolean("isChecked") );
+		userOd.setOnline( rs.getBoolean("isOnline") );
 		return userOd;
 	}
 	

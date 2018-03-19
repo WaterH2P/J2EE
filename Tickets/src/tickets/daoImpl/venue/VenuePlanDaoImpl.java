@@ -66,4 +66,13 @@ public class VenuePlanDaoImpl implements VenuePlanDao {
 		jdbcTemplate.update(sql, seatDist, planID);
 	}
 	
+	@Override
+	public void updateVenuePlanNumOfT(String planID, int numOfTLeftModifyValue, int numOfTSeatedModifyValue, int numOfTUnallocatedModifyValue){
+		String sql = "UPDATE " + ParaName.Table_venuePlan +
+				" SET numOfTLeft=numOfTLeft+?, numOfTSeated=numOfTSeated+?, numOfTUnallocated=numOfTUnallocated+?" +
+				" WHERE planID=?";
+		jdbcTemplate.update(sql, numOfTLeftModifyValue, numOfTSeatedModifyValue, numOfTUnallocatedModifyValue, planID);
+	}
+	
+	
 }

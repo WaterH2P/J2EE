@@ -4,7 +4,7 @@ public class UserCoupon {
 	
 	private String couponID = "";
 	private String name = "";
-	private double discount = 0.0;
+	private int discount = 0;
 	private int number = 0;
 	
 	public String getCouponID(){
@@ -23,11 +23,11 @@ public class UserCoupon {
 		this.name = name;
 	}
 	
-	public double getDiscount(){
+	public int getDiscount(){
 		return discount;
 	}
 	
-	public void setDiscount(double discount){
+	public void setDiscount(int discount){
 		this.discount = discount;
 	}
 	

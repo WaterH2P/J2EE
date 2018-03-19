@@ -17,6 +17,8 @@ public interface VenuePlanDao {
 	VenuePlan selectVenuePlanInfo(String planID);
 	
 	void updateVenuePlanSeatDist(String planID, String seatDist);
-
-//	plan kill2 55555005514551455005555551455145
+	
+	void updateVenuePlanNumOfT(String planID, int numOfTLeftModifyValue,
+	                           int numOfTSeatedModifyValue, int numOfTUnallocatedModifyValue);
+	
 }

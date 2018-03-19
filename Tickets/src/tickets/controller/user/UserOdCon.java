@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import tickets.controller.CommonCon;
-import tickets.dao.user.UserOdDao;
 import tickets.daoImpl.ParaName;
 import tickets.model.Result;
 import tickets.model.venue.VenuePlan;
@@ -91,28 +90,55 @@ public class UserOdCon {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/User/MakeNewOd", method = RequestMethod.POST)
-	public Result makeNewOrder(String planID, String seatSelected, String totalPrice){
+	@RequestMapping(value = "/User/MakeNewOdSeated", method = RequestMethod.POST)
+	public Result makeNewOdSeated(String planID, String seatSelected, String totalPrice){
 		Result result = new Result();
 		result.setResult(false);
 		HttpSession session = request.getSession(false);
 		if( CommonCon.hasLogin(session) ){
 			String email = (String)session.getAttribute(ParaName.VerificationCode);
 			if( CommonCon.isUser(email) ){
-				String OdID = userOdService.makeNewOrder(email, planID, seatSelected, totalPrice);
-				if( !OdID.equals(ParaName.return_false) ){
-					result.setResult(true);
-					result.setMessage(OdID);
-				}
-				else {
-					result.setResult(false);
-					String message = "购票冲突，请刷新重试！";
-					result.setMessage(message);
-				}
+				final boolean isOnline = true;
+				String OdID = userOdService.makeNewOrderSeated(email, planID, seatSelected, totalPrice, isOnline);
+				result = strCheck(OdID, ParaName.return_false);
 			}
 		}
 		if( !result.getResult() && result.getMessage().length()==0 ){
 			result.setMessage(ParaName.message_ownNoAuthority);
+		}
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/User/MakeNewOdUnseated", method = RequestMethod.POST)
+	public Result makeNewOdUnseated(String planID, String numOfTSelected){
+		Result result = new Result();
+		result.setResult(false);
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String email = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isUser(email) ){
+				final boolean isOnline = true;
+				String OdID = userOdService.makeNewOrderUnseated(email, planID, numOfTSelected, isOnline);
+				result = strCheck(OdID, ParaName.return_false);
+			}
+		}
+		if( !result.getResult() && result.getMessage().length()==0 ){
+			result.setMessage(ParaName.message_ownNoAuthority);
+		}
+		return result;
+	}
+	
+	private Result strCheck(String strChecked, String strChecking){
+		Result result = new Result();
+		if( !strChecked.equals(strChecking) ){
+			result.setResult(true);
+			result.setMessage(strChecked);
+		}
+		else {
+			result.setResult(false);
+			String message = "购票冲突，请刷新重试！";
+			result.setMessage(message);
 		}
 		return result;
 	}

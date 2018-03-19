@@ -25,24 +25,9 @@ public class UserOdDaoImpl implements UserOdDao {
 	
 	@Override
 	public void insertNewUserOdSeated(UserOd userOd, List<UserOdSeat> userOdSeats){
-		String OdID = userOd.getOdID();
-		String email = userOd.getEmail();
-		String planID = userOd.getPlanID();
-		int numOfTicket = userOd.getNumOfTicket();
-		double totalPrice = userOd.getTotalPrice();
-		final double vipDiscount = 0.0;
-		final int couponDiscount = 0;
-		final double pay = 0;
-		Date makeTime = userOd.getMakeTime();
-		final boolean isPaid = false;
-		final boolean isTimeout = false;
-		final boolean isDeleted = false;
 		final boolean isSeated = true;
-		final boolean isChecked = false;
-		
-		String insertNewOdSql = "INSERT INTO " + ParaName.Table_userOd + " VALUES (?,?,?,?,?, ?,?,?,?,?, ?,?,?,?)";
-		jdbcTemplate.update(insertNewOdSql, OdID, email, planID, numOfTicket, totalPrice, vipDiscount, couponDiscount,
-				pay, makeTime, isPaid, isTimeout, isDeleted, isSeated, isChecked);
+		userOd.setSeated(isSeated);
+		insertNewUserOd(userOd);
 		
 		String insertOdSeatSql = "INSERT INTO " + ParaName.Table_userOdSeat + " VALUES (?,?,?,?,?)";
 		jdbcTemplate.batchUpdate(insertOdSeatSql, new BatchPreparedStatementSetter() {
@@ -61,12 +46,35 @@ public class UserOdDaoImpl implements UserOdDao {
 				return userOdSeats.size();
 			}
 		});
-//		for( UserOdSeat userOdSeat : userOdSeats ){
-//			int row = userOdSeat.getRow();
-//			int col = userOdSeat.getCol();
-//			double price = userOdSeat.getPrice();
-//			jdbcTemplate.update(insertOdSeatSql, OdID, planID, row, col, price);
-//		}
+	}
+	
+	@Override
+	public void insertNewUserOdUnseated(UserOd userOd){
+		final boolean isSeated = false;
+		userOd.setSeated(isSeated);
+		insertNewUserOd(userOd);
+	}
+	
+	private void insertNewUserOd(UserOd userOd){
+		String OdID = userOd.getOdID();
+		String email = userOd.getEmail();
+		String planID = userOd.getPlanID();
+		int numOfTicket = userOd.getNumOfTicket();
+		double totalPrice = userOd.getTotalPrice();
+		final double vipDiscount = 0.0;
+		final int couponDiscount = 0;
+		final double pay = 0;
+		Date makeTime = userOd.getMakeTime();
+		final boolean isPaid = false;
+		final boolean isTimeout = false;
+		final boolean isDeleted = false;
+		boolean isSeated = userOd.isSeated();
+		final boolean isChecked = false;
+		boolean isOnline = userOd.isOnline();
+		
+		String insertNewOdSql = "INSERT INTO " + ParaName.Table_userOd + " VALUES (?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?)";
+		jdbcTemplate.update(insertNewOdSql, OdID, email, planID, numOfTicket, totalPrice, vipDiscount, couponDiscount,
+				pay, makeTime, isPaid, isTimeout, isDeleted, isSeated, isChecked, isOnline);
 	}
 	
 	@Override
@@ -94,7 +102,7 @@ public class UserOdDaoImpl implements UserOdDao {
 	public void updateUserOdIsPaid(String OdID, double vipDiscount, int couponDiscount, double totalPay){
 		final boolean isPaid = true;
 		String sql = "UPDATE " + ParaName.Table_userOd +
-				" SET vipDiscount=?, couponDiscount=?, totalPrice=?, isPaid=? WHERE OdID=?";
+				" SET vipDiscount=?, couponDiscount=?, totalPay=?, isPaid=? WHERE OdID=?";
 		jdbcTemplate.update(sql, vipDiscount, couponDiscount, totalPay, isPaid, OdID);
 	}
 	
