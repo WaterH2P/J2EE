@@ -10,6 +10,8 @@ import tickets.daoImpl.ParaName;
 import tickets.model.Result;
 import tickets.model.user.UserOd;
 import tickets.model.user.UserOdSeat;
+import tickets.model.venue.VenueBaseInfo;
+import tickets.model.venue.VenueHall;
 import tickets.model.venue.VenuePlan;
 import tickets.model.venue.VenuePlanSeat;
 import tickets.service.user.UserOdService;
@@ -92,6 +94,34 @@ public class UserOdCon {
 	}
 	
 	@ResponseBody
+	@RequestMapping(value = "/User/GetPlanHallInfo", method = RequestMethod.POST)
+	public VenueHall getPlanHallInfo(String planID){
+		VenueHall venueHall = new VenueHall();
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String email = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isUser(email) ){
+				venueHall = userOdService.getPlanHallInfo(planID);
+			}
+		}
+		return venueHall;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/User/GetPlanVenueInfo", method = RequestMethod.POST)
+	public VenueBaseInfo getPlanVenueInfo(String planID){
+		VenueBaseInfo venueBaseInfo = new VenueBaseInfo();
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String email = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isUser(email) ){
+				venueBaseInfo = userOdService.getPlanVenueInfo(planID);
+			}
+		}
+		return venueBaseInfo;
+	}
+	
+	@ResponseBody
 	@RequestMapping(value = "/User/MakeNewOdSeated", method = RequestMethod.POST)
 	public Result makeNewOdSeated(String planID, String seatSelected, String totalPrice){
 		Result result = new Result();
@@ -162,6 +192,28 @@ public class UserOdCon {
 				else {
 					result.setResult(false);
 					String message = "支付出错！";
+					result.setMessage(message);
+				}
+			}
+		}
+		if( !result.getResult() && result.getMessage().length()==0 ){
+			result.setMessage(ParaName.message_ownNoAuthority);
+		}
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/User/DeleteOrder", method = RequestMethod.POST)
+	public Result deleteOrder(String OdID){
+		Result result = new Result();
+		result.setResult(false);
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String email = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isUser(email) ){
+				if( userOdService.deleteOd(email, OdID) ){
+					result.setResult(true);
+					String message = "退单成功！";
 					result.setMessage(message);
 				}
 			}
@@ -269,4 +321,5 @@ public class UserOdCon {
 		}
 		return userOdSeats;
 	}
+	
 }

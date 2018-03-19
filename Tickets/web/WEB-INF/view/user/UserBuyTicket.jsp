@@ -6,7 +6,7 @@
     <title>Buy Ticket</title>
     <link rel="stylesheet" type="text/css" href="../../stylesheet/common.css">
     <link rel="stylesheet" type="text/css" href="../../stylesheet/hallSeat.css">
-    <link rel="stylesheet" type="text/css" href="../../stylesheet/venue/venueHallManage.css">
+    <link rel="stylesheet" type="text/css" href="../../stylesheet/fix.css">
 </head>
 <body>
 <div class="common">
@@ -452,6 +452,7 @@
             $("#Od_vipDiscount_input").val(discount);
 
             var totalPay = totalPrice - discount;
+            totalPay = parseFloat(totalPay.toFixed(2));
             $("#Od_totalPay_input").val(totalPay);
         });
     }

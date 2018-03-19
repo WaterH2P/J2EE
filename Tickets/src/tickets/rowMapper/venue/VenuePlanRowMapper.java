@@ -3,11 +3,9 @@ package tickets.rowMapper.venue;
 import org.springframework.jdbc.core.RowMapper;
 import tickets.model.venue.VenuePlan;
 
-import java.sql.Date;
+import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 
 public class VenuePlanRowMapper implements RowMapper<VenuePlan> {
 	
@@ -18,8 +16,8 @@ public class VenuePlanRowMapper implements RowMapper<VenuePlan> {
 		venuePlan.setVenueID( rs.getString("venueID") );
 		venuePlan.setName( rs.getString("name") );
 		venuePlan.setType( rs.getString("type") );
-		venuePlan.setBeginTime( rs.getDate("beginTime" ) );
-		venuePlan.setEndTime( rs.getDate("endTime" ) );
+		venuePlan.setBeginTime( rs.getTimestamp("beginTime" ) );
+		venuePlan.setEndTime( rs.getTimestamp("endTime" ) );
 		venuePlan.setHallID( rs.getString("hallID") );
 		venuePlan.setHallName( rs.getString("hallName") );
 		venuePlan.setNumOfRow(rs.getInt("numOfRow"));

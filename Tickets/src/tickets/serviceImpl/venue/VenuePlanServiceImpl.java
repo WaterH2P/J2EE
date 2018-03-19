@@ -5,6 +5,7 @@ import tickets.dao.venue.VenueHallDao;
 import tickets.dao.venue.VenuePlanDao;
 import tickets.daoImpl.Common;
 import tickets.daoImpl.ParaName;
+import tickets.model.user.UserOdSeat;
 import tickets.model.venue.VenueHall;
 import tickets.model.venue.VenuePlan;
 import tickets.service.venue.VenuePlanService;
@@ -60,18 +61,18 @@ public class VenuePlanServiceImpl implements VenuePlanService {
 	}
 	
 	@Override
-	public void updateVenuePlanSeatDist(String planID, String[] seats){
+	public void updateVenuePlanSeatDist(String planID, List<UserOdSeat> userOdSeats, String stateExchangeTo){
 		VenuePlan venuePlan = venuePlanDao.selectVenuePlanInfo(planID);
 		int col = venuePlan.getNumOfCol();
 		String seatDist = venuePlan.getSeatDist();
 		seatDist = CommonService.hexadecimalToFour(seatDist);
-		for( String seat : seats ){
-			String[] rowAndCol = seat.split("--");
-			int seatRow = Integer.valueOf( rowAndCol[0] );
-			int seatCol = Integer.valueOf( rowAndCol[1] );
+		for( UserOdSeat userOdSeat : userOdSeats ){
+			int seatRow = userOdSeat.getRow();
+			int seatCol = userOdSeat.getCol();
 			String front = seatDist.substring(0, (seatRow-1)*col + (seatCol-1));
 			String back = seatDist.substring((seatRow-1)*col + seatCol, seatDist.length());
-			seatDist = front + ParaName.seat_unavailable + back;
+//			seatDist = front + ParaName.seat_unavailable + back;
+			seatDist = front + stateExchangeTo + back;
 		}
 		seatDist = CommonService.fourToHexadecimal(seatDist);
 		venuePlanDao.updateVenuePlanSeatDist(planID, seatDist);

@@ -62,6 +62,7 @@
 <script src="../javascript/jquery/jquery-3.2.1.min.js"></script>
 <script src="../javascript/venue/venueRegister.js"></script>
 <script src="../javascript/password.js"></script>
+<script src="../javascript/deleteSpace.js"></script>
 <script>
     var addressReady = false;
     $("#address").blur(function(){
@@ -143,10 +144,6 @@
             $("#messageShow").addClass("colorRed");
         }
     });
-
-    function deleteSpace(str) {
-        return str.replace(/\s/g, "");
-    }
 </script>
 </body>
 </html>

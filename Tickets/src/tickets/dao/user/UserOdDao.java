@@ -19,7 +19,11 @@ public interface UserOdDao {
 	
 	List<UserOdSeat> selectUserOdAllSeatSelectedInfo(String OdID);
 	
+	void deleteUserOdAllSeatSelectedInfo(String OdID);
+	
 	void updateUserOdIsPaid(String OdID, double vipDiscount, int couponDiscount, double totalPay);
+	
+	void updateUserOdIsDeleted(String OdID);
 	
 	List<UserOd> selectAllHistoricalUserOd(String email);
 	

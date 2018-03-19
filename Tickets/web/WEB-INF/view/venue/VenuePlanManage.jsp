@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="../../stylesheet/common.css">
     <link rel="stylesheet" type="text/css" href="../../stylesheet/hallSeat.css">
     <link rel="stylesheet" type="text/css" href="../../stylesheet/jquery/pikaday.css">
+    <link rel="stylesheet" type="text/css" href="../../stylesheet/DateTimePicker.css">
 </head>
 <body>
 <div class="common">
@@ -47,18 +48,20 @@
                 <label>类型：</label><select id="planType"></select>
             </p>
             <p>
-                <label>开始日期：</label><input type="date" id="beginDate"/>
-                <label>时间：</label><input type="date" id=""/>
+                <label>开始日期：</label><input id="beginDate"/>
+                <label>时间：</label><input type="text" data-field="time" id="beginTime"/>
             </p>
             <p>
-                <label>结束日期：</label><input type="date" id="endDate" />
-                <label>时间：</label><input type="date" />
+                <label>结束日期：</label><input id="endDate" />
+                <label>时间：</label><input type="text" data-field="time" id="endTime"/>
             </p>
             <p><label>场厅：</label><select id="planHall_select" onchange="changeHallSeat()"></select></p>
             <p><label>总票数：</label><input type="text" id="numOfTicket" readonly/></p>
             <p><label>基准票价：</label><input type="text" id="priceOfTicket" /></p>
             <p><label>描述：</label><textarea type="text" id="planDesc"></textarea></p>
             <button id="submitPlan_btn">发布活动</button>
+
+            <div id="dtBox"></div>
 
             <br/>
             <br/>
@@ -77,6 +80,7 @@
 
 <script src="../../javascript/jquery/jquery-3.2.1.min.js" ></script>
 <script src="../../javascript/jquery/jquery.seat-charts.min.js" ></script>
+<script src="../../javascript/DateTimePicker.js" ></script>
 <script src="../../javascript/jquery/pikaday.js" ></script>
 <script src="../../javascript/date-format.js" ></script>
 <script>
@@ -162,6 +166,10 @@
             minDate:new Date(),
             maxDate:futureDay,
             i18n:i18n,
+        });
+
+        $("#dtBox").DateTimePicker({
+            dateFormat: "dd-MMM-yyyy"
         });
     });
 </script>
@@ -406,9 +414,11 @@
 
     $("#submitPlan_btn").click(function () {
         var beginDate = $("#beginDate").val().toString();
+        var beginTime = beginDate + " " + $("#beginTime").val().toString() + ":00";
         var endDate = $("#endDate").val().toString();
-        var beginTimeM = new Date(beginDate).getTime();
-        var endTimeM = new Date(endDate).getTime();
+        var endTime = endDate + " " + $("#endTime").val().toString() + ":00";
+        var beginTimeM = new Date(beginTime).getTime();
+        var endTimeM = new Date(endTime).getTime();
         if( endTimeM>beginTimeM ){
             if( nameReady && priceReady && descReady ){
                 var name = $("#planName").val().toString();
@@ -421,7 +431,7 @@
                 var description = $("#planDesc").val().toString();
                 description = deleteSpace(description);
 
-                var data = {"name":name, "type":type, "beginTime":beginDate, "endTime":endDate,
+                var data = {"name":name, "type":type, "beginTime":beginTime, "endTime":endTime,
                     "hallID":hallID, "hallName":hallName, "numOfTicket":numOfTicket, "price":price,
                     "description":description};
                 $.post("AddNewVenuePlan", data, function (rs) {
@@ -431,8 +441,8 @@
                         var infoDiv = "<div id='" + planID + "_info_div'>" +
                             "<p><label>计划名称：</label><input type='text' value='" + name + "' readonly /></p>" +
                             "<p><label>计划类型：</label><input type='text' value='" + type + "' readonly /></p>" +
-                            "<p><label>开始时间：</label><input type='text' value='" + beginDate + "' readonly /></p>" +
-                            "<p><label>结束时间：</label><input type='text' value='" + endDate + "' readonly /></p>" +
+                            "<p><label>开始时间：</label><input type='text' value='" + beginTime + "' readonly /></p>" +
+                            "<p><label>结束时间：</label><input type='text' value='" + endTime + "' readonly /></p>" +
                             "<p><label>安排场厅：</label><input type='text' value='" + hallName + "' readonly /></p>" +
                             "<p><label>总卖票数：</label><input type='text' value='" + numOfTicket + "' readonly /></p>" +
                             "<p><label>剩余票数：</label><input type='text' value='" + numOfTicket + "' readonly /></p>" +

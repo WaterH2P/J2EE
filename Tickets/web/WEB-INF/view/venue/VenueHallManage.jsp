@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../stylesheet/common.css">
     <link rel="stylesheet" type="text/css" href="../../stylesheet/hallSeat.css">
-    <link rel="stylesheet" type="text/css" href="../../stylesheet/venue/venueHallManage.css">
+    <link rel="stylesheet" type="text/css" href="../../stylesheet/fix.css">
 </head>
 <body>
 <div class="common">

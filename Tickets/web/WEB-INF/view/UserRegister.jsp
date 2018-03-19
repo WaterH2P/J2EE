@@ -63,6 +63,7 @@
 
 <script src="../javascript/jquery/jquery-3.2.1.min.js"></script>
 <script src="../javascript/password.js"></script>
+<script src="../javascript/deleteSpace.js"></script>
 <script>
     var emailReady = false;
     var nameReady = false;
@@ -162,10 +163,6 @@
             $("#messageShow").addClass("colorRed");
         }
     });
-
-    function deleteSpace(str) {
-        return str.replace(/\s/g, "");
-    }
 </script>
 </body>
 

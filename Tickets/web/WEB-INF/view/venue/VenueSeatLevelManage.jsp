@@ -40,6 +40,7 @@
 </div>
 
 <script src="../../javascript/jquery/jquery-3.2.1.min.js" ></script>
+<script src="../javascript/deleteSpace.js"></script>
 <script>
     var numOfSeatLevel = 0;
     $(function () {
@@ -79,10 +80,6 @@
                 }
             });
         }
-    }
-
-    function deleteSpace(str) {
-        return str.replace(/\s/g, "");
     }
 </script>
 <script>

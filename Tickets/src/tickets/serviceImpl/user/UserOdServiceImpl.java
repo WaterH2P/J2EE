@@ -7,23 +7,28 @@ import tickets.dao.user.UserInfoDao;
 import tickets.dao.user.UserOdDao;
 import tickets.dao.venue.VenueHallDao;
 import tickets.dao.venue.VenuePlanDao;
+import tickets.daoImpl.Common;
 import tickets.daoImpl.ParaName;
 import tickets.model.mgr.VIPLevelInfo;
 import tickets.model.user.UserCoupon;
 import tickets.model.user.UserInfo;
 import tickets.model.user.UserOd;
 import tickets.model.user.UserOdSeat;
+import tickets.model.venue.VenueBaseInfo;
+import tickets.model.venue.VenueHall;
 import tickets.model.venue.VenuePlan;
 import tickets.model.venue.VenuePlanSeat;
 import tickets.service.user.UserInfoService;
 import tickets.service.user.UserOdService;
+import tickets.service.venue.VenueBaseInfoService;
 import tickets.service.venue.VenuePlanService;
 import tickets.serviceImpl.CommonService;
 
 import javax.annotation.Resource;
+import java.util.Calendar;
+import java.util.Date;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service( "userOdService" )
@@ -37,6 +42,9 @@ public class UserOdServiceImpl implements UserOdService {
 	
 	@Resource(name = "venuePlanService")
 	private VenuePlanService venuePlanService;
+	
+	@Resource(name = "venueBaseInfoService")
+	private VenueBaseInfoService venueBaseInfoService;
 	
 	@Resource(name = "userOdDao")
 	private UserOdDao userOdDao;
@@ -127,7 +135,7 @@ public class UserOdServiceImpl implements UserOdService {
 //			更新计划中座位数量信息
 			venuePlanDao.updateVenuePlanNumOfT(planID, -numOfTicket, numOfTicket, 0);
 //			更新计划的座位图
-			venuePlanService.updateVenuePlanSeatDist(planID, seatRowAndCols);
+			venuePlanService.updateVenuePlanSeatDist(planID, userOdSeats, ParaName.seat_unavailable);
 			return OdID;
 		}
 	}
@@ -219,6 +227,86 @@ public class UserOdServiceImpl implements UserOdService {
 	}
 	
 	@Override
+	public boolean deleteOd(String email, String OdID){
+		UserInfo userInfo = new UserInfo();
+		userInfo = userInfoService.getUserInfo(email);
+		UserOd userOd = new UserOd();
+		userOd = userOdDao.selectUserOdInfo(OdID);
+		if( userInfo.getEmail().equals(userOd.getEmail()) ){
+//			设置订单状态
+			userOdDao.updateUserOdIsDeleted(OdID);
+			
+			String planID = userOd.getPlanID();
+			if( userOd.isPaid() ){
+//			更新用户余额和积分
+				double balanceModifyValue = userOd.getTotalPay();
+				userInfoDao.updateUserBalance(email, balanceModifyValue);
+				
+				VenuePlan venuePlan = venuePlanDao.selectVenuePlanInfo(planID);
+				int retPer = calRetPer(venuePlan.getBeginTime());
+				balanceModifyValue = -(100 - retPer) * balanceModifyValue;
+				if( balanceModifyValue!=0 ){
+					userInfoDao.updateOnlyUserBalance(email, balanceModifyValue);
+				}
+			}
+			
+			
+//			删除订单对应座位
+			List<UserOdSeat> userOdSeats = userOdDao.selectUserOdAllSeatSelectedInfo(OdID);
+			userOdDao.deleteUserOdAllSeatSelectedInfo(OdID);
+			
+//			更新活动场馆 seatDist
+			venuePlanService.updateVenuePlanSeatDist(planID, userOdSeats, ParaName.seat_available);
+			
+			int numOfTicket = userOd.getNumOfTicket();
+			if( userOd.isSeated() ){
+				venuePlanDao.updateVenuePlanNumOfT(planID, numOfTicket, -numOfTicket, 0);
+			}
+			else {
+				venuePlanDao.updateVenuePlanNumOfT(planID, numOfTicket, 0, 0);
+			}
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	private int calRetPer(Date beginTime){
+		long Odm = beginTime.getTime();
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.DAY_OF_MONTH, 5);
+		Date d = c.getTime();
+		
+		int retPer = 0;
+		if( Odm<d.getTime() ){
+			retPer = 70;
+		}
+		else {
+			c.add(Calendar.DAY_OF_MONTH, 5);
+			d = c.getTime();
+			if( Odm<d.getTime() ){
+				retPer = 80;
+			}
+			else {
+				c.add(Calendar.DAY_OF_MONTH, 5);
+				d = c.getTime();
+				if( Odm<d.getTime() ){
+					retPer = 90;
+				}
+				else {
+					c.add(Calendar.DAY_OF_MONTH, 5);
+					d = c.getTime();
+					if( Odm<d.getTime() ){
+						retPer = 100;
+					}
+				}
+			}
+		}
+		return retPer;
+	}
+	
+	@Override
 	public List<UserOd> getAllHistoricalUserOd(String email){
 		return userOdDao.selectAllHistoricalUserOd(email);
 	}
@@ -251,6 +339,26 @@ public class UserOdServiceImpl implements UserOdService {
 	@Override
 	public List<UserOdSeat> getUserOdAllSeatSelectedInfo(String OdID){
 		return userOdDao.selectUserOdAllSeatSelectedInfo(OdID);
+	}
+	
+	@Override
+	public VenueHall getPlanHallInfo(String planID){
+		VenuePlan venuePlan = venuePlanDao.selectVenuePlanInfo(planID);
+		VenueHall venueHall = venueHallDao.selectVenueHall(venuePlan.getHallID());
+		String seatDist = venueHall.getSeatDist();
+		seatDist = CommonService.hexadecimalToOneZero(seatDist);
+		seatDist = CommonService.strFromNumToLetter(seatDist);
+		venueHall.setSeatDist(seatDist);
+		return venueHall;
+	}
+	
+	@Override
+	public VenueBaseInfo getPlanVenueInfo(String planID){
+		VenuePlan venuePlan = venuePlanDao.selectVenuePlanInfo(planID);
+		String venueID = venuePlan.getVenueID();
+		VenueBaseInfo venueBaseInfo = venueBaseInfoService.getVenueInfo(venueID);
+		venueBaseInfo.setVenueID("");
+		return venueBaseInfo;
 	}
 	
 }

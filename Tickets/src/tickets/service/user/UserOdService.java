@@ -2,6 +2,8 @@ package tickets.service.user;
 
 import tickets.model.user.UserOd;
 import tickets.model.user.UserOdSeat;
+import tickets.model.venue.VenueBaseInfo;
+import tickets.model.venue.VenueHall;
 import tickets.model.venue.VenuePlan;
 import tickets.model.venue.VenuePlanSeat;
 
@@ -19,6 +21,8 @@ public interface UserOdService {
 	
 	boolean payOd(String email, String OdID, String couponID);
 	
+	boolean deleteOd(String email, String OdID);
+	
 	List<UserOd> getAllHistoricalUserOd(String email);
 	
 	List<UserOd> getAllUserOdTimeout(String email);
@@ -32,4 +36,8 @@ public interface UserOdService {
 	VenuePlan getUserOdPlanInfo(String planID);
 	
 	List<UserOdSeat> getUserOdAllSeatSelectedInfo(String OdID);
+	
+	VenueHall getPlanHallInfo(String planID);
+	
+	VenueBaseInfo getPlanVenueInfo(String planID);
 }

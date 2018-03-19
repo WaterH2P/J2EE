@@ -109,11 +109,24 @@ public class UserOdDaoImpl implements UserOdDao {
 	}
 	
 	@Override
+	public void deleteUserOdAllSeatSelectedInfo(String OdID){
+		String sql = "DELETE FROM " + ParaName.Table_userOdSeat + " WHERE OdID=?";
+		jdbcTemplate.update(sql, OdID);
+	}
+	
+	@Override
 	public void updateUserOdIsPaid(String OdID, double vipDiscount, int couponDiscount, double totalPay){
 		final boolean isPaid = true;
 		String sql = "UPDATE " + ParaName.Table_userOd +
 				" SET vipDiscount=?, couponDiscount=?, totalPay=?, isPaid=? WHERE OdID=?";
 		jdbcTemplate.update(sql, vipDiscount, couponDiscount, totalPay, isPaid, OdID);
+	}
+	
+	@Override
+	public void updateUserOdIsDeleted(String OdID){
+		final boolean isDeleted = true;
+		String sql = "UPDATE " + ParaName.Table_userOd + " SET isDeleted=? WHERE OdID=?";
+		jdbcTemplate.update(sql, isDeleted, OdID);
 	}
 	
 	@Override
