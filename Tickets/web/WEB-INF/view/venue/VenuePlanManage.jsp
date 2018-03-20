@@ -505,7 +505,7 @@
 
         $("#Od_pay_div").empty();
         var submitBtn = "<button id='btn_" + res.message +"_payOdImmediately' onclick='payOdImmediately(this)'>立即付款</button>" +
-            "<button id='btn_" + res.message +"_cancel' onclick='cancelBuyTicket()' '>取消购票</button>";
+            "<button id='btn_" + res.message +"_cancel' onclick='cancelBuyTicket(this)' '>取消购票</button>";
         $("#Od_pay_div").append(submitBtn);
 
         $("#Od_nameOfPlan_input").val($("#nameOfPlan_input").val().toString());
@@ -784,34 +784,36 @@
                     var res = $.parseJSON(rs);
                     var planID = res.message;
                     if( res.result ){
-                        var infoDiv = "<div id='" + planID + "_info_div'>" +
-                            "<p><label>计划名称：</label><input type='text' value='" + name + "' readonly /></p>" +
-                            "<p><label>计划类型：</label><input type='text' value='" + type + "' readonly /></p>" +
-                            "<p><label>开始时间：</label><input type='text' value='" + beginTime + "' readonly /></p>" +
-                            "<p><label>结束时间：</label><input type='text' value='" + endTime + "' readonly /></p>" +
-                            "<p><label>安排场厅：</label><input type='text' value='" + hallName + "' readonly /></p>" +
-                            "<p><label>总卖票数：</label><input type='text' value='" + numOfTicket + "' readonly /></p>" +
-                            "<p><label>剩余票数：</label><input type='text' value='" + numOfTicket + "' readonly /></p>" +
-                            "<p><label>有座票数：</label><input type='text' value='0' readonly /></p>" +
-                            "<p><label>待配票数：</label><input type='text' value='0' readonly /></p>" +
-                            "<p><label>基准票价：</label><input type='text' value='" + price + "' readonly /></p>" +
-                            "<p><label>计划介绍：</label><textarea type='text' readonly>" + description + "</textarea></p>" +
-                            "<p>" +
-                                "<button id='btn_" + planID + "_" + hallID + "_buyTickets' onclick='toBuyTicketUnderline(this)'>线下买票</button>" +
-                            "</p>" +
-                            "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
-                            "</div>";
-                        $("#main_planList_div").append(infoDiv);
+                        // var infoDiv = "<div id='" + planID + "_info_div'>" +
+                        //     "<p><label>计划名称：</label><input type='text' value='" + name + "' readonly /></p>" +
+                        //     "<p><label>计划类型：</label><input type='text' value='" + type + "' readonly /></p>" +
+                        //     "<p><label>开始时间：</label><input type='text' value='" + beginTime + "' readonly /></p>" +
+                        //     "<p><label>结束时间：</label><input type='text' value='" + endTime + "' readonly /></p>" +
+                        //     "<p><label>安排场厅：</label><input type='text' value='" + hallName + "' readonly /></p>" +
+                        //     "<p><label>总卖票数：</label><input type='text' value='" + numOfTicket + "' readonly /></p>" +
+                        //     "<p><label>剩余票数：</label><input type='text' value='" + numOfTicket + "' readonly /></p>" +
+                        //     "<p><label>有座票数：</label><input type='text' value='0' readonly /></p>" +
+                        //     "<p><label>待配票数：</label><input type='text' value='0' readonly /></p>" +
+                        //     "<p><label>基准票价：</label><input type='text' value='" + price + "' readonly /></p>" +
+                        //     "<p><label>计划介绍：</label><textarea type='text' readonly>" + description + "</textarea></p>" +
+                        //     "<p>" +
+                        //         "<button id='btn_" + planID + "_" + hallID + "_buyTickets' onclick='toBuyTicketUnderline(this)'>线下买票</button>" +
+                        //     "</p>" +
+                        //     "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
+                        //     "</div>";
+                        // $("#main_planList_div").append(infoDiv);
 
-                        $("#planName").val("");
-                        $("#beginDate").val("");
-                        $("#endDate").val("");
-                        $("#priceOfTicket").val("");
-                        $("#planDesc").val("");
+                        // $("#planName").val("");
+                        // $("#beginDate").val("");
+                        // $("#endDate").val("");
+                        // $("#priceOfTicket").val("");
+                        // $("#planDesc").val("");
 
-                        $("#main_div").show();
-                        $("#title_2").show();
-                        $("#createPlan_div").hide();
+                        // $("#main_div").show();
+                        // $("#title_2").show();
+                        // $("#createPlan_div").hide();
+                        alert("新建成功！");
+                        window.location.reload();
                     }
                     else {
                         alert(res.message);

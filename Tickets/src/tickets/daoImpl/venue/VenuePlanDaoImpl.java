@@ -25,12 +25,15 @@ public class VenuePlanDaoImpl implements VenuePlanDao {
 	
 	@Override
 	public void insertNewVenuePlan(VenuePlan venuePlan){
-		String sql = "INSERT INTO " + ParaName.Table_venuePlan + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		final boolean isChecking = false;
+		final boolean isChecked = false;
+		String sql = "INSERT INTO " + ParaName.Table_venuePlan + " VALUES (?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?)";
 		jdbcTemplate.update(sql, venuePlan.getPlanID(), venuePlan.getVenueID(), venuePlan.getName(),
 				venuePlan.getType(), venuePlan.getBeginTime(), venuePlan.getEndTime(),
 				venuePlan.getHallID(), venuePlan.getHallName(), venuePlan.getNumOfTicket(),
 				venuePlan.getNumOfTLeft(), venuePlan.getNumOfTSeated(), venuePlan.getNumOfTUnallocated(),
-				venuePlan.getPrice(), venuePlan.getDescription(), venuePlan.getSeatDist());
+				venuePlan.getPrice(), venuePlan.getDescription(), venuePlan.getSeatDist(),
+				isChecking, isChecked);
 	}
 	
 	@Override
