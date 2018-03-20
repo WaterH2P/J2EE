@@ -19,7 +19,7 @@ public class UserOdRowMapper implements RowMapper {
 		userOd.setVipDiscount( rs.getDouble("vipDiscount") );
 		userOd.setCouponDiscount( rs.getInt("couponDiscount") );
 		userOd.setTotalPay( rs.getDouble("totalPay") );
-		userOd.setMakeTime( rs.getDate("makeTime") );
+		userOd.setMakeTime( rs.getTimestamp("makeTime") );
 		userOd.setPaid( rs.getBoolean("isPaid") );
 		userOd.setTimeout( rs.getBoolean("isTimeout") );
 		userOd.setDeleted( rs.getBoolean("isDeleted") );

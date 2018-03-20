@@ -29,6 +29,8 @@ public class VenuePlanRowMapper implements RowMapper<VenuePlan> {
 		venuePlan.setPrice(rs.getDouble("price"));
 		venuePlan.setDescription( rs.getString("description") );
 		venuePlan.setSeatDist( rs.getString("seatDist") );
+		venuePlan.setChecking( rs.getBoolean("isChecking") );
+		venuePlan.setChecked( rs.getBoolean("isChecked") );
 		return venuePlan;
 	}
 	

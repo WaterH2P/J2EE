@@ -37,7 +37,16 @@ public interface UserOdService {
 	
 	List<UserOdSeat> getUserOdAllSeatSelectedInfo(String OdID);
 	
+	List<UserOdSeat> getPlanAllUserOdCheckedSeatInfo(String planID);
+	
+	List<UserOdSeat> getPlanUserOdCheckedSeatInfo(String OdID);
+	
 	VenueHall getPlanHallInfo(String planID);
 	
 	VenueBaseInfo getPlanVenueInfo(String planID);
+	
+	String checkUserOd(String OdID, String planID);
+	
+	void checkUserOdIsTimeout();
+	
 }

@@ -22,7 +22,13 @@ public interface VenuePlanDao {
 	
 	void updateVenuePlanSeatDist(String planID, String seatDist);
 	
-	void updateVenuePlanNumOfT(String planID, int numOfTLeftModifyValue,
-	                           int numOfTSeatedModifyValue, int numOfTUnallocatedModifyValue);
+	void updateVenuePlanNumOfTicket(String planID, int numOfTLeftModifyValue,
+	                                int numOfTSeatedModifyValue, int numOfTUnallocatedModifyValue);
+	
+	void updateVenuePlanIsChecking(String planID);
+	
+	void updateVenuePlanIsChecked(String planID);
+	
+	List<VenuePlan> selectAllFutureVenuePlan();
 	
 }

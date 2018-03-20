@@ -8,6 +8,7 @@ import tickets.model.user.UserInfo;
 import tickets.service.user.UserInfoService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service("userInfoService" )
 public class UserInfoServiceImpl implements UserInfoService {
@@ -35,6 +36,28 @@ public class UserInfoServiceImpl implements UserInfoService {
 		System.out.println(vipLevel);
 		VIPLevelInfo vipLevelInfo = mgrVIPLevelDao.selectVIPInfoByLevel(vipLevel);
 		return vipLevelInfo;
+	}
+	
+	@Override
+	public void updateUserVIPLevel(String email){
+		UserInfo userInfo = userInfoDao.selectUserInfo(email);
+		List<VIPLevelInfo> vipLevelInfos = mgrVIPLevelDao.selectAllVIPLevelInfos();
+		int vipLevel = 0;
+		for( int i=0; i<vipLevelInfos.size(); i++ ){
+			vipLevel = i + 1;
+			for( VIPLevelInfo vipLevelInfo : vipLevelInfos ){
+				if( vipLevelInfo.getVipLevel().equals(vipLevel) ){
+					if( userInfo.getPoint()<vipLevelInfo.getPoint() ){
+						vipLevel -= 1;
+						break;
+					}
+				}
+			}
+			if( vipLevel < i+1 ){
+				break;
+			}
+		}
+		userInfoDao.updateUserVIPLevel(email, String.valueOf(vipLevel));
 	}
 	
 }

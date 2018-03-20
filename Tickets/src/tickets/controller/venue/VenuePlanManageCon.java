@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import tickets.controller.CommonCon;
 import tickets.daoImpl.ParaName;
 import tickets.model.Result;
+import tickets.model.user.UserOdSeat;
 import tickets.model.venue.VenuePlan;
 import tickets.model.venue.VenuePlanSeat;
+import tickets.service.user.UserOdService;
 import tickets.service.venue.VenuePlanService;
 
 import javax.annotation.Resource;
@@ -27,6 +29,9 @@ public class VenuePlanManageCon {
 	
 	@Resource(name = "venuePlanService")
 	private VenuePlanService venuePlanService;
+	
+	@Resource(name = "userOdService")
+	private UserOdService userOdService;
 	
 	@RequestMapping(value = "/Venue/VenuePlanManage", method = RequestMethod.GET)
 	public String venuePlanManage(){
@@ -135,4 +140,74 @@ public class VenuePlanManageCon {
 		return venuePlanSeats;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/Venue/VenuePlanBeginCheckTicket", method = RequestMethod.POST)
+	public Result venuePlanBeginCheckTicket(String planID){
+		Result result = new Result();
+		result.setResult(false);
+		String message = "";
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isVenue(venueID) ){
+				if( venuePlanService.setVenuePlanIsChecking(planID) ){
+					result.setResult(true);
+					message = "该计划开始检票！";
+					result.setMessage(message);
+				}
+				else {
+					message = "已经开始检票或检票完成！";
+					result.setMessage(message);
+				}
+			}
+		}
+		if( !result.getResult() && result.getMessage().length()==0 ){
+			result.setMessage(ParaName.message_ownNoAuthority);
+		}
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/Venue/VenuePlanFinishCheckTicket", method = RequestMethod.POST)
+	public Result venuePlanFinishCheckTicket(String planID){
+		Result result = new Result();
+		result.setResult(false);
+		String message = "";
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isVenue(venueID) ){
+				if( venuePlanService.setVenuePlanIsChecked(planID) ){
+					result.setResult(true);
+					message = "该计划结束检票！";
+					result.setMessage(message);
+				}
+				else {
+					message = "还未开始检票或检票完成！";
+					result.setMessage(message);
+				}
+			}
+		}
+		if( !result.getResult() && result.getMessage().length()==0 ){
+			result.setMessage(ParaName.message_ownNoAuthority);
+		}
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/Venue/GetPlanAllUserOdCheckedSeatInfo", method = RequestMethod.POST)
+	public List<UserOdSeat> getPlanAllUserOdCheckedSeatInfo(String planID){
+		List<UserOdSeat> userOdSeats = new ArrayList<>();
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isVenue(venueID) ){
+				userOdSeats = userOdService.getPlanAllUserOdCheckedSeatInfo(planID);
+			}
+			else {
+				System.out.println(venueID + " " + ParaName.message_ownNoAuthority);
+			}
+		}
+		return userOdSeats;
+	}
 }

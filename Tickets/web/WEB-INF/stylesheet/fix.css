@@ -23,3 +23,16 @@
     right: 30px;
     top: 30px;
 }
+
+.fixLeftFar{
+    /*margin: 30px auto 0;*/
+    padding: 8px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 8px rgba(0,0,0,.1);
+    vertical-align: middle;
+    display: inline-block;
+    position: fixed;
+    left: 30px;
+    top: 30px;
+}

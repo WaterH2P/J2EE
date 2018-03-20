@@ -10,6 +10,7 @@ import tickets.daoImpl.ParaName;
 import tickets.model.Result;
 import tickets.model.mgr.VIPLevelInfo;
 import tickets.model.user.UserCoupon;
+import tickets.model.user.UserOdSeat;
 import tickets.service.user.UserOdService;
 import tickets.service.venue.VenueOdService;
 
@@ -158,4 +159,44 @@ public class VenueOdCon {
 		return userCoupons;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/Venue/VenuePlanCheckTicket", method = RequestMethod.POST)
+	public Result venuePlanCheckTicket(String OdID, String planID){
+		Result result = new Result();
+		result.setResult(false);
+		String message = "";
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isVenue(venueID) ){
+				message = userOdService.checkUserOd(OdID, planID);
+				if( message.equals(ParaName.return_true) ){
+					result.setResult(true);
+					message = "检票成功！";
+					result.setMessage(message);
+				}
+				else {
+					result.setMessage(message);
+				}
+			}
+		}
+		if( !result.getResult() && result.getMessage().length()==0 ){
+			result.setMessage(ParaName.message_ownNoAuthority);
+		}
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/Venue/GetPlanUserOdCheckedSeatInfo", method = RequestMethod.POST)
+	public List<UserOdSeat> getPlanUserOdCheckedSeatInfo(String OdID){
+		List<UserOdSeat> userOdSeats = new ArrayList<>();
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isVenue(venueID) ){
+				userOdSeats = userOdService.getPlanUserOdCheckedSeatInfo(OdID);
+			}
+		}
+		return userOdSeats;
+	}
 }

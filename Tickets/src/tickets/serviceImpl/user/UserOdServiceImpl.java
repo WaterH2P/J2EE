@@ -8,8 +8,8 @@ import tickets.dao.user.UserInfoDao;
 import tickets.dao.user.UserOdDao;
 import tickets.dao.venue.VenueHallDao;
 import tickets.dao.venue.VenuePlanDao;
-import tickets.daoImpl.Common;
 import tickets.daoImpl.ParaName;
+import tickets.daoImpl.user.UserOdDaoImpl;
 import tickets.model.mgr.VIPLevelInfo;
 import tickets.model.user.UserCoupon;
 import tickets.model.user.UserInfo;
@@ -48,7 +48,7 @@ public class UserOdServiceImpl implements UserOdService {
 	private VenueBaseInfoService venueBaseInfoService;
 	
 	@Resource(name = "userOdDao")
-	private UserOdDao userOdDao;
+	private UserOdDao userOdDao = new UserOdDaoImpl();
 	
 	@Resource(name = "userInfoService")
 	private UserInfoService userInfoService;
@@ -140,7 +140,7 @@ public class UserOdServiceImpl implements UserOdService {
 		else {
 			userOdDao.insertNewUserOdSeated(userOd, userOdSeats);
 //			更新计划中座位数量信息
-			venuePlanDao.updateVenuePlanNumOfT(planID, -numOfTicket, numOfTicket, 0);
+			venuePlanDao.updateVenuePlanNumOfTicket(planID, -numOfTicket, numOfTicket, 0);
 //			更新计划的座位图
 			venuePlanService.updateVenuePlanSeatDist(planID, userOdSeats, ParaName.seat_unavailable);
 			return OdID;
@@ -171,7 +171,7 @@ public class UserOdServiceImpl implements UserOdService {
 			
 			userOdDao.insertNewUserOdUnseated(userOd);
 //			更新计划中座位数量信息
-			venuePlanDao.updateVenuePlanNumOfT(planID, -numOfTicket, 0, numOfTicket);
+			venuePlanDao.updateVenuePlanNumOfTicket(planID, -numOfTicket, 0, numOfTicket);
 			
 			return OdID;
 		}
@@ -246,6 +246,7 @@ public class UserOdServiceImpl implements UserOdService {
 						if( userInfoDao.updateUserBalance(email, -totalPay) ){
 							final int couponDiscount = 0;
 							userOdDao.updateUserOdIsPaid(OdID, vipDiscount, couponDiscount, totalPay);
+							userInfoService.updateUserVIPLevel(email);
 							return true;
 						}
 						else{
@@ -288,6 +289,9 @@ public class UserOdServiceImpl implements UserOdService {
 		UserOd userOd = new UserOd();
 		userOd = userOdDao.selectUserOdInfo(OdID);
 		if( userInfo.getEmail().equals(userOd.getEmail()) ){
+			if( userOd.isChecked() || userOd.isDeleted() || userOd.isTimeout() ){
+				return false;
+			}
 //			设置订单状态
 			userOdDao.updateUserOdIsDeleted(OdID);
 			
@@ -303,23 +307,24 @@ public class UserOdServiceImpl implements UserOdService {
 				if( balanceModifyValue!=0 ){
 					userInfoDao.updateOnlyUserBalance(email, balanceModifyValue);
 				}
+				userInfoService.updateUserVIPLevel(email);
 			}
 			
-			
-//			删除订单对应座位
-			List<UserOdSeat> userOdSeats = userOdDao.selectUserOdAllSeatSelectedInfo(OdID);
-			userOdDao.deleteUserOdAllSeatSelectedInfo(OdID);
-			
-//			更新活动场馆 seatDist
-			venuePlanService.updateVenuePlanSeatDist(planID, userOdSeats, ParaName.seat_available);
-			
-			int numOfTicket = userOd.getNumOfTicket();
-			if( userOd.isSeated() ){
-				venuePlanDao.updateVenuePlanNumOfT(planID, numOfTicket, -numOfTicket, 0);
-			}
-			else {
-				venuePlanDao.updateVenuePlanNumOfT(planID, numOfTicket, 0, 0);
-			}
+			userOdRecoverPlanInfo(userOd);
+////			删除订单对应座位
+//			List<UserOdSeat> userOdSeats = userOdDao.selectUserOdAllSeatSelectedInfo(OdID);
+//			userOdDao.deleteUserOdAllSeatSelectedInfo(OdID);
+//
+////			更新活动场馆 seatDist
+//			venuePlanService.updateVenuePlanSeatDist(planID, userOdSeats, ParaName.seat_available);
+//
+//			int numOfTicket = userOd.getNumOfTicket();
+//			if( userOd.isSeated() ){
+//				venuePlanDao.updateVenuePlanNumOfTicket(planID, numOfTicket, -numOfTicket, 0);
+//			}
+//			else {
+//				venuePlanDao.updateVenuePlanNumOfTicket(planID, numOfTicket, 0, 0);
+//			}
 			return true;
 		}
 		else {
@@ -397,6 +402,21 @@ public class UserOdServiceImpl implements UserOdService {
 	}
 	
 	@Override
+	public List<UserOdSeat> getPlanAllUserOdCheckedSeatInfo(String planID){
+		return userOdDao.selectPlanAllUserOdCheckedSeatInfo(planID);
+	}
+	
+	@Override
+	public List<UserOdSeat> getPlanUserOdCheckedSeatInfo(String OdID){
+		List<UserOdSeat> userOdSeats = new ArrayList<>();
+		UserOd userOd = userOdDao.selectUserOdInfo(OdID);
+		if( userOd.isChecked() ){
+			userOdSeats = userOdDao.selectPlanUserOdCheckedSeatInfo(OdID);
+		}
+		return userOdSeats;
+	}
+	
+	@Override
 	public VenueHall getPlanHallInfo(String planID){
 		VenuePlan venuePlan = venuePlanDao.selectVenuePlanInfo(planID);
 		VenueHall venueHall = venueHallDao.selectVenueHall(venuePlan.getHallID());
@@ -414,6 +434,73 @@ public class UserOdServiceImpl implements UserOdService {
 		VenueBaseInfo venueBaseInfo = venueBaseInfoService.getVenueInfo(venueID);
 		venueBaseInfo.setVenueID("");
 		return venueBaseInfo;
+	}
+	
+	@Override
+	public String checkUserOd(String OdID, String planID){
+		List<String> userOdIDs = userOdDao.selectAllVenuePlanUserOd(
+				planID, true, false, false, true, false);
+		if( userOdIDs.contains(OdID) ){
+			UserOd userOd = userOdDao.selectUserOdInfo(OdID);
+			if( userOd.isPaid() ){
+				if( !userOd.isDeleted() ){
+					if( !userOd.isChecked() ){
+						userOdDao.updateUserOdIsChecked(OdID);
+						return ParaName.return_true;
+					}
+					else {
+						return "订单已检票！";
+					}
+				}
+				else {
+					return "订单已退订！";
+				}
+			}
+			else {
+				return "订单未完成付钱！";
+			}
+		}
+		else {
+			return "订单不存在！";
+		}
+	}
+	
+	private void userOdRecoverPlanInfo(UserOd userOd){
+		String OdID = userOd.getOdID();
+		String planID = userOd.getPlanID();
+		
+		//	删除订单对应座位
+		List<UserOdSeat> userOdSeats = userOdDao.selectUserOdAllSeatSelectedInfo(OdID);
+		userOdDao.deleteUserOdAllSeatSelectedInfo(OdID);
+		
+		//	更新活动场馆 seatDist
+		venuePlanService.updateVenuePlanSeatDist(planID, userOdSeats, ParaName.seat_available);
+		
+		int numOfTicket = userOd.getNumOfTicket();
+		if( userOd.isSeated() ){
+			venuePlanDao.updateVenuePlanNumOfTicket(planID, numOfTicket, -numOfTicket, 0);
+		}
+		else {
+			venuePlanDao.updateVenuePlanNumOfTicket(planID, numOfTicket, 0, 0);
+		}
+	}
+	
+	@Override
+	public void checkUserOdIsTimeout(){
+		List<UserOd> userOds = userOdDao.selectAllOdUnfinished();
+		Date now = new Date();
+		for( UserOd userOd : userOds ){
+			Date makeTime = userOd.getMakeTime();
+			makeTime = new Date(makeTime.getTime()+15*60*1000);
+			if( makeTime.compareTo(now)<0 ){
+				System.out.println( userOd.getOdID() + " is time out!");
+				
+				//	设置订单状态
+				userOdDao.updateUserOdIsTimeout(userOd.getOdID());
+				
+				userOdRecoverPlanInfo(userOd);
+			}
+		}
 	}
 	
 }

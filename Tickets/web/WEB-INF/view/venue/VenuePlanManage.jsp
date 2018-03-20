@@ -123,6 +123,36 @@
             </div>
         </div>
 
+        <div id="checkTicket_div" style="display: none">
+            <button id="checkTicket_back_main_div">🔙</button>
+            <hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />
+            <p><label>计划ID：</label><input type="text" id="checkTicket_planID" readonly/></p>
+            <p><label>名称：</label><input type="text" id="checkTicket_planName" readonly/></p>
+            <p><label>类型：</label><input type="text" id="checkTicket_planType" readonly/></p>
+
+            <p><label>开始时间：</label><input id="checkTicket_beginTime" readonly/></p>
+            <p><label>结束日期：</label><input id="checkTicket_endTime" readonly/></p>
+            <p><label>总票数：</label><input type="text" id="checkTicket_numOfTicket" readonly/></p>
+            <p><label>基准票价：</label><input type="text" id="checkTicket_priceOfTicket" readonly/></p>
+            <p><label>描述：</label><textarea type="text" id="checkTicket_planDesc" readonly></textarea></p>
+            <div id="checkTicket_finish_div">
+
+            </div>
+
+            <div id="checkTicket_hallShow_div">
+                <hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />
+                <p>场厅展示</p>
+                <div class="demo" id="checkTicket_seatMap_div">
+
+                </div>
+            </div>
+
+            <div class="fixRightFar" id="checkTicket_inputOdID_div">
+                <p><input type="text" id="checkTicket_inputOdID_input" placeholder="订单号"></p>
+                <p><button id="checkTicket_inputOdID_btn" onclick="checkTicket_OdID_submit()">检票</button></p>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -131,6 +161,7 @@
 <script src="../../javascript/DateTimePicker.js" ></script>
 <script src="../../javascript/jquery/pikaday.js" ></script>
 <script src="../../javascript/date-format.js" ></script>
+<script src="../../javascript/deleteSpace.js" ></script>
 <script>
     var dateFormat = "yyyy-MM-dd hh:mm:ss";
 
@@ -195,26 +226,9 @@
         });
     });
 </script>
+
+<%-- 主界面跳转 --%>
 <script>
-    function show_venuePlan_isNotChecked() {
-        allTitle2RemoveActive();
-        $("#venuePlan_isNotChecked").addClass("active");
-
-        $.post("GetAllVenuePlansIsNotChecked", function (rs) {
-            var res = $.parseJSON(rs);
-            planInfos = res;
-            $("#main_planList_div").empty();
-            $.each(res, function (index, value, array) {
-                var infoDiv = getInfoDiv(value) +
-                    "<button id='btn_" + value.planID + "_" + value.hallID + "_buyTickets' onclick='toBuyTicketUnderline(this)'>线下买票</button>" +
-                    "<button id='btn_" + value.planID + "_" + value.hallID + "_buyTickets' onclick=''>开始检票</button>" +
-                    "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
-                    "</div>";
-                $("#main_planList_div").append(infoDiv);
-            });
-        });
-    }
-
     function allTitle2RemoveActive() {
         $("#venuePlan_isChecked").removeClass("active");
         $("#venuePlan_isChecking").removeClass("active");
@@ -239,6 +253,25 @@
         return infoDiv;
     }
 
+    function show_venuePlan_isNotChecked() {
+        allTitle2RemoveActive();
+        $("#venuePlan_isNotChecked").addClass("active");
+
+        $.post("GetAllVenuePlansIsNotChecked", function (rs) {
+            var res = $.parseJSON(rs);
+            planInfos = res;
+            $("#main_planList_div").empty();
+            $.each(res, function (index, value, array) {
+                var infoDiv = getInfoDiv(value) +
+                    "<button id='btn_" + value.planID + "_" + value.hallID + "_buyTicket' onclick='toBuyTicketUnderline(this)'>线下买票</button>" +
+                    "<button id='btn_" + value.planID + "_" + value.hallID + "_beginCheckTicket' onclick='checkTicket_begin(this)'>开始检票</button>" +
+                    "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
+                    "</div>";
+                $("#main_planList_div").append(infoDiv);
+            });
+        });
+    }
+
     function show_venuePlan_isChecked() {
         allTitle2RemoveActive();
         $("#venuePlan_isChecked").addClass("active");
@@ -249,7 +282,7 @@
             $("#main_planList_div").empty();
             $.each(res, function (index, value, array) {
                 var infoDiv = getInfoDiv(value) + "<p>" +
-                    "<button id='btn_" + value.planID + "_" + value.hallID + "_buyTickets' onclick='toBuyTicketUnderline(this)'>线下买票</button>" +
+                    "<button id='btn_" + value.planID + "_" + value.hallID + "_info' onclick='planHallSeatInfo_checkTicketFinish_page(this)'>详细信息</button>" +
                     "</p>" +
                     "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
                     "</div>";
@@ -268,7 +301,7 @@
             $("#main_planList_div").empty();
             $.each(res, function (index, value, array) {
                 var infoDiv = getInfoDiv(value) + "<p>" +
-                    "<button id='btn_" + value.hallID + "_buyTickets' onclick='toBuyTicketUnderline(this)'>线下买票</button>" +
+                    "<button id='btn_" + value.hallID + "_checkTicket' onclick='checkTicket_page(this)'>检票</button>" +
                     "</p>" +
                     "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
                     "</div>";
@@ -276,7 +309,11 @@
             });
         });
     }
+</script>
+<%-- 主界面跳转 --%>
 
+<!-- 新建计划 -->
+<script>
     function changeHallSeat () {
         var option = $("#planHall_select option:selected").val().toString();
 
@@ -332,10 +369,174 @@
         }
     };
 
-    function deleteSpace(str) {
-        return str.replace(/\s/g, "");
-    }
+    var hallInfos = [];
+    var nameReady = false;
+    var priceReady = false;
+    var descReady = false;
 
+    $("#addNewPlan_btn").click(function () {
+        $("#main_div").hide();
+        $("#title_2").hide();
+        $("#createPlan_div").show();
+
+        $("#beginDate").val("");
+        $("#endDate").val("");
+
+        $.post("GetAllVenueHalls", function (rs) {
+            var res = $.parseJSON(rs);
+            hallInfos = res;
+            $("#planHall_select").empty();
+            for( var i=0; i<res.length; i++ ){
+                var hallInfo = res[i];
+                var option = "<option value='" + hallInfo.hallID + "'>" + hallInfo.name + "</option>";
+                $("#planHall_select").append(option);
+                if( i===0 ){
+                    var seatData = [];
+                    var seatDist = hallInfo.seatDist;
+                    var seatDistSave = seatDist;
+                    for( var j=0; j<hallInfo.numOfRow; j++ ){
+                        seatData[j] = seatDist.substring(0, hallInfo.numOfCol);
+                        seatDist = seatDist.substring(hallInfo.numOfCol);
+                    }
+
+                    $("#hallSeatShow_div").empty();
+                    var seat = "<div class='front'>屏幕</div>" +
+                        "<div id='seat-map'></div>" +
+                        "<div class='booking-details'>" +
+                        "<div id='legend'></div>" +
+                        "</div>";
+                    $("#hallSeatShow_div").append(seat);
+
+                    $("#seat-map").seatCharts({
+                        map:seatData,
+                        naming: {
+                            top: true,
+                            left:true,
+                            getLabel: function(character, row, column) { //返回座位信息
+                                return column;
+                            }
+                        },
+                        legend: {
+                            node: $('#legend'),
+                            items: [
+                                [ 'a', 'available',   '位置' ],
+                                [ '_', 'none', '过道']
+                            ]
+                        },
+                        click: function() {
+                            return this.status();
+                        }
+                    });
+
+                    var c = "a";
+                    var regex = new RegExp(c, "g");
+                    var result = seatDistSave.match(regex);
+                    var numOfTicket = !result ? 0 : result.length;
+                    $("#numOfTicket").val(numOfTicket);
+                }
+            }
+        });
+
+    });
+
+    $("#createPlan_back_main_div").click(function () {
+        var isConfirmed = confirm("返回将丢失全部信息！");
+        if( isConfirmed ){
+            $("#main_div").show();
+            $("#title_2").show();
+            $("#createPlan_div").hide();
+        }
+    });
+
+    $("#planName").blur(function () {
+        var name = $("#planName").val().toString();
+        name = deleteSpace(name);
+        $("#planName").val(name);
+        if( name.length>0 ){
+            $("#planName").removeClass("borderRed");
+            nameReady = true;
+        }
+        else {
+            $("#planName").addClass("borderRed");
+            nameReady = false;
+        }
+    });
+
+    $("#priceOfTicket").blur(function () {
+        var price = $("#priceOfTicket").val().toString();
+        var priceReg = /^((0.)[1-9]*)|[1-9]+[0-9]*([.]{0,1})[0-9]*$/;
+        if( priceReg.test(price) ){
+            $("#priceOfTicket").removeClass("borderRed");
+            priceReady = true;
+        }
+        else {
+            $("#priceOfTicket").addClass("borderRed");
+            priceReady = false;
+        }
+    });
+
+    $("#planDesc").blur(function () {
+        var description = $("#planDesc").val().toString();
+        description = deleteSpace(description);
+        $("#planDesc").val(description);
+        if( description.length>0 ){
+            $("#planDesc").removeClass("borderRed");
+            descReady = true;
+        }
+        else {
+            $("#planDesc").addClass("borderRed");
+            descReady = false;
+        }
+    });
+
+    $("#submitPlan_btn").click(function () {
+        var beginDate = $("#beginDate").val().toString();
+        var beginTime = beginDate + " " + $("#beginTime").val().toString() + ":00";
+        var endDate = $("#endDate").val().toString();
+        var endTime = endDate + " " + $("#endTime").val().toString() + ":00";
+        var beginTimeM = new Date(beginTime).getTime();
+        var endTimeM = new Date(endTime).getTime();
+        if( endTimeM>beginTimeM ){
+            if( nameReady && priceReady && descReady ){
+                var name = $("#planName").val().toString();
+                name = deleteSpace(name);
+                var type = $("#planType option:selected").val().toString();
+                var hallID = $("#planHall_select option:selected").val().toString();
+                var hallName = $("#planHall_select option:selected").text();
+                var numOfTicket = $("#numOfTicket").val().toString();
+                var price = $("#priceOfTicket").val().toString();
+                var description = $("#planDesc").val().toString();
+                description = deleteSpace(description);
+
+                var data = {"name":name, "type":type, "beginTime":beginTime, "endTime":endTime,
+                    "hallID":hallID, "hallName":hallName, "numOfTicket":numOfTicket, "price":price,
+                    "description":description};
+                $.post("AddNewVenuePlan", data, function (rs) {
+                    var res = $.parseJSON(rs);
+                    var planID = res.message;
+                    if( res.result ){
+                        alert("新建成功！");
+                        window.location.reload();
+                    }
+                    else {
+                        alert(res.message);
+                    }
+                });
+            }
+            else {
+                alert("请正确填写信息！");
+            }
+        }
+        else {
+            alert("请选择正确起始时间！");
+        }
+
+    });
+</script>
+<!-- 新建计划 -->
+
+<!-- 线下购票 -->
+<script>
     var totalPrice = 0;
     var seatSelectedRowAndCols = "";
     var planSelected = {};
@@ -636,199 +837,6 @@
             }
         })
     }
-</script>
-<script>
-    var hallInfos = [];
-    var nameReady = false;
-    var priceReady = false;
-    var descReady = false;
-
-    $("#addNewPlan_btn").click(function () {
-        $("#main_div").hide();
-        $("#title_2").hide();
-        $("#createPlan_div").show();
-
-        $("#beginDate").val("");
-        $("#endDate").val("");
-
-        $.post("GetAllVenueHalls", function (rs) {
-            var res = $.parseJSON(rs);
-            hallInfos = res;
-            $("#planHall_select").empty();
-            for( var i=0; i<res.length; i++ ){
-                var hallInfo = res[i];
-                var option = "<option value='" + hallInfo.hallID + "'>" + hallInfo.name + "</option>";
-                $("#planHall_select").append(option);
-                if( i===0 ){
-                    var seatData = [];
-                    var seatDist = hallInfo.seatDist;
-                    var seatDistSave = seatDist;
-                    for( var j=0; j<hallInfo.numOfRow; j++ ){
-                        seatData[j] = seatDist.substring(0, hallInfo.numOfCol);
-                        seatDist = seatDist.substring(hallInfo.numOfCol);
-                    }
-
-                    $("#hallSeatShow_div").empty();
-                    var seat = "<div class='front'>屏幕</div>" +
-                        "<div id='seat-map'></div>" +
-                        "<div class='booking-details'>" +
-                        "<div id='legend'></div>" +
-                        "</div>";
-                    $("#hallSeatShow_div").append(seat);
-
-                    $("#seat-map").seatCharts({
-                        map:seatData,
-                        naming: {
-                            top: true,
-                            left:true,
-                            getLabel: function(character, row, column) { //返回座位信息
-                                return column;
-                            }
-                        },
-                        legend: {
-                            node: $('#legend'),
-                            items: [
-                                [ 'a', 'available',   '位置' ],
-                                [ '_', 'none', '过道']
-                            ]
-                        },
-                        click: function() {
-                            return this.status();
-                        }
-                    });
-
-                    var c = "a";
-                    var regex = new RegExp(c, "g");
-                    var result = seatDistSave.match(regex);
-                    var numOfTicket = !result ? 0 : result.length;
-                    $("#numOfTicket").val(numOfTicket);
-                }
-            }
-        });
-
-    });
-
-    $("#createPlan_back_main_div").click(function () {
-        var isConfirmed = confirm("返回将丢失全部信息！");
-        if( isConfirmed ){
-            $("#main_div").show();
-            $("#title_2").show();
-            $("#createPlan_div").hide();
-        }
-    });
-
-    $("#planName").blur(function () {
-        var name = $("#planName").val().toString();
-        name = deleteSpace(name);
-        $("#planName").val(name);
-        if( name.length>0 ){
-            $("#planName").removeClass("borderRed");
-            nameReady = true;
-        }
-        else {
-            $("#planName").addClass("borderRed");
-            nameReady = false;
-        }
-    });
-
-    $("#priceOfTicket").blur(function () {
-        var price = $("#priceOfTicket").val().toString();
-        var priceReg = /^((0.)[1-9]*)|[1-9]+[0-9]*([.]{0,1})[0-9]*$/;
-        if( priceReg.test(price) ){
-            $("#priceOfTicket").removeClass("borderRed");
-            priceReady = true;
-        }
-        else {
-            $("#priceOfTicket").addClass("borderRed");
-            priceReady = false;
-        }
-    });
-
-    $("#planDesc").blur(function () {
-        var description = $("#planDesc").val().toString();
-        description = deleteSpace(description);
-        $("#planDesc").val(description);
-        if( description.length>0 ){
-            $("#planDesc").removeClass("borderRed");
-            descReady = true;
-        }
-        else {
-            $("#planDesc").addClass("borderRed");
-            descReady = false;
-        }
-    });
-
-    $("#submitPlan_btn").click(function () {
-        var beginDate = $("#beginDate").val().toString();
-        var beginTime = beginDate + " " + $("#beginTime").val().toString() + ":00";
-        var endDate = $("#endDate").val().toString();
-        var endTime = endDate + " " + $("#endTime").val().toString() + ":00";
-        var beginTimeM = new Date(beginTime).getTime();
-        var endTimeM = new Date(endTime).getTime();
-        if( endTimeM>beginTimeM ){
-            if( nameReady && priceReady && descReady ){
-                var name = $("#planName").val().toString();
-                name = deleteSpace(name);
-                var type = $("#planType option:selected").val().toString();
-                var hallID = $("#planHall_select option:selected").val().toString();
-                var hallName = $("#planHall_select option:selected").text();
-                var numOfTicket = $("#numOfTicket").val().toString();
-                var price = $("#priceOfTicket").val().toString();
-                var description = $("#planDesc").val().toString();
-                description = deleteSpace(description);
-
-                var data = {"name":name, "type":type, "beginTime":beginTime, "endTime":endTime,
-                    "hallID":hallID, "hallName":hallName, "numOfTicket":numOfTicket, "price":price,
-                    "description":description};
-                $.post("AddNewVenuePlan", data, function (rs) {
-                    var res = $.parseJSON(rs);
-                    var planID = res.message;
-                    if( res.result ){
-                        // var infoDiv = "<div id='" + planID + "_info_div'>" +
-                        //     "<p><label>计划名称：</label><input type='text' value='" + name + "' readonly /></p>" +
-                        //     "<p><label>计划类型：</label><input type='text' value='" + type + "' readonly /></p>" +
-                        //     "<p><label>开始时间：</label><input type='text' value='" + beginTime + "' readonly /></p>" +
-                        //     "<p><label>结束时间：</label><input type='text' value='" + endTime + "' readonly /></p>" +
-                        //     "<p><label>安排场厅：</label><input type='text' value='" + hallName + "' readonly /></p>" +
-                        //     "<p><label>总卖票数：</label><input type='text' value='" + numOfTicket + "' readonly /></p>" +
-                        //     "<p><label>剩余票数：</label><input type='text' value='" + numOfTicket + "' readonly /></p>" +
-                        //     "<p><label>有座票数：</label><input type='text' value='0' readonly /></p>" +
-                        //     "<p><label>待配票数：</label><input type='text' value='0' readonly /></p>" +
-                        //     "<p><label>基准票价：</label><input type='text' value='" + price + "' readonly /></p>" +
-                        //     "<p><label>计划介绍：</label><textarea type='text' readonly>" + description + "</textarea></p>" +
-                        //     "<p>" +
-                        //         "<button id='btn_" + planID + "_" + hallID + "_buyTickets' onclick='toBuyTicketUnderline(this)'>线下买票</button>" +
-                        //     "</p>" +
-                        //     "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
-                        //     "</div>";
-                        // $("#main_planList_div").append(infoDiv);
-
-                        // $("#planName").val("");
-                        // $("#beginDate").val("");
-                        // $("#endDate").val("");
-                        // $("#priceOfTicket").val("");
-                        // $("#planDesc").val("");
-
-                        // $("#main_div").show();
-                        // $("#title_2").show();
-                        // $("#createPlan_div").hide();
-                        alert("新建成功！");
-                        window.location.reload();
-                    }
-                    else {
-                        alert(res.message);
-                    }
-                });
-            }
-            else {
-                alert("请正确填写信息！");
-            }
-        }
-        else {
-            alert("请选择正确起始时间！");
-        }
-
-    });
 
     $("#buyTicketUnderline_back_main_div").click(function () {
         $("#main_div").show();
@@ -865,7 +873,293 @@
             getAndShowVIPCouponDiscount(email);
         }
     });
-
 </script>
+<!-- 线下购票 -->
+
+<!-- 计划场厅座位详细信息 -->
+<script>
+    function planHallSeatInfo_page(obj) {
+        $("#main_div").hide();
+        $("#title_2").hide();
+
+        $("#checkTicket_div").show();
+
+        var temp1 = $(obj).attr("id");
+        var temp2 = temp1.split("_");
+        var planID = temp2[1];
+
+        for (var i = 0; i < planInfos.length; i++) {
+            planSelected = planInfos[i];
+            if (planID == planSelected.planID) {
+                break;
+            }
+        }
+
+        $("#checkTicket_planID").val(planSelected.planID);
+        $("#checkTicket_planName").val(planSelected.name);
+        $("#checkTicket_planType").val(planSelected.type);
+        $("#checkTicket_beginTime").val(planSelected.beginTime);
+        $("#checkTicket_endTime").val(planSelected.endTime);
+        $("#checkTicket_numOfTicket").val(planSelected.numOfTicket);
+        $("#checkTicket_priceOfTicket").val(planSelected.price);
+        $("#checkTicket_planDesc").val(planSelected.description);
+        $("#checkTicket_inputOdID_input").val("");
+    }
+</script>
+<!-- 计划场厅座位详细信息 -->
+
+<%-- 正在检票 --%>
+<script>
+    function checkTicket_begin(obj) {
+        var isConfirmed = confirm("确认检票？");
+        if( isConfirmed ){
+            var temp1 = $(obj).attr("id");
+            var temp2 = temp1.split("_");
+            var planID = temp2[1];
+            var data = {"planID":planID};
+            $.post("VenuePlanBeginCheckTicket", data, function (rs) {
+                var res = $.parseJSON(rs);
+                if( res.result ){
+                    alert(res.message);
+                    window.location.reload();
+                    show_venuePlan_isChecking();
+                }
+                else {
+                    alert(res.message);
+                }
+            });
+        }
+    }
+
+    var seatMap = undefined;
+    function checkTicket_page(obj) {
+        planHallSeatInfo_page(obj);
+        $("#checkTicket_inputOdID_div").show();
+
+        // $("#main_div").hide();
+        // $("#title_2").hide();
+        //
+        // $("#checkTicket_div").show();
+        // $("#checkTicket_inputOdID_div").show();
+        //
+        // var temp1 = $(obj).attr("id");
+        // var temp2 = temp1.split("_");
+        // var planID = temp2[1];
+        //
+        // for( var i=0; i<planInfos.length; i++ ){
+        //     planSelected = planInfos[i];
+        //     if( planID==planSelected.planID ){
+        //         break;
+        //     }
+        // }
+        //
+        // $("#checkTicket_planID").val(planSelected.planID);
+        // $("#checkTicket_planName").val(planSelected.name);
+        // $("#checkTicket_planType").val(planSelected.type);
+        // $("#checkTicket_beginTime").val(planSelected.beginTime);
+        // $("#checkTicket_endTime").val(planSelected.endTime);
+        // $("#checkTicket_numOfTicket").val(planSelected.numOfTicket);
+        // $("#checkTicket_priceOfTicket").val(planSelected.price);
+        // $("#checkTicket_planDesc").val(planSelected.description);
+        // $("#checkTicket_inputOdID_input").val("");
+
+        var seatDist = planSelected.seatDist;
+        var numOfRow = parseInt(planSelected.numOfRow);
+        var numOfCol = parseInt(planSelected.numOfCol);
+
+        var seatData = [];
+        var seatSelected = new Array();
+        for( var j=0; j<numOfRow; j++ ) {
+            seatData[j] = seatDist.substring(0, numOfCol);
+            seatDist = seatDist.substring(numOfCol);
+            var seatRow = seatData[j];
+            for (var k = 0; k < seatRow.length; k++) {
+                if (seatRow.charAt(k) == 's') {
+                    var row = j + 1;
+                    var col = k + 1;
+                    seatSelected[seatSelected.length] = row + "_" + col;
+                }
+            }
+        }
+
+        $("#checkTicket_seatMap_div").empty();
+        var seat = "<div class='front'>屏幕</div>" +
+            "<div id='seat-map'></div>" +
+            "<div class='booking-details'>" +
+            "<div id='legend'></div>" +
+            "</div>";
+        $("#checkTicket_seatMap_div").append(seat);
+        seatMap = undefined;
+        seatMap = $("#seat-map").seatCharts({
+            map:seatData,
+            naming: {
+                top: true,
+                left:true,
+                getLabel: function(character, row, column) { //返回座位信息
+                    return column;
+                }
+            },
+            legend: {
+                node: $('#legend'),
+                items: [
+                    [ 'a', 'available',   '未出售' ],
+                    [ 'c', 'selected',   '已检票' ],
+                    [ 's', 'unavailable',   '未检票' ],
+                    [ '_', 'none', '过道']
+                ]
+            },
+            click: function() {
+                return this.status();
+            }
+        });
+        seatMap.status(seatSelected, "unavailable");
+
+        var data = {"planID":planSelected.planID};
+        $.post("GetPlanAllUserOdCheckedSeatInfo", data, function (rs) {
+            var res = $.parseJSON(rs);
+            $.each(res, function (index, value, array) {
+               var seatRowAndCol = value.row + "_" + value.col;
+               seatMap.status(seatRowAndCol, "selected");
+            });
+        });
+
+        $("#checkTicket_finish_div").empty();
+        var subBtn = "<button id='checkTicket_" + planSelected.planID + "_finish_btn' onclick='checkTicket_finish(this)'>检票结束</button>";
+        $("#checkTicket_finish_div").append(subBtn);
+    }
+
+    function checkTicket_finish(obj) {
+        var isConfirmed = confirm("检票结束？");
+        if( isConfirmed ){
+            var temp1 = $(obj).attr("id");
+            var temp2 = temp1.split("_");
+            var planID = temp2[1];
+            var data = {"planID":planID};
+            $.post("VenuePlanFinishCheckTicket", data, function (rs) {
+                var res = $.parseJSON(rs);
+                if( res.result ){
+                    alert(res.message);
+                    window.location.reload();
+                }
+                else {
+                    alert(res.message);
+                }
+            });
+        }
+    }
+
+    function checkTicket_OdID_submit() {
+        var OdID = $("#checkTicket_inputOdID_input").val().toString();
+        OdID = deleteSpace(OdID);
+        var planID = planSelected.planID;
+        if( OdID.length>0 ){
+            var data = {"OdID": OdID, "planID":planID};
+            $.post("VenuePlanCheckTicket", data, function (rs) {
+                var res = $.parseJSON(rs);
+                if( res.result ){
+                    $("#checkTicket_inputOdID_input").val("");
+                    alert(res.message);
+                    checkTicket_OdID_submit_updateSeat(OdID);
+                }
+                else{
+                    $("#checkTicket_inputOdID_input").val("");
+                    alert(res.message);
+                }
+            });
+
+
+        }
+        else {
+            alert("请输入订单号！");
+        }
+    }
+
+    function checkTicket_OdID_submit_updateSeat(OdID) {
+        var data = {"OdID": OdID};
+        $.post("GetPlanUserOdCheckedSeatInfo", data, function (result) {
+            var res2 = $.parseJSON(result);
+            $.each(res2, function (index, value, array) {
+                var seatRowAndCol = value.row + "_" + value.col;
+                seatMap.status(seatRowAndCol, "selected");
+            });
+        });
+    }
+
+    $("#checkTicket_back_main_div").click(function () {
+        $("#checkTicket_div").hide();
+
+        $("#main_div").show();
+        $("#title_2").show();
+    });
+</script>
+<%-- 正在检票 --%>
+
+<%-- 检票完成 --%>
+<script>
+    function planHallSeatInfo_checkTicketFinish_page(obj) {
+        planHallSeatInfo_page(obj);
+        $("#checkTicket_inputOdID_div").hide();
+
+        var seatDist = planSelected.seatDist;
+        var numOfRow = parseInt(planSelected.numOfRow);
+        var numOfCol = parseInt(planSelected.numOfCol);
+
+        var seatData = [];
+        var seatSelected = new Array();
+        for (var j = 0; j < numOfRow; j++) {
+            seatData[j] = seatDist.substring(0, numOfCol);
+            seatDist = seatDist.substring(numOfCol);
+            var seatRow = seatData[j];
+            for (var k = 0; k < seatRow.length; k++) {
+                if (seatRow.charAt(k) == 's') {
+                    var row = j + 1;
+                    var col = k + 1;
+                    seatSelected[seatSelected.length] = row + "_" + col;
+                }
+            }
+        }
+
+        $("#checkTicket_seatMap_div").empty();
+        var seat = "<div class='front'>屏幕</div>" +
+            "<div id='seat-map'></div>" +
+            "<div class='booking-details'>" +
+            "<div id='legend'></div>" +
+            "</div>";
+        $("#checkTicket_seatMap_div").append(seat);
+        var seatMap = $("#seat-map").seatCharts({
+            map: seatData,
+            naming: {
+                top: true,
+                left: true,
+                getLabel: function (character, row, column) { //返回座位信息
+                    return column;
+                }
+            },
+            legend: {
+                node: $('#legend'),
+                items: [
+                    ['a', 'available', '未出售'],
+                    ['c', 'selected', '已检票'],
+                    ['s', 'unavailable', '未检票'],
+                    ['_', 'none', '过道']
+                ]
+            },
+            click: function () {
+                return this.status();
+            }
+        });
+        seatMap.status(seatSelected, "unavailable");
+
+        var data = {"planID": planSelected.planID};
+        $.post("GetPlanAllUserOdCheckedSeatInfo", data, function (rs) {
+            var res = $.parseJSON(rs);
+            $.each(res, function (index, value, array) {
+                var seatRowAndCol = value.row + "_" + value.col;
+                seatMap.status(seatRowAndCol, "selected");
+            });
+        });
+    }
+</script>
+
 </body>
 </html>

@@ -20,4 +20,10 @@ public interface VenuePlanService {
 	
 	List<VenuePlanSeat> getPlanHallSeatInfo(String hallID);
 	
+	boolean setVenuePlanIsChecking(String planID);
+	
+	boolean setVenuePlanIsChecked(String planID);
+	
+	void allocateSeatToUserOd_IsPaid_IsNotSeated();
+	
 }

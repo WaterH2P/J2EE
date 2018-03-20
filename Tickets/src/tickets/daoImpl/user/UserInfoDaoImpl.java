@@ -69,4 +69,10 @@ public class UserInfoDaoImpl implements UserInfoDao {
 		}
 	}
 	
+	@Override
+	public void updateUserVIPLevel(String email, String vipLevel){
+		String sql = "UPDATE " + ParaName.Table_userInfo + " SET vipLevel=? WHERE email=?";
+		jdbcTemplate.update(sql, vipLevel, email);
+	}
+	
 }

@@ -245,7 +245,7 @@
                 var hallID = temp2[1];
 
                 planSelected = planInfo;
-                numOfTLeft = planSelected.numOfTLeft;
+                numOfTLeft = planInfo.numOfTLeft;
                 var seatDist = planInfo.seatDist;
                 var numOfRow = parseInt(planInfo.numOfRow);
                 var numOfCol = parseInt(planInfo.numOfCol);
@@ -263,6 +263,14 @@
                         }
                     }
                 }
+
+                $("#nameOfPlan_input").val(planInfo.name);
+                var beginTime = new Date(planInfo.beginTime);
+                $("#beginTimeOfPlan_div").val(beginTime.format(dateFormat));
+                var endTime = new Date(planInfo.endTime);
+                $("#endTimeOfPlan_div").val(endTime.format(dateFormat));
+                $("#totalPrice_input").val(totalPrice);
+                $("#seatSelected_ul").empty();
 
                 $("#buyTicket_seatMap_div").empty();
                 var numOfTicketDiv = "<div>" +

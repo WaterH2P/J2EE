@@ -11,4 +11,6 @@ public interface UserInfoService {
 	
 	VIPLevelInfo getUserVIPDiscount(String email);
 	
+	void updateUserVIPLevel(String email);
+	
 }

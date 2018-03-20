@@ -34,6 +34,7 @@ public class ParaName {
 	public final static String message_failToDelete = "很抱歉删除失败，请重新尝试！";
 	
 	public final static String return_false = "false";
+	public final static String return_true = "true";
 	
 	public final static String seat_none = "0";
 	public final static String seat_available = "1";

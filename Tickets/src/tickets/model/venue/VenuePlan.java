@@ -21,6 +21,8 @@ public class VenuePlan {
 	private double price = 0.0;
 	private String description = "";
 	private String seatDist = "";
+	private boolean isChecking = false;
+	private boolean isChecked = false;
 	
 	public String getPlanID(){
 		return planID;
@@ -156,6 +158,22 @@ public class VenuePlan {
 	
 	public void setSeatDist(String seatDist){
 		this.seatDist = seatDist;
+	}
+	
+	public boolean isChecking(){
+		return isChecking;
+	}
+	
+	public void setChecking(boolean checking){
+		isChecking = checking;
+	}
+	
+	public boolean isChecked(){
+		return isChecked;
+	}
+	
+	public void setChecked(boolean checked){
+		isChecked = checked;
 	}
 	
 }

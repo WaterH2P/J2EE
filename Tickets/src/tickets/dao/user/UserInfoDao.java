@@ -19,4 +19,6 @@ public interface UserInfoDao {
 	
 	boolean updateOnlyUserBalance(String email, double balanceModifyValue);
 	
+	void updateUserVIPLevel(String email, String vipLevel);
+	
 }
