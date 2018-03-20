@@ -503,4 +503,19 @@ public class UserOdServiceImpl implements UserOdService {
 		}
 	}
 	
+	@Override
+	public List<UserOd> getAllPlanUserOd(String planID){
+		return userOdDao.selectAllPlanUserOd(planID);
+	}
+	
+	@Override
+	public List<UserOd> getAllUserOd_IsCheck_IsNotSettled(){
+		return userOdDao.selectAllUserOd_isChecked_isNotSettled();
+	}
+	
+	@Override
+	public void settleUserOd(String OdID){
+		userOdDao.updateUserOdIsSettled(OdID);
+	}
+	
 }

@@ -10,6 +10,7 @@ import tickets.daoImpl.ParaName;
 import tickets.model.Result;
 import tickets.model.mgr.VIPLevelInfo;
 import tickets.model.user.UserCoupon;
+import tickets.model.user.UserOd;
 import tickets.model.user.UserOdSeat;
 import tickets.service.user.UserOdService;
 import tickets.service.venue.VenueOdService;
@@ -198,5 +199,19 @@ public class VenueOdCon {
 			}
 		}
 		return userOdSeats;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/Venue/GetPlanUserOdInfo", method = RequestMethod.POST)
+	public List<UserOd> getPlanUserOdInfo(String planID){
+		List<UserOd> userOds = new ArrayList<>();
+		HttpSession session = request.getSession(false);
+		if( CommonCon.hasLogin(session) ){
+			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
+			if( CommonCon.isVenue(venueID) ){
+				userOds = userOdService.getAllPlanUserOd(planID);
+			}
+		}
+		return userOds;
 	}
 }

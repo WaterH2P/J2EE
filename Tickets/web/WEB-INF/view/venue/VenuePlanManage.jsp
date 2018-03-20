@@ -153,6 +153,13 @@
             </div>
         </div>
 
+        <div id="plan_userOd_show_div" style="display:none;">
+            <button onclick="planUserOd_div_back_main_div()">🔙</button>
+            <hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />
+            <div id="plan_userOd_show">
+
+            </div>
+        </div>
     </div>
 </div>
 
@@ -265,6 +272,7 @@
                 var infoDiv = getInfoDiv(value) +
                     "<button id='btn_" + value.planID + "_" + value.hallID + "_buyTicket' onclick='toBuyTicketUnderline(this)'>线下买票</button>" +
                     "<button id='btn_" + value.planID + "_" + value.hallID + "_beginCheckTicket' onclick='checkTicket_begin(this)'>开始检票</button>" +
+                    "<button id='planOd_" + value.planID + "_show_btn' onclick='showPlanUserOd(this)'>显示计划订单</button>" +
                     "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
                     "</div>";
                 $("#main_planList_div").append(infoDiv);
@@ -283,6 +291,7 @@
             $.each(res, function (index, value, array) {
                 var infoDiv = getInfoDiv(value) + "<p>" +
                     "<button id='btn_" + value.planID + "_" + value.hallID + "_info' onclick='planHallSeatInfo_checkTicketFinish_page(this)'>详细信息</button>" +
+                    "<button id='planOd_" + value.planID + "_show_btn' onclick='showPlanUserOd(this)'>显示计划订单</button>" +
                     "</p>" +
                     "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
                     "</div>";
@@ -301,7 +310,8 @@
             $("#main_planList_div").empty();
             $.each(res, function (index, value, array) {
                 var infoDiv = getInfoDiv(value) + "<p>" +
-                    "<button id='btn_" + value.hallID + "_checkTicket' onclick='checkTicket_page(this)'>检票</button>" +
+                    "<button id='btn_" + value.planID + "_checkTicket' onclick='checkTicket_page(this)'>检票</button>" +
+                    "<button id='planOd_" + value.planID + "_show_btn' onclick='showPlanUserOd(this)'>显示计划订单</button>" +
                     "</p>" +
                     "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
                     "</div>";
@@ -1024,7 +1034,8 @@
         });
 
         $("#checkTicket_finish_div").empty();
-        var subBtn = "<button id='checkTicket_" + planSelected.planID + "_finish_btn' onclick='checkTicket_finish(this)'>检票结束</button>";
+        var subBtn = "<button id='checkTicket_" + planSelected.planID + "_finish_btn' onclick='checkTicket_finish(this)'>检票结束</button>" +
+            "<button id='planOd_" + planSelected.planID + "_show_btn' onclick='showPlanUserOd(this)'>显示计划订单</button>";
         $("#checkTicket_finish_div").append(subBtn);
     }
 
@@ -1160,6 +1171,63 @@
         });
     }
 </script>
+<%-- 检票完成 --%>
 
+<%-- 展示计划订单 --%>
+<script>
+    function showPlanUserOd(obj) {
+        $("#main_div").hide();
+        $("#title_2").hide();
+
+        $("#plan_userOd_show_div").show();
+
+        var temp1 = $(obj).attr("id");
+        var temp2 = temp1.split("_");
+        var planID = temp2[1];
+        var data = {"planID":planID};
+        $.post("GetPlanUserOdInfo", data, function (rs) {
+            var res = $.parseJSON(rs);
+            $("#plan_userOd_show").empty();
+            $.each(res, function (index, value, array) {
+                var infoDiv = "<div>" +
+                    "<p><label>订单ID：</label><input type='text' value='" + value.odID + "' readonly/></p>" +
+                    "<p><label>计划ID：</label><input type='text' value='" + value.planID + "' readonly/></p>" +
+                    "<p><label>下订单时间：</label><input type='text' value='" + new Date(value.makeTime).format(dateFormat) + "' readonly/></p>" +
+                    "<p><label>购票数：</label><input type='text' value='" + value.numOfTicket + "' readonly></p>" +
+                    "<p><label>实付：</label><input type='text' value='" + value.totalPay + "' readonly></p>";
+                if( value.paid ){
+                    infoDiv += "<p><label>订单：</label><input type='text' value='已付款' readonly></p>";
+                }
+                else {
+                    infoDiv += "<p><label>订单：</label><input type='text' value='未付款' readonly></p>";
+                }
+                if( value.checked ){
+                    infoDiv += "<p><label>检票：</label><input type='text' value='已检票' readonly></p>";
+                }
+                else {
+                    infoDiv += "<p><label>检票：</label><input type='text' value='未检票' readonly></p>";
+                }
+                if( value.timeout ){
+                    infoDiv += "<p><input type='text' value='订单超时' readonly></p>";
+                }
+                if( value.deleted ){
+                    infoDiv += "<p><input type='text' value='订单退票' readonly></p>";
+                }
+
+                infoDiv += "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
+                    "</div>";
+                $("#plan_userOd_show").append(infoDiv);
+            });
+        });
+    }
+
+    function planUserOd_div_back_main_div() {
+        $("#plan_userOd_show_div").hide();
+
+        $("#main_div").show();
+        $("#title_2").show();
+    }
+</script>
+<%-- 展示计划订单 --%>
 </body>
 </html>

@@ -2,14 +2,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>MgrInfo</title>
+    <title>MgrStatistics</title>
     <link rel="stylesheet" type="text/css" href="../../stylesheet/common.css">
 </head>
 <body>
 <div class="common">
     <div class="main minMain bigMain">
         <div id="aSign" class="title">
-            <a href="MgrStatistics">数据统计</a>
+            <a class="active">数据统计</a>
             <b>·</b>
             <a href="MgrSettleUserOd">订单结算</a>
             <b>·</b>
@@ -19,22 +19,9 @@
             <b>·</b>
             <a href="MgrExamineVenueInfoChange">审批修改信息</a>
             <b>·</b>
-            <a class="active">个人信息</a>
+            <a href="MgrInfo">个人信息</a>
         </div>
 
-        <div>
-            <p>
-                <label>帐号：</label>
-                <input type="text" id="venueID" value="${mgrID}" readonly />
-            </p>
-        </div>
-
-        <div>
-            <hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />
-            <form action="/Logout" method="post">
-                <input type="submit" value="退出登录">
-            </form>
-        </div>
     </div>
 </div>
 </body>

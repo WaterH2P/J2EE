@@ -49,4 +49,10 @@ public interface UserOdService {
 	
 	void checkUserOdIsTimeout();
 	
+	List<UserOd> getAllPlanUserOd(String planID);
+	
+	List<UserOd> getAllUserOd_IsCheck_IsNotSettled();
+	
+	void settleUserOd(String OdID);
+	
 }

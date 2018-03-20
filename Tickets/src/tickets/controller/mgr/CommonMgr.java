@@ -30,4 +30,18 @@ public class CommonMgr {
 		return "redirect:/Mgr/MgrSetVIPDiscount";
 	}
 	
+	public static String toMgrSettleUserOdPage(){
+		return "mgr/MgrSettleUserOd";
+	}
+	public static String redirectToMgrSettleUserOdPage(){
+		return "redirect:/Mgr/MgrSettleUserOd";
+	}
+	
+	public static String toMgrStatisticsPage(){
+		return "mgr/MgrStatistics";
+	}
+	public static String redirectToMgrStatisticsPage(){
+		return "redirect:/Mgr/MgrStatistics";
+	}
+	
 }

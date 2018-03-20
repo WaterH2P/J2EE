@@ -35,6 +35,8 @@ public interface UserOdDao {
 	
 	void updateUserOdIsSeated(String OdID);
 	
+	void updateUserOdIsSettled(String OdID);
+	
 	List<UserOd> selectAllHistoricalUserOd(String email);
 	
 	List<UserOd> selectAllUserOdTimeout(String email);
@@ -60,5 +62,9 @@ public interface UserOdDao {
 	List<UserOd> selectAllOdUnfinished();
 	
 	List<UserOd> selectAllPlanUserOd_isPaid_isNotDeleted_isNotSeated(String planID);
+	
+	List<UserOd> selectAllPlanUserOd(String planID);
+	
+	List<UserOd> selectAllUserOd_isChecked_isNotSettled();
 	
 }

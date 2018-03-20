@@ -96,10 +96,11 @@ public class UserOdDaoImpl implements UserOdDao {
 		boolean isSeated = userOd.isSeated();
 		final boolean isChecked = false;
 		boolean isOnline = userOd.isOnline();
+		final boolean isSettled = false;
 		
-		String insertNewOdSql = "INSERT INTO " + ParaName.Table_userOd + " VALUES (?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?)";
+		String insertNewOdSql = "INSERT INTO " + ParaName.Table_userOd + " VALUES (?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?)";
 		jdbcTemplate.update(insertNewOdSql, OdID, email, planID, numOfTicket, totalPrice, vipDiscount, couponDiscount,
-				pay, makeTime, isPaid, isTimeout, isDeleted, isSeated, isChecked, isOnline);
+				pay, makeTime, isPaid, isTimeout, isDeleted, isSeated, isChecked, isOnline, isSettled);
 	}
 	
 	@Override
@@ -179,6 +180,13 @@ public class UserOdDaoImpl implements UserOdDao {
 		final boolean isSeated = true;
 		String sql = "UPDATE " + ParaName.Table_userOd + " SET isSeated=? WHERE OdID=?";
 		jdbcTemplate.update(sql, isSeated, OdID);
+	}
+	
+	@Override
+	public void updateUserOdIsSettled(String OdID){
+		final boolean isSettled = true;
+		String sql = "UPDATE " + ParaName.Table_userOd + " SET isSettled=? WHERE OdID=?";
+		jdbcTemplate.update(sql, isSettled, OdID);
 	}
 	
 	@Override
@@ -285,6 +293,20 @@ public class UserOdDaoImpl implements UserOdDao {
 		String sql = "SELECT * FROM " + ParaName.Table_userOd + " WHERE" +
 				" planID=? AND isPaid=TRUE AND isDeleted=FALSE AND isSeated=FALSE ";
 		List<UserOd> userOds = jdbcTemplate.query(sql, new UserOdRowMapper(), planID);
+		return userOds;
+	}
+	
+	@Override
+	public List<UserOd> selectAllPlanUserOd(String planID){
+		String sql = "SELECT * FROM " + ParaName.Table_userOd + " WHERE planID=?";
+		List<UserOd> userOds = jdbcTemplate.query(sql, new UserOdRowMapper(), planID);
+		return userOds;
+	}
+	
+	@Override
+	public List<UserOd> selectAllUserOd_isChecked_isNotSettled(){
+		String sql = "SELECT * FROM " + ParaName.Table_userOd + " WHERE isChecked=TRUE AND isSettled=FALSE ";
+		List<UserOd> userOds = jdbcTemplate.query(sql, new UserOdRowMapper());
 		return userOds;
 	}
 	

@@ -11,6 +11,10 @@
 <div class="common">
     <div class="main minMain bigMain">
         <div id="aSign" class="title">
+            <a href="MgrStatistics">数据统计</a>
+            <b>·</b>
+            <a href="MgrSettleUserOd">订单结算</a>
+            <b>·</b>
             <a class="active">VIP 优惠</a>
             <b>·</b>
             <a href="MgrExamineVenueRegister">审批注册</a>
