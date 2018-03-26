@@ -136,4 +136,11 @@ public class VenueBaseInfoDaoImpl implements VenueBaseInfoDao {
 		jdbcTemplate.update(updateIsChangingSql, isChanging, venueID);
 	}
 	
+	@Override
+	public List<VenueBaseInfo> selectAllVenueInfo(){
+		String sql = "SELECT * FROM " + ParaName.Table_venueBaseInfo;
+		List<VenueBaseInfo> venueBaseInfos = jdbcTemplate.query(sql, new VenueInfoRowMapper());
+		return venueBaseInfos;
+	}
+	
 }

@@ -6,8 +6,10 @@ import org.springframework.stereotype.Repository;
 import tickets.dao.user.UserOdDao;
 import tickets.daoImpl.DaoHelperImpl;
 import tickets.daoImpl.ParaName;
+import tickets.model.user.UserInfo;
 import tickets.model.user.UserOd;
 import tickets.model.user.UserOdSeat;
+import tickets.rowMapper.user.UserInfoRowMapper;
 import tickets.rowMapper.user.UserOdIDRowMapper;
 import tickets.rowMapper.user.UserOdRowMapper;
 import tickets.rowMapper.user.UserOdSeatRowMapper;
@@ -307,6 +309,13 @@ public class UserOdDaoImpl implements UserOdDao {
 	public List<UserOd> selectAllUserOd_isChecked_isNotSettled(){
 		String sql = "SELECT * FROM " + ParaName.Table_userOd + " WHERE isChecked=TRUE AND isSettled=FALSE ";
 		List<UserOd> userOds = jdbcTemplate.query(sql, new UserOdRowMapper());
+		return userOds;
+	}
+	
+	@Override
+	public List<UserOd> selectUserAllOd(String email){
+		String sql = "SELECT * FROM " + ParaName.Table_userOd + " WHERE email=? ";
+		List<UserOd> userOds = jdbcTemplate.query(sql, new UserOdRowMapper(), email);
 		return userOds;
 	}
 	

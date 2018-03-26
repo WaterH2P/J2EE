@@ -10,6 +10,7 @@ import tickets.dao.venue.VenueHallDao;
 import tickets.dao.venue.VenuePlanDao;
 import tickets.daoImpl.ParaName;
 import tickets.daoImpl.user.UserOdDaoImpl;
+import tickets.daoImpl.venue.VenuePlanDaoImpl;
 import tickets.model.mgr.VIPLevelInfo;
 import tickets.model.user.UserCoupon;
 import tickets.model.user.UserInfo;
@@ -24,6 +25,7 @@ import tickets.service.user.UserOdService;
 import tickets.service.venue.VenueBaseInfoService;
 import tickets.service.venue.VenuePlanService;
 import tickets.serviceImpl.CommonService;
+import tickets.serviceImpl.venue.VenuePlanServiceImpl;
 
 import javax.annotation.Resource;
 import java.util.Calendar;
@@ -36,13 +38,13 @@ import java.util.List;
 public class UserOdServiceImpl implements UserOdService {
 	
 	@Resource(name = "venuePlanDao")
-	private VenuePlanDao venuePlanDao;
+	private VenuePlanDao venuePlanDao = new VenuePlanDaoImpl();
 	
 	@Resource(name = "venueHallDao")
 	private VenueHallDao venueHallDao;
 	
 	@Resource(name = "venuePlanService")
-	private VenuePlanService venuePlanService;
+	private VenuePlanService venuePlanService = new VenuePlanServiceImpl();
 	
 	@Resource(name = "venueBaseInfoService")
 	private VenueBaseInfoService venueBaseInfoService;
@@ -481,7 +483,7 @@ public class UserOdServiceImpl implements UserOdService {
 			venuePlanDao.updateVenuePlanNumOfTicket(planID, numOfTicket, -numOfTicket, 0);
 		}
 		else {
-			venuePlanDao.updateVenuePlanNumOfTicket(planID, numOfTicket, 0, 0);
+			venuePlanDao.updateVenuePlanNumOfTicket(planID, numOfTicket, 0, -numOfTicket);
 		}
 	}
 	

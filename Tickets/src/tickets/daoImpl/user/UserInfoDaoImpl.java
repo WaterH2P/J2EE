@@ -8,6 +8,8 @@ import tickets.daoImpl.ParaName;
 import tickets.model.user.UserInfo;
 import tickets.rowMapper.user.UserInfoRowMapper;
 
+import java.util.List;
+
 @Repository( "userInfoDao" )
 public class UserInfoDaoImpl implements UserInfoDao {
 	
@@ -75,4 +77,11 @@ public class UserInfoDaoImpl implements UserInfoDao {
 		jdbcTemplate.update(sql, vipLevel, email);
 	}
 	
+	
+	@Override
+	public List<UserInfo> selectAllUserInfo(){
+		String sql = "SELECT * FROM " + ParaName.Table_userInfo;
+		List<UserInfo> userInfos = jdbcTemplate.query(sql, new UserInfoRowMapper());
+		return userInfos;
+	}
 }

@@ -123,5 +123,14 @@ public class VenuePlanDaoImpl implements VenuePlanDao {
 		return venuePlans;
 	}
 	
+	@Override
+	public List<VenuePlan> selectVenueAllPlan(String venueID){
+		String sql = "SELECT * FROM " + ParaName.Table_venuePlan + " as plan," +
+				" (SELECT hallID, numOfRow, numOfCol FROM " + ParaName.Table_venueHall + ")as hall" +
+				" WHERE plan.hallID=hall.hallID AND plan.venueID=? ";
+		List<VenuePlan> venuePlans = jdbcTemplate.query(sql, new VenuePlanRowMapper(), venueID);
+		return venuePlans;
+	}
+	
 	
 }

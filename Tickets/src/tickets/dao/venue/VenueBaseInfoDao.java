@@ -24,4 +24,5 @@ public interface VenueBaseInfoDao {
 	
 	void updateVenueInfoIsChanging(String venueID, boolean isChanging);
 
+	List<VenueBaseInfo> selectAllVenueInfo();
 }

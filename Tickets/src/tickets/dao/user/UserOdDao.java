@@ -1,5 +1,6 @@
 package tickets.dao.user;
 
+import tickets.model.user.UserInfo;
 import tickets.model.user.UserOd;
 import tickets.model.user.UserOdSeat;
 
@@ -67,4 +68,5 @@ public interface UserOdDao {
 	
 	List<UserOd> selectAllUserOd_isChecked_isNotSettled();
 	
+	List<UserOd> selectUserAllOd(String email);
 }

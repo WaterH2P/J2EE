@@ -31,4 +31,6 @@ public interface VenuePlanDao {
 	
 	List<VenuePlan> selectAllFutureVenuePlan();
 	
+	List<VenuePlan> selectVenueAllPlan(String venueID);
+	
 }

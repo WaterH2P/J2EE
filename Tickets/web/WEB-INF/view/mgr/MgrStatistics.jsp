@@ -4,6 +4,7 @@
 <head>
     <title>MgrStatistics</title>
     <link rel="stylesheet" type="text/css" href="../../stylesheet/common.css">
+    <link rel="stylesheet" type="text/css" href="../../stylesheet/title.css">
 </head>
 <body>
 <div class="common">
@@ -22,7 +23,76 @@
             <a href="MgrInfo">个人信息</a>
         </div>
 
+        <div class="title_2" id="title_2">
+            <a class="active" id="user_statistic" onclick="userStatistic_show()">用户统计</a>
+            <b>·</b>
+            <a id="venue_statistic" onclick="venueStatistic_show()">场馆统计</a>
+        </div>
+
+        <div id="statistic_show">
+
+        </div>
+
     </div>
 </div>
+
+<script src="../../javascript/jquery/jquery-3.2.1.min.js" ></script>
+<script>
+    $(function () {
+      userStatistic_show();
+    });
+</script>
+
+<script>
+    function userStatistic_show() {
+        $("#user_statistic").addClass("active");
+        $("#venue_statistic").removeClass("active");
+
+        $.post("GetAllUserStatistics", function (rs) {
+            var res = $.parseJSON(rs);
+            $("#statistic_show").empty();
+            $.each(res, function (index, value, array) {
+                var infoDiv = "<div>" +
+                    "<p><label>用户邮箱：</label><input type='text' value='" + value.email + "' readonly/></p>" +
+                    "<p><label>用户昵称：</label><input type='text' value='" + value.name + "' readonly/></p>" +
+                    "<p><label>用户VIP：</label><input type='text' value='" + value.vipLevel + "' readonly/></p>" +
+                    "<p><label>总积分：</label><input type='text' value='" + value.totalPoint + "' readonly/></p>" +
+                    "<p><label>总消费：</label><input type='text' value='" + value.totalConsume + "' readonly></p>" +
+                    "<p><label>总购票数：</label><input type='text' value='" + value.numOfTicket + "' readonly></p>" +
+                    "<p><label>超时票数：</label><input type='text' value='" + value.numOfTTimeout + "' readonly></p>" +
+                    "<p><label>已检票票数：</label><input type='text' value='" + value.numOfTChecked + "' readonly></p>" +
+                    "<p><label>退订票数：</label><input type='text' value='" + value.numOfTDeleted + "' readonly></p>" +
+                    "<p><label>线上购票数：</label><input type='text' value='" + value.numOfTOnline + "' readonly></p>" +
+                    "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
+                    "</div>";
+                $("#statistic_show").append(infoDiv);
+            });
+        });
+    }
+
+    function venueStatistic_show() {
+        $("#user_statistic").removeClass("active");
+        $("#venue_statistic").addClass("active");
+
+        $.post("GetAllVenueStatistics", function (rs) {
+            var res = $.parseJSON(rs);
+            $("#statistic_show").empty();
+            $.each(res, function (index, value, array) {
+                var infoDiv = "<div>" +
+                    "<p><label>场馆ID：</label><input type='text' value='" + value.venueID + "' readonly/></p>" +
+                    "<p><label>场馆地址：</label><input type='text' value='" + value.address + "' readonly/></p>" +
+                    "<p><label>场馆电话：</label><input type='text' value='" + value.telephone + "' readonly/></p>" +
+                    "<p><label>场厅数量：</label><input type='text' value='" + value.numOfHall + "' readonly/></p>" +
+                    "<p><label>计划总数量：</label><input type='text' value='" + value.numOfPlan + "' readonly></p>" +
+                    "<p><label>正在检票计划数：</label><input type='text' value='" + value.numOfPlanIsChecking + "' readonly></p>" +
+                    "<p><label>检票结束计划数：</label><input type='text' value='" + value.numOfPlanIsChecked + "' readonly></p>" +
+                    "<p><label>营业额：</label><input type='text' value='" + value.totalPrice + "' readonly></p>" +
+                    "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
+                    "</div>";
+                $("#statistic_show").append(infoDiv);
+            });
+        });
+    }
+</script>
 </body>
 </html>

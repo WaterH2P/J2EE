@@ -2,6 +2,8 @@ package tickets.dao.user;
 
 import tickets.model.user.UserInfo;
 
+import java.util.List;
+
 public interface UserInfoDao {
 	
 	UserInfo selectUserInfo(String email);
@@ -20,5 +22,7 @@ public interface UserInfoDao {
 	boolean updateOnlyUserBalance(String email, double balanceModifyValue);
 	
 	void updateUserVIPLevel(String email, String vipLevel);
+	
+	List<UserInfo> selectAllUserInfo();
 	
 }
