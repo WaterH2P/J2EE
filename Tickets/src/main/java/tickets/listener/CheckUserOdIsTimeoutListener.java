@@ -18,8 +18,8 @@ public class CheckUserOdIsTimeoutListener implements ServletContextListener {
 	}
 	public void contextInitialized(ServletContextEvent e) {
 		if( checkUserOdIsTimeoutThread== null ){
-			checkUserOdIsTimeoutThread = new CheckUserOdIsTimeoutThread();
-			checkUserOdIsTimeoutThread.start();
+//			checkUserOdIsTimeoutThread = new CheckUserOdIsTimeoutThread();
+//			checkUserOdIsTimeoutThread.start();
 		}
 	}
 }

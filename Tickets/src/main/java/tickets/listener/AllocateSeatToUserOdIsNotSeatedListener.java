@@ -16,8 +16,8 @@ public class AllocateSeatToUserOdIsNotSeatedListener implements ServletContextLi
 	}
 	public void contextInitialized(ServletContextEvent e) {
 		if( allocateSeatToUserOdIsNotSeatedThread== null ){
-			allocateSeatToUserOdIsNotSeatedThread = new AllocateSeatToUserOdIsNotSeatedThread();
-			allocateSeatToUserOdIsNotSeatedThread.start();
+//			allocateSeatToUserOdIsNotSeatedThread = new AllocateSeatToUserOdIsNotSeatedThread();
+//			allocateSeatToUserOdIsNotSeatedThread.start();
 		}
 	}
 	
