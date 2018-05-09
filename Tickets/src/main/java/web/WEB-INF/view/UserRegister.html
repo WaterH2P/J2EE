@@ -1,0 +1,218 @@
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Register</title>
+
+    <link rel="stylesheet" type="text/css" href="../stylesheet/common.css">
+    <link rel="stylesheet" type="text/css" href="../stylesheet/account/register.css">
+    <link rel="stylesheet" type="text/css" href="../../stylesheet/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../../stylesheet/bootstrap/bootstrap-theme.min.css">
+
+    <style>
+        .border-red{
+            border: 1px solid red;
+        }
+    </style>
+</head>
+
+<body>
+<div class="common">
+    <div class="main fixMain smallMain">
+        <div>
+            <ul class="nav nav-pills nav-justified">
+                <li>
+                    <a href="/Login">登录</a>
+                </li>
+                <li class="active">
+                    <a>注册</a>
+                </li>
+                <li>
+                    <a href="/Venue/VenueRegister">场馆注册</a>
+                </li>
+            </ul>
+        </div>
+
+        <hr/>
+
+        <div>
+            <form id="signUpForm" accept-charset="utf-8" role="form" method="post" onsubmit="return false">
+                <!-- 邮箱 -->
+                <div class="form-group">
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-envelope" style="font-size: 14px"></span>
+                        </span>
+                        <input class="form-control" style="font-size: 14px" id="userEmail" name="userEmail"
+                               type="email" placeholder="请输入邮箱" required/>
+                    </div>
+                </div>
+
+                <!-- 登录密码输入框 -->
+                <div class="form-group">
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-lock" style="font-size: 14px"></span>
+                        </span>
+                        <input class="form-control" style="font-size: 14px" id="userPassword" name="userPassword"
+                               type="password" placeholder="请输入密码" required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group input-group-lg">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-lock" style="font-size: 14px"></span>
+                    </span>
+                        <input class="form-control" style="font-size: 14px" id="userPasswordAgain" name="userPasswordAgain"
+                               type="password" placeholder="请再次输入密码" required/>
+                    </div>
+                </div>
+
+                <!-- 昵称 -->
+                <div class="form-group">
+                    <div class="input-group input-group-lg">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-user" style="font-size: 14px"></span>
+                    </span>
+                        <input class="form-control" style="font-size: 14px" id="userName" name="userName"
+                               type="text" placeholder="请输入昵称" required/>
+                    </div>
+                </div>
+
+                <!-- 验证码 -->
+                <div class="form-group">
+                    <div class="input-group input-group-lg">
+                        <input class="form-control" style="font-size: 14px" id="verificationCode" name="verificationCode"
+                               type="text" placeholder="请输入邮箱验证码" required/>
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" style="font-size: 12px" id="getCodeBtn">获得验证码</button>
+                    </span>
+                    </div>
+                </div>
+
+                <br/>
+
+                <!-- 注册 -->
+                <div class="form-group">
+                    <input class="btn btn-info btn-lg btn-block" id="signUpSubmit" type="submit" value="注册" />
+                </div>
+            </form>
+
+            <!--<div id="showIDDiv">-->
+                <!--<input class="input_prepend" style="margin-bottom: 50px;padding: 0;text-align: center;"-->
+                       <!--type="text" id="messageShow" value="${message}" readonly />-->
+            <!--</div>-->
+
+        </div>
+    </div>
+</div>
+
+<script src="../javascript/jquery/jquery-3.2.1.min.js"></script>
+<script src="../javascript/bootstrap/bootstrap.min.js" ></script>
+<script src="../javascript/password.js"></script>
+<script src="../javascript/deleteSpace.js"></script>
+<script>
+    var emailReady = false;
+    var nameReady = false;
+
+    $("#userEmail").blur(function(){
+        var email = $("#userEmail").val().toString();
+        email = deleteSpace(email);
+        email = email.toLowerCase();
+        $("#userEmail").val(email);
+
+        var emailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+.([a-z.])+$/;
+        if( emailReg.test(email) ){
+            $("#userEmail").removeClass("borderRed");
+            $("#userEmail").addClass("noBorderBottom");
+            emailReady = true;
+        }
+        else {
+            $("#userEmail").addClass("borderRed");
+            emailReady = false;
+        }
+    });
+
+    $("#userName").blur(function(){
+        var name = $("#userName").val().toString();
+        name = deleteSpace(name);
+        $("#userName").val(name);
+
+        if( name.length>0 ){
+            nameReady = true;
+        }
+        else {
+            nameReady = false;
+        }
+    });
+
+    $("#getCodeBtn").click(function(){
+        var message = "";
+        if( !emailReady ){
+            if( message.length==0 ){
+                message += "请输入 ";
+            }
+            message += "正确邮箱！";
+        }
+        if( !nameReady ){
+            if( message.length==0 ){
+                message += "请输入 ";
+            }
+            message += "正确昵称！";
+        }
+        if( message.length==0 ){
+            $("#messageShow").val(message);
+            $("#messageShow").removeClass("colorRed");
+
+            var userEmail = $("#userEmail").val().toString();
+            var userName = $("#userName").val().toString();
+            var data = { "userEmail":userEmail, "userName":userName };
+            $.post("GetVerificationCode", data, function(rs){
+                var res = $.parseJSON( rs );
+                if( res.result ){
+                    alert(res.message);
+                }
+                else {
+                    alert(res.message);
+                }
+            });
+        }
+        else{
+            $("#messageShow").val(message);
+            $("#messageShow").addClass("colorRed");
+        }
+    });
+
+    $("#signUpSubmit").click(function(){
+        if( passwordReady ){
+            var userEmail = $("#userEmail").val().toString();
+            var userPassword = $("#userPassword").val().toString();
+            var verificationCode = $("#verificationCode").val().toString();
+            userEmail = deleteSpace(userEmail);
+            userEmail = userEmail.toLowerCase();
+            userPassword = deleteSpace(userPassword);
+            verificationCode = deleteSpace(verificationCode);
+            var data = { "userEmail":userEmail, "userPassword":userPassword, "verificationCode":verificationCode };
+            $.post("UserRegister", data, function (rs) {
+                var res = $.parseJSON( rs );
+                if( res.result ){
+                    var newHref = "/Login";
+                    window.location.replace(newHref);
+                }
+                else {
+                    $("#messageShow").val(res.message);
+                    $("#messageShow").addClass("colorRed");
+                }
+            });
+        }
+        else {
+            $("#messageShow").val("请输入正确密码!");
+            $("#messageShow").addClass("colorRed");
+        }
+    });
+</script>
+</body>
+
+</html>
+

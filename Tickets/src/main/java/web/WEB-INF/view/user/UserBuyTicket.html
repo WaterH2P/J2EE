@@ -1,5 +1,4 @@
 
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -7,20 +6,33 @@
     <link rel="stylesheet" type="text/css" href="../../stylesheet/common.css">
     <link rel="stylesheet" type="text/css" href="../../stylesheet/hallSeat.css">
     <link rel="stylesheet" type="text/css" href="../../stylesheet/fix.css">
+    <link rel="stylesheet" type="text/css" href="../../stylesheet/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../../stylesheet/bootstrap/bootstrap-theme.min.css">
 </head>
 <body>
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand">Tickets</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">订票</a></li>
+                <li><a href="UserOrder">订单查看</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right hidden">
+                <li><a href="#"></a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="UserInfo">个人信息</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
 <div class="common">
     <div class="main minMain bigMain">
-        <div id="aSign" class="title">
-            <a class="active">订票</a>
-            <b>·</b>
-            <a href="UserOrder">订单查看</a>
-            <b>·</b>
-            <a href="UserCoupon">优惠券</a>
-            <b>·</b>
-            <a href="UserInfo">个人信息</a>
-        </div>
-
         <div id="main_div">
             <div id="searchPlan_div">
                 <input id="searchPlan_input" type="text" placeholder="搜索"/>
@@ -80,6 +92,7 @@
 
 <script src="../../javascript/jquery/jquery-3.2.1.min.js" ></script>
 <script src="../../javascript/jquery/jquery.seat-charts.min.js" ></script>
+<script src="../../javascript/bootstrap/bootstrap.min.js" ></script>
 <script src="../../javascript/date-format.js" ></script>
 <script>
     function deleteSpace(str) {

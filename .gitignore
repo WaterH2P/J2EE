@@ -32,4 +32,11 @@ WEB-INF/lib/
 .project
 org.eclipse.*
 top.jpg
+target/
 
+bootstrap.js
+bootstrap.css
+bootstrap.css.map
+bootstrap-theme.css
+bootstrap-theme.css.map
+jquery-3.3.1.js

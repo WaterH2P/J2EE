@@ -50,17 +50,15 @@
 
     <mvc:resources location="WEB-INF/stylesheet/" mapping="/stylesheet/**" />
     <mvc:resources location="WEB-INF/javascript/" mapping="/javascript/**" />
+    <mvc:resources location="WEB-INF/image/" mapping="/image/**" />
 
     <!-- 配置视图解析器(对jsp默认解析的视图解析器) -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <!-- prefix：前缀 -->
-        <property name="prefix" >
-            <value>/WEB-INF/view/</value>
-        </property>
+        <property name="prefix" value="/WEB-INF/view/" />
         <!-- suffix：后缀 -->
-        <property name="suffix" >
-            <value>.jsp</value>
-        </property>
+        <property name="suffix" value=".html" />
+        <property name="contentType" value="text/html;charset=UTF-8"></property>
     </bean>
 
     <!-- 发送邮件 -->

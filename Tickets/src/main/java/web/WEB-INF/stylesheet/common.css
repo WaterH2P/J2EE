@@ -12,38 +12,6 @@ body {
     background: #f1f1f1;
 }
 
-div {
-    display: block;
-}
-
-a {
-    cursor: pointer;
-    background-color: transparent;
-    color: #337ab7;
-    text-decoration: none;
-}
-
-form {
-    display: block;
-    margin: 0 0 20px;
-}
-
-input{
-    line-height: inherit;
-
-    font: inherit;
-    margin: 0;
-    cursor: auto;
-
-    text-rendering: auto;
-    letter-spacing: normal;
-    word-spacing: normal;
-    text-transform: none;
-    text-indent: 0px;
-    text-shadow: none;
-    display: inline-block;
-    text-align: start;
-}
 /* ==================== ==== ==================== */
 
 
@@ -82,26 +50,6 @@ input{
     min-width: 400px;
 }
 
-.main .title {
-    font-family: Georgia,Times New Roman,Times,Songti SC,serif;
-
-    margin: 0 auto 50px;
-    padding: 10px;
-    font-weight: 400;
-    color: #969696;
-}
-
-.main .title a{
-    padding: 10px;
-    color: #969696;
-}
-
-.main .title .active{
-    font-weight: 700;
-    color: #ea6f5a;
-    border-bottom: 2px solid #ea6f5a;
-}
-
 .main form {
     margin-bottom: 30px;
 }
@@ -131,30 +79,10 @@ input{
     margin-bottom: 30px;
 }
 
-.sign_button {
-    font-family: Georgia,Times New Roman,Times,Songti SC,serif;
-    width: 100%;
-    padding: 9px 18px;
-    font-size: 18px;
-    text-align: center;
-    border: none;
-    border-radius: 25px;
-    color: #fff;
-    background: #3194d0;
-    cursor: pointer;
-    outline: none;
-    display: block;
-    clear: both;
+.input-font-size14px{
+    font-size: 14px;
 }
 
-
-*, :after, :before {
-    box-sizing: border-box;
-}
-
-.borderRed{
-    border:1px solid red;
-}
 
 .borderEdit{
     border:2px solid blue;
