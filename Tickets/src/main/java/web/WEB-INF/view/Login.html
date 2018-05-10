@@ -4,64 +4,73 @@
 <head>
     <meta charset="utf-8">
     <title>Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" type="text/css" href="../stylesheet/common.css">
-    <link rel="stylesheet" type="text/css" href="../stylesheet/bootstrap/bootstrap-theme.min.css">
-    <link rel="stylesheet" type="text/css" href="../stylesheet/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../stylesheet/bootstrap/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../stylesheet/bootstrap/bootstrap.min.css">
+
+    <link rel="stylesheet" href="../stylesheet/common.css">
+    <link rel="stylesheet" href="../stylesheet/bootstrap/my-bootstrap.css">
 </head>
 
-<body>
-
+<body class="body-gray">
 <div class="common">
-    <div class="main fixMain smallMain">
-        <div>
-            <ul class="nav nav-pills nav-justified">
-                <li class="active">
-                    <a>登录</a>
-                </li>
-                <li>
-                    <a href="/User/UserRegister">注册</a>
-                </li>
-                <li>
-                    <a href="/Venue/VenueRegister">场馆注册</a>
-                </li>
-            </ul>
-        </div>
+    <div class="main">
+        <ul class="nav nav-pills nav-justified">
+            <li class="active">
+                <a>登录</a>
+            </li>
+            <li>
+                <a href="/User/UserRegister">注册</a>
+            </li>
+            <li>
+                <a href="/Venue/VenueRegister">场馆注册</a>
+            </li>
+        </ul>
 
-        <hr/>
+        <hr>
 
-        <div>
-            <form id="signInForm" accept-charset="utf-8" role="form" method="post" onsubmit="return false">
-                <!-- 登录名输入框 -->
-                <div class="form-group">
-                    <div class="input-group input-group-lg">
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-user" style="font-size: 14px"></span>
-                    </span>
-                        <input class="form-control" style="font-size: 14px" id="EmailORID" name="EmailORID"
-                               type="text" placeholder="邮箱 或 场馆ID" required/>
-                    </div>
+        <form role="form" accept-charset="utf-8" onsubmit="return false">
+            <!-- 登录名输入框 -->
+            <div class="form-group">
+                <div class="input-group input-group-lg">
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-user"></span>
+                        </span>
+                    <input class="form-control" id="EmailORID" name="EmailORID"
+                           type="text" placeholder="邮箱 或 场馆ID" required/>
                 </div>
+            </div>
 
-                <!-- 登录密码输入框 -->
-                <div class="form-group">
-                    <div class="input-group input-group-lg">
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-lock" style="font-size: 14px"></span>
-                    </span>
-                        <input class="form-control" style="font-size: 14px" id="password" name="password"
-                               type="password" placeholder="密码" required/>
-                    </div>
+            <!-- 登录密码输入框 -->
+            <div class="form-group">
+                <div class="input-group input-group-lg">
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-lock"></span>
+                        </span>
+                    <input class="form-control" id="password" name="password"
+                           type="password" placeholder="密码" required/>
                 </div>
+            </div>
 
-                <br/>
+            <br>
 
-                <div class="form-group">
-                    <!-- 登录 -->
-                    <input class="btn btn-info btn-lg btn-block" id="signInSubmit" type="submit" value="登录" />
-                </div>
-            </form>
+            <div class="form-group">
+                <!-- 登录 -->
+                <input class="btn btn-info btn-lg btn-block" id="signInSubmit" type="submit" value="登录" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-loginFail" tabindex="-1" role="dialog" aria-labelledby="label-loginFail" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p id="p-loginFail">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
         </div>
     </div>
 </div>
@@ -73,15 +82,20 @@
         var EmailORID = $("#EmailORID").val().toString();
         var password = $("#password").val().toString();
         EmailORID = EmailORID.toLowerCase();
+
         var data = {"EmailORID":EmailORID, "password":password};
         $.post("Login", data, function (rs) {
             var res = $.parseJSON(rs);
             if( !res.result ){
-                alert(res.message);
+                $("#p-loginFail").text(res.message);
+                $("#modal-loginFail").modal("show");
             }
-            window.location.reload();
+            else{
+                window.location.reload();
+            }
         });
     });
 </script>
 </body>
+
 </html>

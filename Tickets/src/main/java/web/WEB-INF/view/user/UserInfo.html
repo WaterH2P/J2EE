@@ -3,11 +3,12 @@
 <head>
     <meta charset="utf-8">
     <title>UserInfo</title>
-    <link rel="stylesheet" type="text/css" href="../../stylesheet/common.css">
-    <link rel="stylesheet" type="text/css" href="../../stylesheet/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../../stylesheet/bootstrap/bootstrap-theme.min.css">
 
+    <link rel="stylesheet" href="../../stylesheet/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../stylesheet/bootstrap/bootstrap-theme.min.css">
 
+    <link rel="stylesheet" href="../../stylesheet/common.css">
+    <link rel="stylesheet" href="../stylesheet/bootstrap/my-bootstrap.css">
 </head>
 <body>
 
@@ -58,11 +59,11 @@
                 <tr>
 
                 </tr>
-                <tr id="tr-user-name">
+                <tr id="tr-userName">
                     <td>昵称</td>
                     <td>
                         <div class="col-lg-6 col-md-6 col-sm-6" style="padding: 0">
-                            <input class="form-control" id="userName" type="text" placeholder="请输入昵称">
+                            <input class="form-control" id="input-userName" type="text" placeholder="请输入昵称">
                         </div>
                     </td>
                 </tr>
@@ -70,7 +71,7 @@
                     <td>邮箱</td>
                     <td>
                         <div class="col-lg-6 col-md-6 col-sm-6" style="padding: 0">
-                            <input class="form-control" id="userEmail" type="text" readonly>
+                            <input class="form-control" id="input-userEmail" type="text" readonly>
                         </div>
                     </td>
                 </tr>
@@ -78,7 +79,7 @@
                     <td>VIP</td>
                     <td>
                         <div class="col-lg-6 col-md-6 col-sm-6" style="padding: 0">
-                            <input class="form-control" id="userVIP" type="text" readonly>
+                            <input class="form-control" id="input-userVIP" type="text" readonly>
                         </div>
                     </td>
                 </tr>
@@ -90,7 +91,7 @@
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-yen"></span>
                                 </span>
-                                <input class="form-control" id="userBalance" type="text" readonly>
+                                <input class="form-control" id="input-userBalance" type="text" readonly>
                             </div>
                         </div>
                     </td>
@@ -99,7 +100,7 @@
                     <td>积分</td>
                     <td>
                         <div class="col-lg-6 col-md-6 col-sm-6" style="padding: 0">
-                            <input class="form-control" id="userPoint" type="text" readonly>
+                            <input class="form-control" id="input-userPoint" type="text" readonly>
                         </div>
                     </td>
                 </tr>
@@ -107,14 +108,15 @@
             </table>
 
             <div>
-                <hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />
-                <button class="btn btn-info" id="submitInfo">提交修改</button>
+                <hr class="hr-dashed-info">
+                <button class="btn btn-info" id="btn-submitInfo" data-loading-text="修改中..."
+                        data-complete-text="提交修改">提交修改</button>
 
-                <button class="btn btn-danger pull-right" id="deleteVIP_1">注销会员</button>
+                <button class="btn btn-danger pull-right" id="btn-deleteVIP">注销会员</button>
             </div>
 
             <div>
-                <hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />
+                <hr class="hr-dashed-info">
                 <form action="/Logout" role="form" method="post">
                     <input class="btn btn-warning pull-right" type="submit" value="退出登录">
                 </form>
@@ -130,12 +132,12 @@
     $(function () {
         $.post("GetUserInfo", function (rs) {
             var res = $.parseJSON(rs);
-            $("#userEmail").val(res.email);
-            $("#userName").val(res.name);
+            $("#input-userEmail").val(res.email);
+            $("#input-userName").val(res.name);
             userNameSave = res.name;
-            $("#userVIP").val(res.vipLevel);
-            $("#userBalance").val(res.balance);
-            $("#userPoint").val(res.point);
+            $("#input-userVIP").val(res.vipLevel);
+            $("#input-userBalance").val(res.balance);
+            $("#input-userPoint").val(res.point);
         });
     });
 </script>
@@ -145,10 +147,10 @@
     }
 </script>
 <script>
-    $("#userName").blur(function(){
-        var userName = $("#userName").val().toString();
+    $("#input-userName").blur(function(){
+        var userName = $("#input-userName").val().toString();
         userName = deleteSpace(userName);
-        $("#userName").val(userName);
+        $("#input-userName").val(userName);
 
         if( userName.length>0 ){
             nameReady = true;
@@ -158,24 +160,24 @@
         }
     });
 
-    $("#userName").bind("input propertychange change", function(){
-        var userName = $("#userName").val().toString();
+    $("#input-userName").bind("input propertychange change", function(){
+        var userName = $("#input-userName").val().toString();
         userName = deleteSpace(userName);
         if( userName==userNameSave ){
-            $("#submitInfo").removeClass("btn-info");
-            $("#submitInfo").addClass("btn-default");
+            $("#btn-submitInfo").removeClass("btn-info");
+            $("#btn-submitInfo").addClass("btn-default");
         }
         else{
-            $("#submitInfo").removeClass("btn-default");
-            $("#submitInfo").addClass("btn-info");
+            $("#btn-submitInfo").removeClass("btn-default");
+            $("#btn-submitInfo").addClass("btn-info");
         }
     });
 
-    $("#submitInfo").click(function () {
-        var userEmail = $("#userEmail").val().toString();
-        var userName = $("#userName").val().toString();
+    $("#btn-submitInfo").click(function () {
+        var userEmail = $("#input-userEmail").val().toString();
+        var userName = $("#input-userName").val().toString();
         userName = deleteSpace(userName);
-        $("#userName").val(userName);
+        $("#input-userName").val(userName);
 
         var data = {"userEmail":userEmail, "userName":userName};
         $.post("ChangeUserInfo", data, function (rs) {
@@ -184,33 +186,31 @@
                 alert(res.message);
             }
             else{
-                $("#tr-user-name").addClass("success");
+                $("#tr-userName").addClass("success").delay(1000).queue(function () {
+                    $(this).removeClass("success");
+                });
 
-                $("#submitInfo").attr("disabled", "disabled");
+                // $("#btn-submitInfo").attr("disabled", "disabled");
+                $("#btn-submitInfo").button("loading");
                 var time = 30;
                 var interval = setInterval(function () {
                     if( time>=0 ){
-                        $("#submitInfo").text(time+"s");
+                        $("#btn-submitInfo").text(time+"s");
                         time = time -1;
                     }
                     else{
                         clearInterval(interval);
-                        $("#submitInfo").removeAttr("disabled");
-                        $("#submitInfo").text("提交修改");
+                        $("#btn-submitInfo").removeAttr("disabled").button("complete");
                     }
-                }, 1000);
-
-                setTimeout(function () {
-                    $("#tr-user-name").removeClass("success");
                 }, 1000);
             }
         });
     });
 
-    $("#deleteVIP_1").click(function () {
+    $("#btn-deleteVIP").click(function () {
         var cancel = confirm("注销会员将导致该账户下线！并且以后无法登陆！无法享受VIP优惠！确认注销请点击确定。");
         if (cancel) {
-            var userEmail = $("#userEmail").val().toString();
+            var userEmail = $("#input-userEmail").val().toString();
             var data = {"userEmail": userEmail};
             $.post("CancelAccountVIP", data, function (rs) {
                var res = $.parseJSON(rs);

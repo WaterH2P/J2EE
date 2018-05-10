@@ -1,102 +1,94 @@
-
+<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>Login</title>
 
-    <link rel="stylesheet" type="text/css" href="../stylesheet/common.css">
-    <link rel="stylesheet" type="text/css" href="../stylesheet/venue/venueRegister.css">
-    <link rel="stylesheet" type="text/css" href="../../stylesheet/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../../stylesheet/bootstrap/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../stylesheet/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../stylesheet/bootstrap/bootstrap-theme.min.css">
 
-    <style>
-        .border-red{
-            border: 1px solid red;
-        }
-    </style>
+    <link rel="stylesheet" href="../stylesheet/common.css">
+    <link rel="stylesheet" href="../stylesheet/venue/venueRegister.css">
+    <link rel="stylesheet" href="../stylesheet/bootstrap/my-bootstrap.css">
 </head>
-<body>
+
+<body class="body-gray">
 <div class="common">
     <div class="main fixMain smallMain">
-        <div>
-            <ul class="nav nav-pills nav-justified">
-                <li>
-                    <a href="/Login">登录</a>
-                </li>
-                <li>
-                    <a href="/User/UserRegister">注册</a>
-                </li>
-                <li  class="active">
-                    <a>场馆注册</a>
-                </li>
-            </ul>
-        </div>
+        <ul class="nav nav-pills nav-justified">
+            <li>
+                <a href="/Login">登录</a>
+            </li>
+            <li>
+                <a href="/User/UserRegister">注册</a>
+            </li>
+            <li  class="active">
+                <a>场馆注册</a>
+            </li>
+        </ul>
 
-        <hr/>
+        <hr>
 
-        <div>
-            <form id="signUpForm" accept-charset="utf-8" role="form"  method="post" onsubmit="return false">
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <select class="form-control" id="province" onchange="selectProvince(this)"></select>
-                        </div>
-                        <div class="col-sm-6">
-                            <select class="form-control" id="city"></select>
-                        </div>
+        <form id="signUpForm" accept-charset="utf-8" role="form"  method="post" onsubmit="return false">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <select class="form-control" id="province" onchange="selectProvince(this)"></select>
+                    </div>
+                    <div class="col-sm-6">
+                        <select class="form-control" id="city"></select>
                     </div>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <div class="input-group input-group-lg">
+            <div class="form-group">
+                <div class="input-group input-group-lg">
                         <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-home" style="font-size: 14px"></span>
+                            <span class="glyphicon glyphicon-home"></span>
                         </span>
-                        <input class="form-control" style="font-size: 14px" id="address"
-                               type="text" placeholder="具体地址" required/>
-                    </div>
+                    <input class="form-control" id="address"
+                           type="text" placeholder="具体地址" required/>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <div class="input-group input-group-lg">
+            <div class="form-group">
+                <div class="input-group input-group-lg">
                         <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-earphone" style="font-size: 14px"></span>
+                            <span class="glyphicon glyphicon-earphone"></span>
                         </span>
-                        <input class="form-control" style="font-size: 14px" id="telephone"
-                               type="text" placeholder="电话" required>
-                    </div>
+                    <input class="form-control" id="telephone"
+                           type="text" placeholder="电话" required>
                 </div>
+            </div>
 
 
-                <div class="form-group">
-                    <div class="input-group input-group-lg">
+            <div class="form-group">
+                <div class="input-group input-group-lg">
                         <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-lock" style="font-size: 14px"></span>
+                            <span class="glyphicon glyphicon-lock"></span>
                         </span>
-                        <input class="form-control" style="font-size: 14px" id="userPassword"
-                               type="password" placeholder="密码" required>
-                    </div>
+                    <input class="form-control" id="userPassword"
+                           type="password" placeholder="密码" required>
                 </div>
-                <div class="form-group">
-                    <div class="input-group input-group-lg">
+            </div>
+            <div class="form-group">
+                <div class="input-group input-group-lg">
                         <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-lock" style="font-size: 14px"></span>
+                            <span class="glyphicon glyphicon-lock"></span>
                         </span>
-                        <input class="form-control" style="font-size: 14px" id="userPasswordAgain"
-                               type="password" placeholder="再次输入密码" required>
-                    </div>
+                    <input class="form-control" id="userPasswordAgain"
+                           type="password" placeholder="再次输入密码" required>
                 </div>
+            </div>
 
-                <br/>
+            <br>
 
-                <!-- 注册 -->
-                <div class="form-group">
-                    <input class="btn btn-info btn-lg btn-block" id="signUpSubmit" type="submit" value="注册" />
-                </div>
-            </form>
-        </div>
-        <div id="div_result" style="display: none">
-
+            <!-- 注册 -->
+            <div class="form-group">
+                <input class="btn btn-info btn-lg btn-block" id="signUpSubmit" type="submit" value="注册" />
+            </div>
+        </form>
         </div>
     </div>
 </div>

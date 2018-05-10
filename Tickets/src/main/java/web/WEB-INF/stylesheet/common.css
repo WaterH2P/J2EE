@@ -1,97 +1,24 @@
-html, body {
-    height: 100%;
-}
 
-body {
-    padding: 0!important;
-    margin: 0!important;
+.body-gray { background-color: #eee; }
 
-    min-width: 768px;
-    font-family: -apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
-    font-size: 17px;
-    background: #f1f1f1;
-}
-
-/* ==================== ==== ==================== */
-
-
-.common {
-    height: 100%;
-    min-height: 750px;
-    text-align: center;
-    font-size: 14px;
-}
-
-
-/* ==================== main part ==================== */
+.common { text-align: center; }
 
 .common .main {
+    display: inline-block;
     padding: 50px 50px 30px;
+    margin-top: 60px;
+    width: 400px;
+    font-size: 14px;
+    vertical-align: middle;
     background-color: #fff;
     border-radius: 4px;
     box-shadow: 0 0 8px rgba(0,0,0,.1);
-    vertical-align: middle;
-    display: inline-block;
 }
 
-.common .smallMain {
-    margin: 60px auto;
-}
+.border-red { border: 1px solid red; }
 
-.common .bigMain {
-    margin: 30px auto;
-}
-
-.common .fixMain {
-    width: 400px;
-}
-
-.common .minMain {
-    min-width: 400px;
-}
-
-.main form {
-    margin-bottom: 30px;
-}
-
-.main form .input_prepend {
-    position: relative;
-    width: 100%;
-    height: 50px;
-    padding: 4px 12px 4px 35px;
-    border: 1px solid #c8c8c8;
-    border-radius: 0 0 4px 4px;
-    background-color: hsla(0, 0%, 71%, .1);
-    vertical-align: middle;
-}
-
-.main form .input_up_prepend {
-    border-bottom: none;
-    border-radius: 4px 4px 0 0;
-}
-
-.main form .input_middle_prepend {
-    border-radius: 0;
-    border-bottom: none;
-}
-
-.main form .input_down_prepend {
-    margin-bottom: 30px;
-}
-
-.input-font-size14px{
-    font-size: 14px;
-}
-
-
-.borderEdit{
-    border:2px solid blue;
-}
-
-.noBorderBottom{
-    border-bottom: none;
-}
-
-.colorRed{
-    color: red;
+.hr-dashed-info {
+    height: 1px;
+    border: none;
+    border-top: 1px dashed #0066CC;
 }
