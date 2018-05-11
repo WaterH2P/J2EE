@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="stylesheet" href="../stylesheet/bootstrap/bootstrap-theme.min.css">
     <link rel="stylesheet" href="../stylesheet/bootstrap/bootstrap.min.css">
@@ -82,6 +83,12 @@
         var EmailORID = $("#EmailORID").val().toString();
         var password = $("#password").val().toString();
         EmailORID = EmailORID.toLowerCase();
+
+        if( EmailORID.length==0 || password.length==0 ){
+            $("#p-loginFail").text("请填写完整信息！");
+            $("#modal-loginFail").modal("show");
+            return;
+        }
 
         var data = {"EmailORID":EmailORID, "password":password};
         $.post("Login", data, function (rs) {

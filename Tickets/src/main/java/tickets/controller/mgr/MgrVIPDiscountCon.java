@@ -41,7 +41,7 @@ public class MgrVIPDiscountCon {
 		if( CommonCon.hasLogin(session) ){
 			String mgrID = (String)session.getAttribute(ParaName.VerificationCode);
 			if( CommonCon.isMgr(mgrID) ){
-				return CommonMgr.toMgrSetVIPDiscountChangePage();
+				return ParaNameMgr.toMgrSetVIPDiscountChangePage();
 			}
 			else{
 				return CommonCon.redirectToInfoPage();

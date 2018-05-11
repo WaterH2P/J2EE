@@ -33,7 +33,7 @@ public class VenueBaseInfoCon {
 		if( CommonCon.hasLogin(session) ){
 			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
 			if( CommonCon.isVenue(venueID) ){
-				return CommonVenue.toVenueBaseInfoPage();
+				return ParaNameVenue.toVenueBaseInfoPage();
 			}
 			else{
 				return CommonCon.redirectToInfoPage();

@@ -36,7 +36,7 @@ public class VenueSeatLevelManageCon {
 		if( CommonCon.hasLogin(session) ){
 			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
 			if( CommonCon.isVenue(venueID) ){
-				return CommonVenue.toVenueSeatLevelManagePage();
+				return ParaNameVenue.toVenueSeatLevelManagePage();
 			}
 			else{
 				return CommonCon.redirectToInfoPage();

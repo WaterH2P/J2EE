@@ -2,8 +2,6 @@
 
 ### E-R 图
 
-<img src="J2EE_Database.png"/>
-
 
 
 ### 数据库表
@@ -183,6 +181,8 @@ DROP TABLE IF EXISTS mgrAccount ;
 CREATE TABLE mgrAccount(
   mgrID VARCHAR(7) ,
   password VARCHAR(15) NOT NULL ,
+  isConfirmed BOOLEAN DEFAULT FALSE ,
+  isDeleted BOOLEAN DEFAULT FALSE ,
   PRIMARY KEY( mgrID )
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
@@ -191,7 +191,7 @@ CREATE TABLE mgrAccount(
 
 ## 二 - 架构设计
 
-1. <img src="J2EE_ProjectStructure.png" style="width:40%; height:40%"/>
+1. 
 2. 使用 SpringMVC
 3. 未使用框架
 

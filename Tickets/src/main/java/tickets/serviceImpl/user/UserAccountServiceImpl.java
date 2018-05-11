@@ -3,8 +3,10 @@ package tickets.serviceImpl.user;
 import org.springframework.stereotype.Service;
 import sun.misc.BASE64Encoder;
 import tickets.dao.CommonAccountDao;
-import tickets.dao.CommonUVAccountDao;
 import tickets.dao.user.UserAccountDao;
+import tickets.daoImpl.ParaName;
+import tickets.exception.AccountAccessException;
+import tickets.model.AccountState;
 import tickets.service.CommonAccountService;
 import tickets.service.MailService;
 import tickets.service.user.UserAccountService;
@@ -24,21 +26,22 @@ public class UserAccountServiceImpl implements CommonAccountService, UserAccount
 	@Resource(name = "userAccountDao")
 	private CommonAccountDao commonAccountDao;
 	
-	@Resource(name = "userAccountDao")
-	private CommonUVAccountDao commonUVAccountDao;
-	
 	@Resource(name = "mailService")
 	private MailService mailService;
 	
 	@Override
-	public boolean login(String email, String password){
-		boolean loginResult = false;
-		boolean isConfirmed = commonUVAccountDao.accountIsConfirmed(email);
-		if( isConfirmed ){
-			System.out.println("用户登录 Service");
-			loginResult = commonAccountDao.loginCheck(email, password);
+	public boolean login(String email, String password) throws AccountAccessException{
+		AccountState accountState = commonAccountDao.selectAccountSateInfo(email, password);
+		if( !accountState.isConfirmed() ){
+			throw new AccountAccessException(ParaName.exception_accountUnconfirmed);
 		}
-		return loginResult;
+		if( accountState.isDeleted() ){
+			throw new AccountAccessException(ParaName.exception_accountDeleted);
+		}
+		if( !accountState.isPasswordRight() ){
+			throw new AccountAccessException(ParaName.exception_accountOrPasswordWrong);
+		}
+		return true;
 	}
 	
 	@Override
@@ -47,10 +50,10 @@ public class UserAccountServiceImpl implements CommonAccountService, UserAccount
 	}
 	
 	@Override
-	public boolean preRegister(String email, String name){
+	public boolean preRegister(String email, String name) throws AccountAccessException{
 		boolean result = false;
 		boolean isExist = userAccountDao.accountIsExist(email);
-		if( isExist && commonUVAccountDao.accountIsConfirmed(email) ){
+		if( isExist && commonAccountDao.selectAccountIsConfirmed(email) ){
 			result = false;
 		}
 		else{
@@ -75,7 +78,7 @@ public class UserAccountServiceImpl implements CommonAccountService, UserAccount
 	}
 	
 	@Override
-	public boolean register(String email, String password, String verificationCode){
+	public boolean register(String email, String password, String verificationCode) throws AccountAccessException{
 		if( userAccountDao.codeCheck(email, verificationCode) ){
 			userAccountDao.updateRegisterAccount(email, password);
 			return true;

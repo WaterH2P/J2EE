@@ -2,8 +2,8 @@ package tickets.serviceImpl.venue;
 
 import org.springframework.stereotype.Service;
 import tickets.dao.CommonAccountDao;
-import tickets.dao.CommonUVAccountDao;
 import tickets.dao.venue.VenueAccountDao;
+import tickets.exception.AccountAccessException;
 import tickets.model.venue.VenueBaseInfo;
 import tickets.service.CommonAccountService;
 import tickets.service.venue.VenueAccountService;
@@ -19,24 +19,12 @@ public class VenueAccountServiceImpl implements CommonAccountService, VenueAccou
 	@Resource(name = "venueAccountDao")
 	private VenueAccountDao venueAccountDao;
 	
-	@Resource(name = "venueAccountDao")
-	private CommonAccountDao commonAccountDao;
-	
-	@Resource(name = "venueAccountDao")
-	private CommonUVAccountDao commonUVAccountDao;
-	
 	@Resource(name = "venueBaseInfoService" )
 	private VenueBaseInfoService venueBaseInfoService;
 	
 	@Override
-	public boolean login(String venueID, String password){
-		boolean loginResult = false;
-		boolean isConfirmed = commonUVAccountDao.accountIsConfirmed(venueID);
-		if( isConfirmed ){
-			System.out.println("场馆登录 Service");
-			return commonAccountDao.loginCheck(venueID, password);
-		}
-		return loginResult;
+	public boolean login(String venueID, String password) throws AccountAccessException{
+		return false;
 	}
 	
 	@Override

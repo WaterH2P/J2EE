@@ -39,7 +39,7 @@ public class VenuePlanManageCon {
 		if( CommonCon.hasLogin(session) ){
 			String venueID = (String)session.getAttribute(ParaName.VerificationCode);
 			if( CommonCon.isVenue(venueID) ){
-				return CommonVenue.toVenuePlanManagePage();
+				return ParaNameVenue.toVenuePlanManagePage();
 			}
 			else{
 				return CommonCon.redirectToInfoPage();

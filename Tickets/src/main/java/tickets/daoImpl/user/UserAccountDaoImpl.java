@@ -1,50 +1,61 @@
 package tickets.daoImpl.user;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import tickets.dao.CommonAccountDao;
-import tickets.dao.CommonUVAccountDao;
 import tickets.dao.user.UserAccountDao;
-import tickets.daoImpl.Common;
+import tickets.daoImpl.CommonDao;
 import tickets.daoImpl.DaoHelperImpl;
 import tickets.daoImpl.ParaName;
+import tickets.exception.AccountAccessException;
+import tickets.model.AccountState;
+import tickets.rowMapper.AccountStateRowMapper;
 import tickets.rowMapper.EmailRowMapper;
+import tickets.rowMapper.IsConfirmedRowMapper;
 import tickets.rowMapper.IsDeletedRowMapper;
 
 import java.util.List;
 
 @Repository( "userAccountDao" )
-public class UserAccountDaoImpl implements CommonAccountDao, CommonUVAccountDao, UserAccountDao {
+public class UserAccountDaoImpl implements CommonAccountDao, UserAccountDao {
 	
 	private static JdbcTemplate jdbcTemplate = DaoHelperImpl.getJdbcTemplate();
 	
 	@Override
-	public boolean loginCheck(String email, String password){
-		boolean loginResult = false;
-		boolean isConfirmed = accountIsConfirmed(email);
-		boolean isDeleted = accountIsDeleted(email);
-		if( isConfirmed && !isDeleted ){
-			System.out.println("用户登录 Dao");
-			String primaryKey = "email";
-			loginResult = Common.loginCheckPassword(
-					primaryKey, email, password, ParaName.Table_userAccount);
+	public AccountState selectAccountSateInfo(String emailOrID, String password) throws AccountAccessException{
+		AccountState accountState = new AccountState();
+		String sql = "SELECT password, isConfirmed, isDeleted FROM " + ParaName.Table_userAccount + " WHERE email=?";
+		try{
+			accountState = jdbcTemplate.queryForObject(sql, new AccountStateRowMapper(), emailOrID);
+			accountState.checkPassword(password);
+		}catch( DataAccessException e ){
+			throw new AccountAccessException(ParaName.exception_accountInvalid);
 		}
-		return loginResult;
+		return accountState;
 	}
 	
-	//	===================================================================================================  //
-	
 	@Override
-	public boolean accountIsConfirmed(String emailOrID){
-		String primaryKey = "email";
-		boolean isConfirmed = Common.accountIsConfirmed(primaryKey, emailOrID, ParaName.Table_userAccount);
+	public boolean selectAccountIsConfirmed(String emailOrID) throws AccountAccessException{
+		boolean isConfirmed = false;
+		String sql = "SELECT isConfirmed FROM " + ParaName.Table_userAccount + " WHERE email=?";
+		try{
+			isConfirmed = jdbcTemplate.queryForObject(sql, new IsConfirmedRowMapper(), emailOrID);
+		}catch( DataAccessException e ){
+			throw new AccountAccessException(ParaName.exception_accountInvalid);
+		}
 		return isConfirmed;
 	}
 	
 	@Override
-	public boolean accountIsDeleted(String emailOrID){
-		String primaryKey = "email";
-		boolean isDeleted = Common.accountIsDeleted(primaryKey, emailOrID, ParaName.Table_userAccount);
+	public boolean selectAccountIsDeleted(String emailOrID) throws AccountAccessException{
+		boolean isDeleted = false;
+		String sql = "SELECT isDeleted FROM " + ParaName.Table_userAccount + " WHERE email=?";
+		try{
+			isDeleted = jdbcTemplate.queryForObject(sql, new IsDeletedRowMapper(), emailOrID);
+		}catch( DataAccessException e ){
+			throw new AccountAccessException(ParaName.exception_accountInvalid);
+		}
 		return isDeleted;
 	}
 	
@@ -58,13 +69,13 @@ public class UserAccountDaoImpl implements CommonAccountDao, CommonUVAccountDao,
 	}
 	
 	@Override
-	public boolean codeCheck(String email, String verificationCode){
+	public boolean codeCheck(String email, String verificationCode) throws AccountAccessException{
 		boolean loginResult = false;
-		boolean isConfirmed = accountIsConfirmed(email);
+		boolean isConfirmed = selectAccountIsConfirmed(email);
 		if( !isConfirmed ){
 			System.out.println("用户验证码 Dao");
 			String primaryKey = "email";
-			loginResult = Common.loginCheckPassword(
+			loginResult = CommonDao.loginCheckPassword(
 					primaryKey, email, verificationCode, ParaName.Table_userAccount);
 		}
 		return loginResult;

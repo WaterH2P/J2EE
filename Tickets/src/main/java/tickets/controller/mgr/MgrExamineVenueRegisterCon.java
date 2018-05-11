@@ -36,7 +36,7 @@ public class MgrExamineVenueRegisterCon {
 		if( CommonCon.hasLogin(session) ){
 			String mgrID = (String)session.getAttribute(ParaName.VerificationCode);
 			if( CommonCon.isMgr(mgrID) ){
-				return CommonMgr.toMgrExamineVenueRegisterPage();
+				return ParaNameMgr.toMgrExamineVenueRegisterPage();
 			}
 			else{
 				return CommonCon.redirectToInfoPage();

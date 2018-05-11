@@ -6,9 +6,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import tickets.controller.CommonAccountCon;
 import tickets.controller.CommonCon;
 import tickets.daoImpl.ParaName;
+import tickets.exception.AccountAccessException;
 import tickets.model.Result;
 import tickets.service.user.UserAccountService;
 
@@ -33,13 +33,13 @@ public class UserAccountCon {
 		}
 		else {
 			model.addAttribute("message", "欢迎注册!");
-			return CommonUser.toUserRegisterPage();
+			return ParaNameUser.toUserRegisterPage();
 		}
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/User/GetVerificationCode", method = RequestMethod.POST)
-	public Result createCode(String userEmail, String userName){
+	public Result createCode(String userEmail, String userName) throws AccountAccessException{
 		Result result = new Result();
 		String message = "";
 		if( userAccountService.preRegister(userEmail, userName) ){
@@ -57,7 +57,7 @@ public class UserAccountCon {
 	
 	@ResponseBody
 	@RequestMapping(value = "/User/UserRegister", method = RequestMethod.POST)
-	public Result register(String userEmail, String userPassword, String verificationCode){
+	public Result register(String userEmail, String userPassword, String verificationCode) throws AccountAccessException{
 		Result result = new Result();
 		if( userAccountService.register(userEmail, userPassword, verificationCode) ){
 			result.setResult(true);

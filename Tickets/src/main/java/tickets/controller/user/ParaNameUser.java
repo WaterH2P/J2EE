@@ -1,6 +1,6 @@
 package tickets.controller.user;
 
-public class CommonUser {
+public class ParaNameUser {
 	
 	public static String toUserRegisterPage(){
 		return "UserRegister";

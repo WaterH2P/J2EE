@@ -9,7 +9,6 @@ import tickets.controller.CommonCon;
 import tickets.daoImpl.ParaName;
 import tickets.model.mgr.UserStatistic;
 import tickets.model.mgr.VenueStatistic;
-import tickets.model.user.UserOd;
 import tickets.service.mgr.MgrStatisticsService;
 
 import javax.annotation.Resource;
@@ -33,7 +32,7 @@ public class MgrStatisticCon {
 		if( CommonCon.hasLogin(session) ){
 			String mgrID = (String)session.getAttribute(ParaName.VerificationCode);
 			if( CommonCon.isMgr(mgrID) ){
-				return CommonMgr.toMgrStatisticsPage();
+				return ParaNameMgr.toMgrStatisticsPage();
 			}
 			else{
 				return CommonCon.redirectToInfoPage();

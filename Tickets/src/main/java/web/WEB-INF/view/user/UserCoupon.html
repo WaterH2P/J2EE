@@ -31,9 +31,9 @@
     </div>
 </nav>
 
-<div class="container-fluid center-block">
+<div class="container-fluid center-block" id="div-couponOwnList">
     <div class="row">
-        <div class="col-lg-2 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-2 hidden-xs" style="position: fixed">
+        <div class="col-lg-2 col-lg-offset-2 col-md-3 col-md-offset-1 col-sm-3 col-sm-offset-1 hidden-xs" style="position: fixed">
             <div class="list-group list-group">
                 <a class="list-group-item" href="UserInfo">
                     <div class="input-group">
@@ -49,45 +49,55 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-lg-5 col-lg-offset-5 col-md-5 col-md-offset-5 col-sm-5 col-sm-offset-5 col-xs-6">
+    <div class="row" id="div-userCouponList">
+        <div class="col-lg-5 col-lg-offset-5 col-md-6 col-md-offset-5 col-sm-7 col-sm-offset-4 col-xs-12">
             <div class="row">
                 <div class="col-lg-4 col-md-4 col-sm-4">
-                    <button class="btn btn-info" onclick="main_to_exchangeCoupon()">兑换优惠券</button>
-                </div>
-
-                <div class="col-lg-4 col-md-4 col-sm-4 hidden"></div>
-
-                <div class="col-lg-4 col-md-4 col-sm-4" id="div-no-coupon">
-                    <input class="form-control btn-warning hidden" type="text" value="还未拥有优惠券" disabled>
+                    <button class="btn btn-info" onclick="getAllExchangedCouponAndShow()">兑换优惠券</button>
                 </div>
             </div>
 
             <br>
 
             <table class="table table-bordered table-striped">
+                <caption>优惠券</caption>
                 <thead></thead>
-                <tbody id="tbody-coupon-list">
-                <tr>
-                    <th>优惠券名称</th>
-                    <th>优惠金额</th>
-                    <th>拥有数量</th>
-                </tr>
+                <tbody id="tbody-userCouponList">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row" id="div-exchangedCouponList" style="display: none">
+        <div class="col-lg-5 col-lg-offset-5 col-md-6 col-md-offset-5 col-sm-7 col-sm-offset-4 col-xs-12">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <button class="btn btn-default" onclick="exchangedCouponList_to_userCouponList()">
+                        <span class="glyphicon glyphicon-arrow-left"></span>
+                    </button>
+                </div>
+            </div>
+
+            <br>
+
+            <table class="table table-bordered table-hover">
+                <caption>可兑换优惠券</caption>
+                <thead></thead>
+                <tbody id="tbody-exchangedCouponList">
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 
-<div class="common" style="display:none;">
-    <div class="main minMain bigMain">
-        <div id="exchangeCoupon_div" style="display: none">
-            <div>
-                <button onclick='exchangeCoupon_back_showUserCouponInfo()'>🔙</button>
-                <hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />
+<div class="modal fade" id="modal-message" tabindex="-1" role="dialog" aria-labelledby="label-message" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p id="p-message">
             </div>
-            <div id="showCouponExchanged_div">
-
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>
     </div>
@@ -102,56 +112,69 @@
 </script>
 <script>
     function getAllUserCouponAndShow() {
-        $.post("GetAllUserCoupons", function (rs) {
+        $.post("GetUserAllCoupons", function (rs) {
             var res = $.parseJSON(rs);
-            $("#showUserCouponInfo_div").empty();
+            $("#tbody-userCouponList").empty();
             if( res.length>0 ){
-                $("#div-no-coupon").addClass("hidden");
+                var infoDiv = "<tr>" +
+                    "<th>ID</th>" +
+                    "<th>名称</th>" +
+                    "<th>优惠金额</th>" +
+                    "<th>数量</th>" +
+                    "</tr>";
+                $("#tbody-userCouponList").append(infoDiv);
+
                 $.each(res, function (index, value, array) {
                     var infoDiv = "<tr>" +
+                        "<td>" + value.couponID + "</td>" +
                         "<td>" + value.name + "</td>" +
                         "<td>" + value.discount + "</td>" +
                         "<td>" + value.number + "</td>" +
                         "</tr>";
-                    $("#tbody-coupon-list").append(infoDiv);
+                    $("#tbody-userCouponList").append(infoDiv);
                 });
             }
             else {
-                $("#div-no-coupon").removeClass("hidden");
+                $("#p-message").text("还未拥有优惠券！");
+                $("#modal-message").modal("show");
             }
         });
     }
 
-    function main_to_exchangeCoupon() {
-        $("#main_div").hide();
-        $("#exchangeCoupon_div").show();
-        $("#showCouponExchanged_div").empty;
-        $.post("GetAllCouponInfosExchanged", function (rs) {
+    function getAllExchangedCouponAndShow() {
+        $.post("GetAllExchangedCouponInfos", function (rs) {
             var res = $.parseJSON(rs);
+            $("#tbody-exchangedCouponList").empty();
+
             if( res.length>0 ){
+                var infoDiv = "<tr>" +
+                    "<th>ID</th>" +
+                    "<th>名称</th>" +
+                    "<th>优惠金额</th>" +
+                    "<th>所需积分</th>" +
+                    "<th></th>" +
+                    "</tr>";
+                $("#tbody-exchangedCouponList").append(infoDiv);
+
                 $.each(res, function (index, value, array) {
-                    var couponID = value.couponID;
-                    var infoDiv = "<div id='coupon_" + couponID + "_info_div'>" +
-                        "<p>名称：<input type='text' value='" + value.name + "' readonly></p>" +
-                        "<p>优惠金额：<input type='text' value='" + value.discount + "' readonly></p>" +
-                        "<p>所需积分：<input type='text' value='" + value.point + "' readonly></p>" +
-                        "<button id='btn_" + couponID + "_exchange' onclick='exchangeCoupon(this)' '>兑换</button>" +
-                        "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
-                        "</div>";
-                    $("#showCouponExchanged_div").append(infoDiv);
+                    var infoDiv = "<tr>" +
+                        "<td>" + value.couponID + "</td>" +
+                        "<td>" + value.name + "</td>" +
+                        "<td>" + value.discount + "</td>" +
+                        "<td>" + value.point + "</td>" +
+                        "<td style='text-align: center'><button class='btn btn-info' id='btn-exchangeCoupon-" + value.couponID + "'>兑换</button></td>" +
+                        "</tr>";
+                    $("#tbody-exchangedCouponList").append(infoDiv);
                 });
+
+                $("#div-userCouponList").hide();
+                $("#div-exchangedCouponList").show();
             }
             else {
-                var infoDiv = "<p>没有优惠券可以兑换！</p>";
-                $("#showCouponExchanged_div").append(infoDiv);
+                $("#p-message").text("暂时没有优惠券可以兑换！");
+                $("#modal-message").modal("show");
             }
         });
-    }
-
-    function exchangeCoupon_back_showUserCouponInfo() {
-        $("#main_div").show();
-        $("#exchangeCoupon_div").hide();
-        $("#showCouponExchanged_div").empty;
     }
 
     function exchangeCoupon(obj) {
@@ -169,6 +192,11 @@
                 alert(res.message);
             }
         });
+    }
+
+    function exchangedCouponList_to_userCouponList() {
+        $("#div-exchangedCouponList").hide();
+        $("#div-userCouponList").show();
     }
 </script>
 </body>

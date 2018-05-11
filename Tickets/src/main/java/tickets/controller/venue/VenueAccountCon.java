@@ -33,7 +33,7 @@ public class VenueAccountCon {
 		}
 		else {
 			model.addAttribute("message", "欢迎注册!");
-			return CommonVenue.toVenueRegisterPage();
+			return ParaNameVenue.toVenueRegisterPage();
 		}
 	}
 	

@@ -6,6 +6,12 @@ public class Result {
 	
 	private String message = "";
 	
+	public Result(){}
+	
+	public Result(boolean result){
+		this.result = result;
+	}
+	
 	public boolean getResult(){
 		return result;
 	}

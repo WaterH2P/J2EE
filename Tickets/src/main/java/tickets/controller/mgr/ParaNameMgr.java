@@ -1,6 +1,6 @@
 package tickets.controller.mgr;
 
-public class CommonMgr {
+public class ParaNameMgr {
 	
 	public static String toMgrInfoPage(){
 		return "mgr/MgrInfo";

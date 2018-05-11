@@ -42,4 +42,9 @@ public class ParaName {
 	public final static String seat_unavailable = "3";
 	
 	public final static String account_fictitious = "fictitious@fictitious.com";
+	
+	public final static String exception_accountInvalid = "账号不存在！";
+	public final static String exception_accountDeleted = "账号已删除！";
+	public final static String exception_accountUnconfirmed = "账号还未通过验证！";
+	public final static String exception_accountOrPasswordWrong = "帐号或密码错误，请重新登录！";
 }

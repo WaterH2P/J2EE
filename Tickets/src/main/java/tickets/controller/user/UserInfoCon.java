@@ -27,12 +27,12 @@ public class UserInfoCon {
 	private HttpServletRequest request;
 	
 	@RequestMapping(value = "/User/UserInfo", method = RequestMethod.GET)
-	public String userInfo(ModelMap model){
+	public String userInfo(){
 		HttpSession session = request.getSession(false);
 		if( CommonCon.hasLogin(session) ){
 			String email = (String)session.getAttribute(ParaName.VerificationCode);
 			if( CommonCon.isUser(email) ){
-				return CommonUser.toUserInfoPage();
+				return ParaNameUser.toUserInfoPage();
 			}
 			else{
 				return CommonCon.redirectToInfoPage();

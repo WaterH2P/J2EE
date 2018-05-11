@@ -1,6 +1,6 @@
 package tickets.controller.venue;
 
-public class CommonVenue {
+public class ParaNameVenue {
 	
 	public static String toVenueRegisterPage(){
 		return "VenueRegister";

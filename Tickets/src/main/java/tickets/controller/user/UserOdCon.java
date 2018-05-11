@@ -37,7 +37,7 @@ public class UserOdCon {
 		if( CommonCon.hasLogin(session) ){
 			String email = (String)session.getAttribute(ParaName.VerificationCode);
 			if( CommonCon.isUser(email) ){
-				return CommonUser.toUserOrderPage();
+				return ParaNameUser.toUserOrderPage();
 			}
 			else{
 				return CommonCon.redirectToInfoPage();
@@ -54,7 +54,7 @@ public class UserOdCon {
 		if( CommonCon.hasLogin(session) ){
 			String email = (String)session.getAttribute(ParaName.VerificationCode);
 			if( CommonCon.isUser(email) ){
-				return CommonUser.toUserBuyTicketOnlinePage();
+				return ParaNameUser.toUserBuyTicketOnlinePage();
 			}
 			else{
 				return CommonCon.redirectToInfoPage();

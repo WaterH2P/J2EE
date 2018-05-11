@@ -2,7 +2,6 @@ package tickets.controller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,7 +33,7 @@ public class UserCouponCon {
 		if( CommonCon.hasLogin(session) ){
 			String email = (String)session.getAttribute(ParaName.VerificationCode);
 			if( CommonCon.isUser(email) ){
-				return CommonUser.toUserCouponPage();
+				return ParaNameUser.toUserCouponPage();
 			}
 			else{
 				return CommonCon.redirectToInfoPage();
@@ -46,7 +45,7 @@ public class UserCouponCon {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/User/GetAllUserCoupons", method = RequestMethod.POST)
+	@RequestMapping(value = "/User/GetUserAllCoupons", method = RequestMethod.POST)
 	public List<UserCoupon> getAllUserCoupons(){
 		List<UserCoupon> userCoupons = new ArrayList<>();
 		HttpSession session = request.getSession(false);
@@ -60,7 +59,7 @@ public class UserCouponCon {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/User/GetAllCouponInfosExchanged", method = RequestMethod.POST)
+	@RequestMapping(value = "/User/GetAllExchangedCouponInfos", method = RequestMethod.POST)
 	public List<CouponInfo> getAllCouponInfosExchanged(){
 		List<CouponInfo> couponInfos = new ArrayList<>();
 		HttpSession session = request.getSession(false);

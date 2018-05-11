@@ -24,7 +24,7 @@ public class MgrInfoCon {
 			String mgrID = (String)session.getAttribute(ParaName.VerificationCode);
 			if( CommonCon.isMgr(mgrID) ){
 				model.addAttribute("mgrID", mgrID);
-				return CommonMgr.toMgrInfoPage();
+				return ParaNameMgr.toMgrInfoPage();
 			}
 			else{
 				return CommonCon.redirectToInfoPage();

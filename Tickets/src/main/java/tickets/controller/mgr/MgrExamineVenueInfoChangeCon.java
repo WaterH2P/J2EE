@@ -35,7 +35,7 @@ public class MgrExamineVenueInfoChangeCon {
 		if( CommonCon.hasLogin(session) ){
 			String mgrID = (String)session.getAttribute(ParaName.VerificationCode);
 			if( CommonCon.isMgr(mgrID) ){
-				return CommonMgr.toMgrExamineVenueInfoChangePage();
+				return ParaNameMgr.toMgrExamineVenueInfoChangePage();
 			}
 			else{
 				return CommonCon.redirectToInfoPage();

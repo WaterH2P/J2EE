@@ -6,10 +6,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import tickets.controller.mgr.CommonMgr;
-import tickets.controller.user.CommonUser;
-import tickets.controller.venue.CommonVenue;
+import tickets.controller.mgr.ParaNameMgr;
+import tickets.controller.user.ParaNameUser;
+import tickets.controller.venue.ParaNameVenue;
 import tickets.daoImpl.ParaName;
+import tickets.exception.AccountAccessException;
 import tickets.model.Result;
 import tickets.service.user.UserInfoService;
 import tickets.service.venue.VenueBaseInfoService;
@@ -22,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
-public class CommonAccountCon {
+public class AccountLogCon {
 	
 	@Resource(name = "userAccountService" )
 	private UserAccountServiceImpl userAccountService;
@@ -65,13 +66,12 @@ public class CommonAccountCon {
 	}
 	
 	@RequestMapping(value = "/Login", method = RequestMethod.GET)
-	public String loginPage(ModelMap model){
+	public String loginPage(){
 		HttpSession session = request.getSession(false);
 		if( CommonCon.hasLogin(session) ){
 			return CommonCon.redirectToInfoPage();
 		}
 		else {
-			model.addAttribute("message", "欢迎登录!");
 			return CommonCon.toLoginPage();
 		}
 	}
@@ -79,38 +79,32 @@ public class CommonAccountCon {
 	@ResponseBody
 	@RequestMapping(value = "/Login", method = RequestMethod.POST)
 	public Result login(String EmailORID, String password, ModelMap model){
-		Result result = new Result();
-		result.setResult(false);
+		Result result = new Result(false);
 		String message = "";
-		if( EmailORID.length()==7 && CommonCon.regCheck(ParaName.venueIDRegex, EmailORID) ){
-			System.out.println("场馆登录");
-			if( venueAccountService.login(EmailORID, password) ){
-				CommonCon.createSession(request, EmailORID);
-				result.setResult(true);
+		try{
+			if( EmailORID.length()==7 && CommonCon.regCheck(ParaName.venueIDRegex, EmailORID) ){
+				System.out.println("场馆登录");
+				if( venueAccountService.login(EmailORID, password) ){
+					CommonCon.createSession(request, EmailORID);
+					result.setResult(true);
+				}
+			}
+			else if( CommonCon.regCheck(ParaName.emailRegex, EmailORID)){
+				System.out.println("邮箱登录");
+				if( userAccountService.login(EmailORID, password) ){
+					CommonCon.createSession(request, EmailORID);
+					result.setResult(true);
+				}
 			}
 			else {
-				message = "帐号或密码错误，请重新登录！或者账号还未审核通过！";
+				System.out.println("管理员登录");
+				if( mgrAccountService.login(EmailORID, password) ){
+					CommonCon.createSession(request, EmailORID);
+					result.setResult(true);
+				}
 			}
-		}
-		else if( CommonCon.regCheck(ParaName.emailRegex, EmailORID)){
-			System.out.println("邮箱登录");
-			if( userAccountService.login(EmailORID, password) ){
-				CommonCon.createSession(request, EmailORID);
-				result.setResult(true);
-			}
-			else {
-				message = "帐号或密码错误，请重新登录！或者账号已注销！";
-			}
-		}
-		else {
-			System.out.println("管理员登录");
-			if( mgrAccountService.login(EmailORID, password) ){
-				CommonCon.createSession(request, EmailORID);
-				result.setResult(true);
-			}
-			else {
-				message = "帐号或密码错误，请重新登录!";
-			}
+		}catch( AccountAccessException e ){
+			message = e.getMessage();
 		}
 		if( !result.getResult() ){
 			result.setMessage(message);
@@ -135,15 +129,15 @@ public class CommonAccountCon {
 		String result = "";
 		if( EmailORID.length()==7 && CommonCon.regCheck(ParaName.venueIDRegex, EmailORID) ){
 			System.out.println("场馆登录");
-			result = CommonVenue.redirectToVenueBaseInfoPage();
+			result = ParaNameVenue.redirectToVenueBaseInfoPage();
 		}
 		else if( CommonCon.regCheck(ParaName.emailRegex, EmailORID)){
 			System.out.println("邮箱登录");
-			result = CommonUser.redirectToUserInfoPage();
+			result = ParaNameUser.redirectToUserInfoPage();
 		}
 		else {
 			System.out.println("管理员登录");
-			result = CommonMgr.redirectToMgrInfoPage();
+			result = ParaNameMgr.redirectToMgrInfoPage();
 		}
 		return result;
 	}

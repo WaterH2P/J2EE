@@ -2,7 +2,6 @@ package tickets.controller.mgr;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,7 +32,7 @@ public class MgrSettleUserOdCon {
 		if( CommonCon.hasLogin(session) ){
 			String mgrID = (String)session.getAttribute(ParaName.VerificationCode);
 			if( CommonCon.isMgr(mgrID) ){
-				return CommonMgr.toMgrSettleUserOdPage();
+				return ParaNameMgr.toMgrSettleUserOdPage();
 			}
 			else{
 				return CommonCon.redirectToInfoPage();
