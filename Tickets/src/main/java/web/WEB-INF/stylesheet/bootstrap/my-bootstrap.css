@@ -4,3 +4,22 @@
     font-size: 14px;
 }
 
+.my-panel-header{
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+.my-panel-info {
+    color: #fff;
+    background-color: #5bc0de;
+}
+
+.my-panel-warning {
+    color: #fff;
+    background-color: #f0ad4e;
+}
+
+.my-panel-danger {
+    color: #fff;
+    background-color: #d9534f;
+}

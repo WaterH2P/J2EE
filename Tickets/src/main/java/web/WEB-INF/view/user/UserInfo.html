@@ -37,7 +37,7 @@
 
 <div class="container-fluid center-block">
     <div class="row">
-        <div class="col-lg-2 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-2 hidden-xs" style="position: fixed">
+        <div class="col-lg-2 col-lg-offset-2 col-md-3 col-md-offset-1 col-sm-3 col-sm-offset-1 hidden-xs" style="position: fixed">
             <div class="list-group list-group">
                 <a class="list-group-item active" href="#">
                     <div class="input-group">
@@ -53,7 +53,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-5 col-lg-offset-5 col-md-5 col-md-offset-5 col-sm-5 col-sm-offset-5 col-xs-6">
+        <div class="col-lg-5 col-lg-offset-5 col-md-6 col-md-offset-5 col-sm-7 col-sm-offset-4 col-xs-12">
             <table class="table">
                 <thead></thead>
                 <tbody>
@@ -113,8 +113,8 @@
 
             <div>
                 <hr class="hr-dashed-info">
-                <button class="btn btn-info" id="btn-submitInfo" data-loading-text="修改中..."
-                        data-complete-text="提交修改">提交修改</button>
+                <button class="btn btn-default" id="btn-submitInfoChange" data-loading-text="修改中..."
+                        data-complete-text="提交信息修改" disabled>提交信息修改</button>
 
                 <button class="btn btn-danger pull-right" id="btn-deleteVIP">注销会员</button>
             </div>
@@ -129,8 +129,39 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-info" tabindex="-1" role="dialog" aria-labelledby="label-message" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p id="p-info-body">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-danger" tabindex="-1" role="dialog" aria-labelledby="label-message" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header my-panel-danger my-panel-header">
+                <p id="p-danger-header">
+            </div>
+            <div class="modal-body">
+                <p id="p-danger-body">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default pull-right" type="button" data-dismiss="modal">关闭</button>
+                <div id="div-danger-footer-extend"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="../../javascript/jquery/jquery-3.2.1.min.js" ></script>
 <script src="../../javascript/bootstrap/bootstrap.min.js" ></script>
+<script src="../../javascript/bootstrap/my-bootstrap.js" ></script>
 <script>
     var userNameSave = "";
     $(function () {
@@ -143,89 +174,119 @@
             $("#input-userBalance").val(res.balance);
             $("#input-userPoint").val(res.point);
         });
+
+        emptyModelMessage( $("#modal-info"), undefined, $("#p-info-body") );
+        emptyModelMessage( $("#modal-danger"), $("#p-danger-header"), $("#p-danger-body") );
     });
 </script>
 <script>
-    function deleteSpace(str) {
-        return str.replace(/\s/g, "");
+    function disableButton(obj, time) {
+        if( time==undefined || time<=0 ){
+            time = 30;
+        }
+
+        var interval = setInterval(function () {
+            if( time>=0 ){
+                $(obj).text(time+"s");
+                time = time -1;
+            }
+            else{
+                clearInterval(interval);
+                $(obj).removeAttr("disabled").button("complete");
+            }
+        }, 1000);
+    }
+
+    function deleteAccount() {
+        var userEmail = $("#input-userEmail").val().toString();
+        var data = {"userEmail": userEmail};
+        $.post("CancelAccountVIP", data, function (rs) {
+            var res = $.parseJSON(rs);
+            if( res.result ){
+                window.location.replace("/Login");
+            }
+            else {
+                $("#p-info-body").text(res.message);
+                $("#modal-info").modal("show");
+            }
+        });
     }
 </script>
 <script>
-    $("#input-userName").blur(function(){
+    $("#input-userName").bind("input propertychange change", function(){
         var userName = $("#input-userName").val().toString();
         userName = deleteSpace(userName);
         $("#input-userName").val(userName);
 
-        if( userName.length>0 ){
-            nameReady = true;
+        if( userName==userNameSave && !$("#btn-submitInfoChange").prop("disabled") ){
+            $("#btn-submitInfoChange").attr("disabled", true);
+            $("#btn-submitInfoChange").removeClass("btn-info");
+            $("#btn-submitInfoChange").addClass("btn-default");
         }
         else {
-            nameReady = false;
+            if( userName.length>0 ){
+                if( $("#input-userName").hasClass("border-red") ) {
+                    $("#input-userName").removeClass("border-red");
+                }
+                if( $("#btn-submitInfoChange").prop("disabled") ){
+                    $("#btn-submitInfoChange").removeAttr("disabled");
+                    $("#btn-submitInfoChange").removeClass("btn-default");
+                    $("#btn-submitInfoChange").addClass("btn-info");
+                }
+            }
+            else {
+                if( !$("#input-userName").hasClass("border-red") ){
+                    $("#input-userName").addClass("border-red");
+                }
+                if( !$("#btn-submitInfoChange").prop("disabled") ){
+                    $("#btn-submitInfoChange").attr("disabled", true);
+                    $("#btn-submitInfoChange").removeClass("btn-info");
+                    $("#btn-submitInfoChange").addClass("btn-default");
+                }
+            }
         }
     });
 
-    $("#input-userName").bind("input propertychange change", function(){
-        var userName = $("#input-userName").val().toString();
-        userName = deleteSpace(userName);
-        if( userName==userNameSave ){
-            $("#btn-submitInfo").removeClass("btn-info");
-            $("#btn-submitInfo").addClass("btn-default");
-        }
-        else{
-            $("#btn-submitInfo").removeClass("btn-default");
-            $("#btn-submitInfo").addClass("btn-info");
-        }
-    });
+    $("#btn-submitInfoChange").click(function () {
+        $("#btn-submitInfoChange").button("loading");
 
-    $("#btn-submitInfo").click(function () {
         var userEmail = $("#input-userEmail").val().toString();
         var userName = $("#input-userName").val().toString();
         userName = deleteSpace(userName);
         $("#input-userName").val(userName);
 
+        if( userName.length==0 ){
+            $("#p-info-body").text("请输入昵称！");
+            $("#modal-info").modal("show");
+            disableButton( $("#btn-submitInfoChange"), 30 );
+            return;
+        }
+
         var data = {"userEmail":userEmail, "userName":userName};
         $.post("ChangeUserInfo", data, function (rs) {
             var res = $.parseJSON(rs);
             if( !res.result ){
-                alert(res.message);
+                $("#p-info-body").text(res.message);
+                $("#modal-info").modal("show");
             }
             else{
                 $("#tr-userName").addClass("success").delay(1000).queue(function () {
                     $(this).removeClass("success");
                 });
-
-                // $("#btn-submitInfo").attr("disabled", "disabled");
-                $("#btn-submitInfo").button("loading");
-                var time = 30;
-                var interval = setInterval(function () {
-                    if( time>=0 ){
-                        $("#btn-submitInfo").text(time+"s");
-                        time = time -1;
-                    }
-                    else{
-                        clearInterval(interval);
-                        $("#btn-submitInfo").removeAttr("disabled").button("complete");
-                    }
-                }, 1000);
             }
+
+            disableButton( $("#btn-submitInfoChange"), 30 );
         });
     });
 
     $("#btn-deleteVIP").click(function () {
-        var cancel = confirm("注销会员将导致该账户下线！并且以后无法登陆！无法享受VIP优惠！确认注销请点击确定。");
-        if (cancel) {
-            var userEmail = $("#input-userEmail").val().toString();
-            var data = {"userEmail": userEmail};
-            $.post("CancelAccountVIP", data, function (rs) {
-               var res = $.parseJSON(rs);
-               if( res.result ){
-                   window.location.replace("/Login");
-               }
-               else {
-                   alert(res.message);
-               }
-            });
-        }
+        $("#div-danger-footer-extend").empty();
+        var div = "<button class='btn btn-danger pull-left' type='button' data-dismiss='modal' onclick='deleteAccount()'>确认注销</button>";
+        $("#div-danger-footer-extend").append(div);
+
+        $("#p-danger-header").text("注销确认");
+        $("#p-danger-body").text("注销会员将导致该账户下线！并且以后无法登陆！无法享受VIP优惠！确认注销请点击确定。");
+        $("#modal-danger").modal("show");
     });
 </script>
 </body>

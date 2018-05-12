@@ -63,14 +63,14 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-loginFail" tabindex="-1" role="dialog" aria-labelledby="label-loginFail" aria-hidden="true">
+<div class="modal fade" id="modal-info" tabindex="-1" role="dialog" aria-labelledby="label-message" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                <p id="p-loginFail">
+                <p id="p-info-body">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button class="btn btn-default" data-dismiss="modal" type="button">关闭</button>
             </div>
         </div>
     </div>
@@ -85,8 +85,8 @@
         EmailORID = EmailORID.toLowerCase();
 
         if( EmailORID.length==0 || password.length==0 ){
-            $("#p-loginFail").text("请填写完整信息！");
-            $("#modal-loginFail").modal("show");
+            $("#p-info-body").text("请填写完整信息！");
+            $("#modal-info").modal("show");
             return;
         }
 
@@ -94,8 +94,8 @@
         $.post("Login", data, function (rs) {
             var res = $.parseJSON(rs);
             if( !res.result ){
-                $("#p-loginFail").text(res.message);
-                $("#modal-loginFail").modal("show");
+                $("#p-info-body").text(res.message);
+                $("#modal-info").modal("show");
             }
             else{
                 window.location.reload();
