@@ -3,16 +3,18 @@
 <head>
     <meta charset="utf-8">
     <title>Order</title>
+
+    <link rel="stylesheet" type="text/css" href="../../stylesheet/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../../stylesheet/bootstrap/bootstrap-theme.min.css">
+
     <link rel="stylesheet" type="text/css" href="../../stylesheet/common.css">
     <link rel="stylesheet" type="text/css" href="../../stylesheet/title.css">
     <link rel="stylesheet" type="text/css" href="../../stylesheet/hallSeat.css">
     <link rel="stylesheet" type="text/css" href="../../stylesheet/fix.css">
-    <link rel="stylesheet" type="text/css" href="../../stylesheet/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../../stylesheet/bootstrap/bootstrap-theme.min.css">
 </head>
 <body>
 
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand">Tickets</a>
@@ -32,11 +34,168 @@
     </div>
 </nav>
 
+<!-- 伪 navbar -->
+<nav class="navbar navbar-default" role="navigation" style="visibility: hidden">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand">Tickets</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li><a href="UserBuyTicket">订票</a></li>
+                <li class="active"><a href="#">订单查看</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right hidden">
+                <li><a href="#"></a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="UserInfo">个人信息</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid center-block">
+    <div class="row">
+        <div class="col-lg-2 col-md-2 col-sm-3 hidden-xs" style="position: fixed">
+            <ul class="nav nav-pills nav-stacked" role="tablist">
+                <li class="active" role="presentation">
+                    <a href="#div-od-historical" data-toggle="tab" role="tab">历史订单</a>
+                </li>
+                <li role="presentation">
+                    <a href="#div-od-timeout" data-toggle="tab" role="tab">超时订单</a>
+                </li>
+                <li role="presentation">
+                    <a href="#div-od-deleted" data-toggle="tab" role="tab">退订订单</a>
+                </li>
+                <li role="presentation">
+                    <a href="#div-od-future" data-toggle="tab" role="tab">未来订单</a>
+                </li>
+                <li role="presentation">
+                    <a href="#div-od-unfinished" data-toggle="tab" role="tab">未完成订单</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-2 col-sm-9 col-sm-offset-3 col-xs-12">
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="div-od-historical" role="tabpanel">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="active" role="presentation">
+                            <a href="#tab-od-historical-checked" data-toggle="tab" role="tab">已检票订单</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#tab-od-historical-unchecked" data-toggle="tab" role="tab">作废订单</a>
+                        </li>
+                    </ul>
+
+                    <hr class="hr-dashed-info">
+
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="tab-od-historical-checked" role="tabpanel" >
+                            <table class="table table-bordered" id="table-od-historical-checked">
+                                <thead></thead>
+                                <tbody id="tbody-od-historical-checked">
+                                <tr>
+                                    <th>订单ID</th>
+                                    <th>活动名称</th>
+                                    <th>下单时间</th>
+                                    <th>订票数目</th>
+                                    <th>实付金额 / 元</th>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="tab-od-historical-unchecked" role="tabpanel">
+                            <table class="table table-bordered" id="table-od-historical-unchecked">
+                                <thead></thead>
+                                <tbody id="tbody-od-historical-unchecked">
+                                <tr>
+                                    <th>订单ID</th>
+                                    <th>活动名称</th>
+                                    <th>下单时间</th>
+                                    <th>订票数目</th>
+                                    <th>实付金额 / 元</th>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div><!--div-od-historical-->
+
+                <div class="tab-pane fade" id="div-od-timeout" role="tabpanel">
+                    <table class="table table-bordered" id="table-od-timeout">
+                        <thead></thead>
+                        <tbody id="tbody-od-timeout">
+                        <tr>
+                            <th>订单ID</th>
+                            <th>活动名称</th>
+                            <th>下单时间</th>
+                            <th>订票数目</th>
+                            <th>实付金额 / 元</th>
+                        </tr>
+                        </tbody>
+                        </tbody>
+                    </table>
+                </div><!--div-od-timeout-->
+
+                <div class="tab-pane fade" id="div-od-deleted" role="tabpanel">
+                    <table class="table table-bordered" id="table-od-deleted">
+                        <thead></thead>
+                        <tbody id="tbody-od-deleted">
+                        <tr>
+                            <th>订单ID</th>
+                            <th>活动名称</th>
+                            <th>下单时间</th>
+                            <th>订票数目</th>
+                            <th>实付金额 / 元</th>
+                        </tr>
+                        </tbody>
+                        </tbody>
+                    </table>
+                </div><!--div-od-deleted-->
+
+                <div class="tab-pane fade" id="div-od-future" role="tabpanel">
+                    <table class="table table-bordered" id="table-od-future">
+                        <thead></thead>
+                        <tbody id="tbody-od-future">
+                        <tr>
+                            <th>订单ID</th>
+                            <th>活动名称</th>
+                            <th>下单时间</th>
+                            <th>订票数目</th>
+                            <th>实付金额 / 元</th>
+                        </tr>
+                        </tbody>
+                        </tbody>
+                    </table>
+                </div><!--div-od-future-->
+
+                <div class="tab-pane fade" id="div-od-unfinished" role="tabpanel">
+                    <table class="table table-bordered" id="table-od-unfinished">
+                        <thead></thead>
+                        <tbody id="tbody-od-unfinished">
+                        <tr>
+                            <th>订单ID</th>
+                            <th>活动名称</th>
+                            <th>下单时间</th>
+                            <th>订票数目</th>
+                            <th>实付金额 / 元</th>
+                        </tr>
+                        </tbody>
+                        </tbody>
+                    </table>
+                </div><!--div-od-unfinished-->
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="common">
-    <div class="main bigMain">
+    <div class="main">
         <div class="title_2" id="title_2">
-            <a class="active" id="userOd_historical" onclick="show_userOd_historical()">历史订单</a>
-            <b>·</b>
             <a id="userOd_timeout" onclick="show_userOd_timeout()">超时订单</a>
             <b>·</b>
             <a id="userOd_deleted" onclick="show_userOd_deleted()">退订订单</a>
@@ -106,6 +265,19 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-info" tabindex="-1" role="dialog" aria-labelledby="label-message" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p id="p-info-body">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     var dateFormat = "yyyy-MM-dd hh:mm:ss";
     var OdInfos = [];
@@ -115,65 +287,20 @@
 <script src="../../javascript/jquery/jquery-3.2.1.min.js" ></script>
 <script src="../../javascript/jquery/jquery.seat-charts.min.js" ></script>
 <script src="../../javascript/bootstrap/bootstrap.min.js" ></script>
+
 <script src="../../javascript/date-format.js" ></script>
 <script src="../../javascript/user/userOrder-showSeat.js" ></script>
+<script src="../../javascript/bootstrap/my-bootstrap.js" ></script>
 <script>
 
     $(function () {
-        show_userOd_historical();
+        emptyModelMessage( $("#modal-info"), undefined, $("#p-info-body"));
+
+        $("#div-od-historical").on("show.bs.tab", getUserAllHistoricalOdsAndShow());
+        $("#div-od-timeout").on("show.bs.tab", getUserAllTimeoutOdsAndShow());
     });
 </script>
 <script>
-    function getInfoAndShow(url, btnOnclick) {
-        $("#userOd_historical").removeClass("active");
-        $("#userOd_timeout").removeClass("active");
-        $("#userOd_deleted").removeClass("active");
-        $("#userOd_future").removeClass("active");
-        $("#userOd_unfinished").removeClass("active");
-
-        $.post(url, function (rs) {
-            var res = $.parseJSON(rs);
-            OdInfos = res;
-            $("#OdList_show_div").empty();
-            if( res.length>0 ){
-                $.each(res, function (index, value, array) {
-                    var infoDiv = "<div>" +
-                        "<p><label>订单ID：</label><input type='text' value='" + value.odID + "' readonly/></p>" +
-                        "<p><label>计划ID：</label><input type='text' value='" + value.planID + "' readonly/></p>" +
-                        "<p><label>下订单时间：</label><input type='text' value='" + new Date(value.makeTime).format(dateFormat) + "' readonly/></p>" +
-                        "<p><label>购票数：</label><input type='text' value='" + value.numOfTicket + "' readonly></p>" +
-                        "<p><label>实付：</label><input type='text' value='" + value.totalPay + "' readonly></p>";
-                    if( value.checked ){
-                        infoDiv += "<p><label>检票：</label><input type='text' value='已检票' readonly></p>";
-                    }
-                    infoDiv += "<button id='btn_" + value.odID + "_" + value.planID + "_check_info' onclick='" + btnOnclick + "'>详细信息</button>" +
-                        "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />" +
-                        "</div>";
-                    $("#OdList_show_div").append(infoDiv);
-                });
-            }
-            else {
-                var infoDiv = "<input type='text' value='没有该类型订单！' readonly />";
-                $("#OdList_show_div").append(infoDiv);
-            }
-        });
-    }
-
-    function show_userOd_deleted() {
-        getInfoAndShow("GetAllUserOdDeleted", "showUserOd_noChange_info(this)");
-        $("#userOd_deleted").addClass("active");
-    }
-
-    function show_userOd_historical() {
-        getInfoAndShow("GetAllHistoricalUserOd", "showUserOd_noChange_info(this)");
-        $("#userOd_historical").addClass("active");
-    }
-
-    function show_userOd_timeout() {
-        getInfoAndShow("GetAllUserOdTimeout", "showUserOd_noChange_info(this)");
-        $("#userOd_timeout").addClass("active");
-    }
-
     function showUserOd_noChange_info(obj) {
         $("#title_2").hide();
         $("#OdList_show_div").hide();
@@ -257,6 +384,82 @@
         })
     }
 
+    function remindNoOd() {
+        $("#p-info-body").text("没有该类型的订单！");
+        $("#modal-info").modal("show");
+    }
+</script>
+
+<!-- new function -->
+<script>
+    function getUserAllHistoricalOdsAndShow() {
+        $("#tbody-od-historical-checked").empty();
+        var div = " <tr>" +
+            "<th>订单ID</th>" +
+            "<th>活动名称</th>" +
+            "<th>下单时间</th>" +
+            "<th>订票数目</th>" +
+            "<th>实付金额 / 元</th>" +
+            "</tr>";
+        $("#tbody-od-historical-checked").append(div);
+
+        $.post("GetUserAllHistoricalOds", function (rs) {
+            var res = $.parseJSON(rs);
+            if( res.length>0 ){
+                $.each(res, function (index, value, array) {
+                    var infoDiv = "";
+                    infoDiv += "<tr>" +
+                        "<td>" + value.odID + "</td>" +
+                        "<td>" + value.planID + "</td>" +
+                        "<td>" + new Date(value.makeTime).format(dateFormat) + "</td>" +
+                        "<td>" + value.numOfTicket + "</td>" +
+                        "<td>" + value.totalPay + "</td>" +
+                        "</tr>";
+                    if( value.checked ){
+                        $("#tbody-od-historical-checked").append(infoDiv);
+                    }
+                    else {
+                        $("#tbody-od-historical-unchecked").append(infoDiv);
+                    }
+                });
+            }
+            else {
+                remindNoOd();
+            }
+        });
+    }
+
+    function getUserAllTimeoutOdsAndShow() {
+        $("#tbody-od-timeout").empty();
+        var div = " <tr>" +
+            "<th>订单ID</th>" +
+            "<th>活动名称</th>" +
+            "<th>下单时间</th>" +
+            "<th>订票数目</th>" +
+            "<th>实付金额 / 元</th>" +
+            "</tr>";
+        $("#tbody-od-timeout").append(div);
+
+        $.post("GetUserAllTimeoutOds", function (rs) {
+            var res = $.parseJSON(rs);
+            if( res.length>0 ){
+                $.each(res, function (index, value, array) {
+                    var infoDiv = "";
+                    infoDiv += "<tr>" +
+                        "<td>" + value.odID + "</td>" +
+                        "<td>" + value.planID + "</td>" +
+                        "<td>" + new Date(value.makeTime).format(dateFormat) + "</td>" +
+                        "<td>" + value.numOfTicket + "</td>" +
+                        "<td>" + value.totalPay + "</td>" +
+                        "</tr>";
+                    $("#tbody-od-timeout").append(infoDiv);
+                });
+            }
+            else {
+                remindNoOd();
+            }
+        });
+    }
 </script>
 
 <!--未来订单-->

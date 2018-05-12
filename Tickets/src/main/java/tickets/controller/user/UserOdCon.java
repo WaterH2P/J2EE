@@ -211,7 +211,7 @@ public class UserOdCon {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/User/GetAllHistoricalUserOd", method = RequestMethod.POST)
+	@RequestMapping(value = "/User/GetUserAllHistoricalOds", method = RequestMethod.POST)
 	public List<UserOd> getAllHistoricalUserOd(){
 		List<UserOd> userOds = new ArrayList<>();
 		HttpSession session = request.getSession(false);
@@ -225,7 +225,7 @@ public class UserOdCon {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/User/GetAllUserOdTimeout", method = RequestMethod.POST)
+	@RequestMapping(value = "/User/GetUserAllTimeoutOds", method = RequestMethod.POST)
 	public List<UserOd> getAllUserOdTimeOut(){
 		List<UserOd> userOds = new ArrayList<>();
 		HttpSession session = request.getSession(false);
@@ -239,7 +239,7 @@ public class UserOdCon {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/User/GetAllUserOdDeleted", method = RequestMethod.POST)
+	@RequestMapping(value = "/User/GetUserAllDeletedOds", method = RequestMethod.POST)
 	public List<UserOd> getAllUserOdDeleted(){
 		List<UserOd> userOds = new ArrayList<>();
 		HttpSession session = request.getSession(false);

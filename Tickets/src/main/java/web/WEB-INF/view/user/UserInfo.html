@@ -13,7 +13,30 @@
 </head>
 <body>
 
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand">Tickets</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li><a href="UserBuyTicket">订票</a></li>
+                <li><a href="UserOrder">订单查看</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right hidden">
+                <li><a href="#"></a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="hidden-xs active"><a href="#">个人信息</a></li>
+                <li class="visible-xs active"><a href="#">基本信息</a></li>
+                <li class="visible-xs"><a href="UserCoupon">优惠券</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- 伪 navbar -->
+<nav class="navbar navbar-default" role="navigation" style="visibility: hidden">
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand">Tickets</a>
