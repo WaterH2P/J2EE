@@ -112,7 +112,6 @@
         var emailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+.([a-z.])+$/;
         if( emailReg.test(email) ){
             $("#userEmail").removeClass("borderRed");
-            $("#userEmail").addClass("noBorderBottom");
             emailReady = true;
         }
         else {
@@ -149,8 +148,8 @@
             message += "正确昵称！";
         }
         if( message.length==0 ){
-            $("#messageShow").val(message);
-            $("#messageShow").removeClass("colorRed");
+            $("#messageShow").val(message)
+                .removeClass("colorRed");
 
             var userEmail = $("#userEmail").val().toString();
             var userName = $("#userName").val().toString();
@@ -166,8 +165,7 @@
             });
         }
         else{
-            $("#messageShow").val(message);
-            $("#messageShow").addClass("colorRed");
+
         }
     });
 
@@ -188,14 +186,12 @@
                     window.location.replace(newHref);
                 }
                 else {
-                    $("#messageShow").val(res.message);
-                    $("#messageShow").addClass("colorRed");
+
                 }
             });
         }
         else {
-            $("#messageShow").val("请输入正确密码!");
-            $("#messageShow").addClass("colorRed");
+
         }
     });
 </script>

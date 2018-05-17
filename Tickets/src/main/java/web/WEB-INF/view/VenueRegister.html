@@ -153,8 +153,6 @@
             message += "正确密码！";
         }
         if( message.length==0 ){
-            $("#messageShow").val(message);
-            $("#messageShow").removeClass("colorRed");
 
             var province = $("#province option:selected").text();
             var city = $("#city option:selected").text();
@@ -176,8 +174,7 @@
             });
         }
         else {
-            $("#messageShow").val(message);
-            $("#messageShow").addClass("colorRed");
+
         }
     });
 </script>

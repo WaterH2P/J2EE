@@ -58,29 +58,25 @@
 <div class="container-fluid center-block">
     <div class="row">
         <div class="col-lg-2 col-md-2 col-sm-3 hidden-xs" style="position: fixed">
-            <ul class="nav nav-pills nav-stacked" role="tablist">
-                <li class="active" role="presentation">
-                    <a href="#div-od-historical" data-toggle="tab" role="tab">历史订单</a>
-                </li>
-                <li role="presentation">
-                    <a href="#div-od-timeout" data-toggle="tab" role="tab">超时订单</a>
-                </li>
-                <li role="presentation">
-                    <a href="#div-od-deleted" data-toggle="tab" role="tab">退订订单</a>
-                </li>
-                <li role="presentation">
-                    <a href="#div-od-future" data-toggle="tab" role="tab">未来订单</a>
-                </li>
-                <li role="presentation">
-                    <a href="#div-od-unfinished" data-toggle="tab" role="tab">未完成订单</a>
-                </li>
-            </ul>
+            <div class="list-group" role="tablist">
+                <a class="list-group-item active" href="#div-od-historical"
+                   data-toggle="tab" role="tab" onclick="getUserAllHistoricalOdsAndShow()">历史订单</a>
+                <a class="list-group-item" href="#div-od-timeout"
+                   data-toggle="tab" role="tab" onclick="getUserAllTimeoutOdsAndShow()">超时订单</a>
+                <a class="list-group-item" href="#div-od-deleted"
+                   data-toggle="tab" role="tab" onclick="getUserAllDeletedOdsAndShow()">退订订单</a>
+                <a class="list-group-item" href="#div-od-future"
+                   data-toggle="tab" role="tab" onclick="getUserAllFutureOdsAndShow()">未来订单</a>
+                <a class="list-group-item" href="#div-od-unfinished"
+                   data-toggle="tab" role="tab" onclick="getUserAllUnfinishedOdsAndShow()">未完成订单</a>
+            </div>
         </div>
     </div>
 
     <div class="row">
         <div class="col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-2 col-sm-9 col-sm-offset-3 col-xs-12">
             <div class="tab-content">
+                <!--div-od-historical-->
                 <div class="tab-pane fade in active" id="div-od-historical" role="tabpanel">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="active" role="presentation">
@@ -95,7 +91,7 @@
 
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="tab-od-historical-checked" role="tabpanel" >
-                            <table class="table table-bordered" id="table-od-historical-checked">
+                            <table class="table table-bordered table-hover" id="table-od-historical-checked">
                                 <thead></thead>
                                 <tbody id="tbody-od-historical-checked">
                                 <tr>
@@ -104,12 +100,13 @@
                                     <th>下单时间</th>
                                     <th>订票数目</th>
                                     <th>实付金额 / 元</th>
+                                    <th></th>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="tab-pane fade" id="tab-od-historical-unchecked" role="tabpanel">
-                            <table class="table table-bordered" id="table-od-historical-unchecked">
+                            <table class="table table-bordered table-hover" id="table-od-historical-unchecked">
                                 <thead></thead>
                                 <tbody id="tbody-od-historical-unchecked">
                                 <tr>
@@ -118,6 +115,7 @@
                                     <th>下单时间</th>
                                     <th>订票数目</th>
                                     <th>实付金额 / 元</th>
+                                    <th></th>
                                 </tr>
                                 </tbody>
                             </table>
@@ -125,8 +123,9 @@
                     </div>
                 </div><!--div-od-historical-->
 
+                <!--div-od-timeout-->
                 <div class="tab-pane fade" id="div-od-timeout" role="tabpanel">
-                    <table class="table table-bordered" id="table-od-timeout">
+                    <table class="table table-bordered table-hover" id="table-od-timeout">
                         <thead></thead>
                         <tbody id="tbody-od-timeout">
                         <tr>
@@ -134,15 +133,15 @@
                             <th>活动名称</th>
                             <th>下单时间</th>
                             <th>订票数目</th>
-                            <th>实付金额 / 元</th>
                         </tr>
                         </tbody>
                         </tbody>
                     </table>
                 </div><!--div-od-timeout-->
 
+                <!--div-od-deleted-->
                 <div class="tab-pane fade" id="div-od-deleted" role="tabpanel">
-                    <table class="table table-bordered" id="table-od-deleted">
+                    <table class="table table-bordered table-hover" id="table-od-deleted">
                         <thead></thead>
                         <tbody id="tbody-od-deleted">
                         <tr>
@@ -157,8 +156,9 @@
                     </table>
                 </div><!--div-od-deleted-->
 
+                <!--div-od-future-->
                 <div class="tab-pane fade" id="div-od-future" role="tabpanel">
-                    <table class="table table-bordered" id="table-od-future">
+                    <table class="table table-bordered table-hover" id="table-od-future">
                         <thead></thead>
                         <tbody id="tbody-od-future">
                         <tr>
@@ -173,8 +173,9 @@
                     </table>
                 </div><!--div-od-future-->
 
+                <!--div-od-unfinished-->
                 <div class="tab-pane fade" id="div-od-unfinished" role="tabpanel">
-                    <table class="table table-bordered" id="table-od-unfinished">
+                    <table class="table table-bordered table-hover" id="table-od-unfinished">
                         <thead></thead>
                         <tbody id="tbody-od-unfinished">
                         <tr>
@@ -195,16 +196,6 @@
 
 <div class="common">
     <div class="main">
-        <div class="title_2" id="title_2">
-            <a id="userOd_timeout" onclick="show_userOd_timeout()">超时订单</a>
-            <b>·</b>
-            <a id="userOd_deleted" onclick="show_userOd_deleted()">退订订单</a>
-            <b>·</b>
-            <a id="userOd_future" onclick="show_userOd_future()">未来订单</a>
-            <b>·</b>
-            <a id="userOd_unfinished" onclick="show_userOd_unfinished()">未完成订单</a>
-        </div>
-
         <div id="OdList_show_div">
 
         </div>
@@ -292,87 +283,18 @@
 <script src="../../javascript/user/userOrder-showSeat.js" ></script>
 <script src="../../javascript/bootstrap/my-bootstrap.js" ></script>
 <script>
-
     $(function () {
+        getUserAllHistoricalOdsAndShow();
+
         emptyModelMessage( $("#modal-info"), undefined, $("#p-info-body"));
 
-        $("#div-od-historical").on("show.bs.tab", getUserAllHistoricalOdsAndShow());
-        $("#div-od-timeout").on("show.bs.tab", getUserAllTimeoutOdsAndShow());
+        $("div.list-group a").click(function () {
+            $("div.list-group a").removeClass("active");
+            $(this).addClass("active")
+        });
     });
 </script>
 <script>
-    function showUserOd_noChange_info(obj) {
-        $("#title_2").hide();
-        $("#OdList_show_div").hide();
-        $("#OdInfo_payImmediately_coupon_p").hide();
-
-        $("#OdInfo_show_div").show();
-        $("#OdInfo_show_couponDiscount_p").show();
-        $("#Od_info_expand_div").show();
-        $("#seatMap_div").show();
-        $("#venueInfo_div").show();
-
-        var temp1 = $(obj).attr("id");
-        var temp2 = temp1.split("_");
-        var OdID = temp2[1];
-        var planID = temp2[2];
-        $("#Od_ID_input").val(OdID);
-
-        var OdInfo = {};
-        for( var i=0; i<OdInfos.length; i++ ){
-            OdInfo = OdInfos[i];
-            if( OdID==OdInfo.odID ){
-                break;
-            }
-        }
-
-        var data = {"planID":planID};
-        $.post("GetUserOdPlanInfo", data, function (rs) {
-            var res = $.parseJSON(rs);
-
-            $("#Od_nameOfPlan_input").val(res.name);
-            $("#Od_beginTimeOfPlan_div").val(new Date(res.beginTime).format(dateFormat));
-            $("#Od_endTimeOfPlan_div").val(new Date(res.endTime).format(dateFormat));
-        });
-
-        $("#Od_seatSelected_ul").empty();
-
-        totalPrice = parseFloat(OdInfo.totalPrice.toFixed(2));
-        $("#Od_totalPrice_input").val(totalPrice);
-
-        var vipDiscount = OdInfo.couponDiscount;
-        $("#Od_vipDiscount_input").val(vipDiscount);
-
-        var couponDiscount = OdInfo.couponDiscount;
-        $("#OdInfo_show_couponDiscount_input").val(couponDiscount);
-
-        var totalPay = OdInfo.totalPay;
-        $("#Od_totalPay_input").val(totalPay)
-
-        var data = {"OdID":OdID};
-        $.post("GetUserOdAllSeatSelectedInfo", data, function (rs) {
-            var res = $.parseJSON(rs);
-            seatRowAndCol = new Array();
-
-            $("#Od_seatSelected_ul").empty();
-            if( res.length>0 ){
-                $.each(res, function (index, value, array) {
-                    var seatLi = "<li>" + value.row + "排" + value.col + "座  ¥" + value.price + "</li>";
-                    $("#Od_seatSelected_ul").append(seatLi);
-                    seatRowAndCol[seatRowAndCol.length] = value.row + "_" + value.col;
-                });
-            }
-            else {
-                var seatLi = "<li>还未分配座位！</li>";
-                $("#Od_seatSelected_ul").append(seatLi);
-            }
-        });
-
-        getHallInfoAndShow(planID);
-
-        getSeatDistAndShow(planID);
-    }
-
     function getHallInfoAndShow(planID) {
         var data = {"planID":planID};
         $.post("GetPlanVenueInfo", data, function (rs) {
@@ -383,37 +305,39 @@
             $("#venueTel").val(res.telephone);
         })
     }
+</script>
 
+<!-- nf: historical od -->
+<script>
     function remindNoOd() {
         $("#p-info-body").text("没有该类型的订单！");
         $("#modal-info").modal("show");
     }
-</script>
 
-<!-- new function -->
-<script>
+    var gotHistoricalOds = false;
     function getUserAllHistoricalOdsAndShow() {
-        $("#tbody-od-historical-checked").empty();
-        var div = " <tr>" +
-            "<th>订单ID</th>" +
-            "<th>活动名称</th>" +
-            "<th>下单时间</th>" +
-            "<th>订票数目</th>" +
-            "<th>实付金额 / 元</th>" +
-            "</tr>";
-        $("#tbody-od-historical-checked").append(div);
+        if( gotHistoricalOds ){
+            return;
+        }
+        $("#tbody-od-historical-checked").children("tr.tr-extend").remove();
+        $("#tbody-od-historical-unchecked").children("tr.tr-extend").remove();
 
         $.post("GetUserAllHistoricalOds", function (rs) {
             var res = $.parseJSON(rs);
             if( res.length>0 ){
                 $.each(res, function (index, value, array) {
                     var infoDiv = "";
-                    infoDiv += "<tr>" +
+                    infoDiv += "<tr class='tr-extend'>" +
                         "<td>" + value.odID + "</td>" +
                         "<td>" + value.planID + "</td>" +
                         "<td>" + new Date(value.makeTime).format(dateFormat) + "</td>" +
                         "<td>" + value.numOfTicket + "</td>" +
                         "<td>" + value.totalPay + "</td>" +
+                        "<td style='text-align: center;'>" +
+                            "<button class='btn btn-info' title='详细信息'>" +
+                                "<span class='glyphicon glyphicon-info-sign'></span>" +
+                            "</button>" +
+                        "</td>" +
                         "</tr>";
                     if( value.checked ){
                         $("#tbody-od-historical-checked").append(infoDiv);
@@ -426,31 +350,30 @@
             else {
                 remindNoOd();
             }
+            gotHistoricalOds = true;
         });
     }
+</script><!-- nf: historical od -->
 
+<!-- nf: timeout od -->
+<script>
+    var gotTimeoutOds = false;
     function getUserAllTimeoutOdsAndShow() {
-        $("#tbody-od-timeout").empty();
-        var div = " <tr>" +
-            "<th>订单ID</th>" +
-            "<th>活动名称</th>" +
-            "<th>下单时间</th>" +
-            "<th>订票数目</th>" +
-            "<th>实付金额 / 元</th>" +
-            "</tr>";
-        $("#tbody-od-timeout").append(div);
+        if( gotTimeoutOds ){
+            return;
+        }
+        $("#tbody-od-timeout").children("tr.tr-extend").remove();
 
         $.post("GetUserAllTimeoutOds", function (rs) {
             var res = $.parseJSON(rs);
             if( res.length>0 ){
                 $.each(res, function (index, value, array) {
                     var infoDiv = "";
-                    infoDiv += "<tr>" +
+                    infoDiv += "<tr class='tr-extend'>" +
                         "<td>" + value.odID + "</td>" +
                         "<td>" + value.planID + "</td>" +
                         "<td>" + new Date(value.makeTime).format(dateFormat) + "</td>" +
                         "<td>" + value.numOfTicket + "</td>" +
-                        "<td>" + value.totalPay + "</td>" +
                         "</tr>";
                     $("#tbody-od-timeout").append(infoDiv);
                 });
@@ -458,28 +381,110 @@
             else {
                 remindNoOd();
             }
+            gotTimeoutOds = true;
         });
     }
-</script>
+</script><!-- nf: timeout od -->
+
+<!-- nf: deleted od -->
+<script>
+    var gotDeletedOds = false;
+    function getUserAllDeletedOdsAndShow() {
+        if( gotDeletedOds ){
+            return;
+        }
+        $("#tbody-od-deleted").children("tr.tr-extend").remove();
+
+        $.post("GetUserAllDeletedOds", function (rs) {
+            var res = $.parseJSON(rs);
+            if( res.length>0 ){
+                $.each(res, function (index, value, array) {
+                    var infoDiv = "";
+                    infoDiv += "<tr class='tr-extend'>" +
+                        "<td>" + value.odID + "</td>" +
+                        "<td>" + value.planID + "</td>" +
+                        "<td>" + new Date(value.makeTime).format(dateFormat) + "</td>" +
+                        "<td>" + value.numOfTicket + "</td>" +
+                        "<td>" + value.totalPay + "</td>" +
+                        "</tr>";
+                    $("#tbody-od-deleted").append(infoDiv);
+                });
+            }
+            else {
+                remindNoOd();
+            }
+            gotDeletedOds = true;
+        });
+    }
+</script><!-- nf: deleted od -->
+
+<!-- nf: future od -->
+<script>
+    var gotFutureOds = false;
+    function getUserAllFutureOdsAndShow() {
+        if( gotFutureOds ){
+            return;
+        }
+        $("#tbody-od-future").children("tr.tr-extend").remove();
+
+        $.post("GetUserAllFutureOds", function (rs) {
+            var res = $.parseJSON(rs);
+            if( res.length>0 ){
+                $.each(res, function (index, value, array) {
+                    var infoDiv = "";
+                    infoDiv += "<tr class='tr-extend'>" +
+                        "<td>" + value.odID + "</td>" +
+                        "<td>" + value.planID + "</td>" +
+                        "<td>" + new Date(value.makeTime).format(dateFormat) + "</td>" +
+                        "<td>" + value.numOfTicket + "</td>" +
+                        "<td>" + value.totalPay + "</td>" +
+                        "</tr>";
+                    $("#tbody-od-future").append(infoDiv);
+                });
+            }
+            else {
+                remindNoOd();
+            }
+            gotFutureOds = true;
+        });
+    }
+</script><!-- nf: future od -->
+
+<!-- nf: unfinished od -->
+<script>
+    var gotUnfinishedOds = false;
+    function getUserAllUnfinishedOdsAndShow() {
+        if( gotUnfinishedOds ){
+            return;
+        }
+        $("#tbody-od-unfinished").children("tr.tr-extend").remove();
+
+        $.post("GetUserAllUnfinishedOds", function (rs) {
+            var res = $.parseJSON(rs);
+            if( res.length>0 ){
+                $.each(res, function (index, value, array) {
+                    var infoDiv = "";
+                    infoDiv += "<tr class='tr-extend'>" +
+                        "<td>" + value.odID + "</td>" +
+                        "<td>" + value.planID + "</td>" +
+                        "<td>" + new Date(value.makeTime).format(dateFormat) + "</td>" +
+                        "<td>" + value.numOfTicket + "</td>" +
+                        "<td>" + value.totalPay + "</td>" +
+                        "</tr>";
+                    $("#tbody-od-unfinished").append(infoDiv);
+                });
+            }
+            else {
+                remindNoOd();
+            }
+            gotUnfinishedOds = true;
+        });
+    }
+</script><!-- nf: unfinished od -->
 
 <!--未来订单-->
 <script>
-    function show_userOd_future() {
-        getInfoAndShow("GetAllFutureUserOd", "showUserOd_future_info(this)");
-        $("#userOd_future").addClass("active");
-    }
-
     function showUserOd_future_info(obj) {
-        $("#title_2").hide();
-        $("#OdList_show_div").hide();
-        $("#OdInfo_payImmediately_coupon_p").hide();
-
-        $("#OdInfo_show_div").show();
-        $("#OdInfo_show_couponDiscount_p").show();
-        $("#Od_info_expand_div").show();
-        $("#seatMap_div").show();
-        $("#venueInfo_div").show();
-
         var temp1 = $(obj).attr("id");
         var temp2 = temp1.split("_");
         var OdID = temp2[1];

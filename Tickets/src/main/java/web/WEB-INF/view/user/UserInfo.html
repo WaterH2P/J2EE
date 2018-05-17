@@ -61,7 +61,7 @@
 <div class="container-fluid center-block">
     <div class="row">
         <div class="col-lg-2 col-lg-offset-2 col-md-3 col-md-offset-1 col-sm-3 col-sm-offset-1 hidden-xs" style="position: fixed">
-            <div class="list-group list-group">
+            <div class="list-group">
                 <a class="list-group-item active" href="#">
                     <div class="input-group">
                         <span class="glyphicon glyphicon-user"></span>
@@ -242,9 +242,9 @@
         $("#input-userName").val(userName);
 
         if( userName==userNameSave && !$("#btn-submitInfoChange").prop("disabled") ){
-            $("#btn-submitInfoChange").attr("disabled", true);
-            $("#btn-submitInfoChange").removeClass("btn-info");
-            $("#btn-submitInfoChange").addClass("btn-default");
+            $("#btn-submitInfoChange").attr("disabled", true)
+                .addClass("btn-default")
+                .removeClass("btn-info");
         }
         else {
             if( userName.length>0 ){
@@ -252,9 +252,9 @@
                     $("#input-userName").removeClass("border-red");
                 }
                 if( $("#btn-submitInfoChange").prop("disabled") ){
-                    $("#btn-submitInfoChange").removeAttr("disabled");
-                    $("#btn-submitInfoChange").removeClass("btn-default");
-                    $("#btn-submitInfoChange").addClass("btn-info");
+                    $("#btn-submitInfoChange").removeAttr("disabled")
+                        .removeClass("btn-default")
+                        .addClass("btn-info");
                 }
             }
             else {
@@ -262,9 +262,9 @@
                     $("#input-userName").addClass("border-red");
                 }
                 if( !$("#btn-submitInfoChange").prop("disabled") ){
-                    $("#btn-submitInfoChange").attr("disabled", true);
-                    $("#btn-submitInfoChange").removeClass("btn-info");
-                    $("#btn-submitInfoChange").addClass("btn-default");
+                    $("#btn-submitInfoChange").attr("disabled", true)
+                        .addClass("btn-default")
+                        .removeClass("btn-info");
                 }
             }
         }

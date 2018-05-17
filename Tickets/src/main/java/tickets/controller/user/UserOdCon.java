@@ -253,7 +253,7 @@ public class UserOdCon {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/User/GetAllFutureUserOd", method = RequestMethod.POST)
+	@RequestMapping(value = "/User/GetUserAllFutureOds", method = RequestMethod.POST)
 	public List<UserOd> getAllFutureUserOd(){
 		List<UserOd> userOds = new ArrayList<>();
 		HttpSession session = request.getSession(false);
@@ -267,7 +267,7 @@ public class UserOdCon {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/User/GetAllUserOdUnfinished", method = RequestMethod.POST)
+	@RequestMapping(value = "/User/GetUserAllUnfinishedOds", method = RequestMethod.POST)
 	public List<UserOd> getAllUserOdUnfinished(){
 		List<UserOd> userOds = new ArrayList<>();
 		HttpSession session = request.getSession(false);
