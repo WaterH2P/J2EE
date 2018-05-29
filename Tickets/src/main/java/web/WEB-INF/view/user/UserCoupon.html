@@ -72,58 +72,56 @@
                 </a>
             </div>
         </div>
-    </div>
 
-    <div class="row" id="div-userCouponList">
         <div class="col-lg-5 col-lg-offset-5 col-md-6 col-md-offset-5 col-sm-7 col-sm-offset-4 col-xs-12">
-            <div class="row">
-                <div class="col-lg-4 col-md-4 col-sm-4">
-                    <button class="btn btn-info" onclick="getAllExchangedCouponAndShow()">兑换优惠券</button>
+            <div id="div-userCouponList">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <button class="btn btn-info" onclick="getAllExchangedCouponAndShow()">兑换优惠券</button>
+                    </div>
                 </div>
+
+                <br>
+
+                <table class="table table-bordered table-striped">
+                    <caption>优惠券</caption>
+                    <thead></thead>
+                    <tbody id="tbody-userCouponList">
+                    <tr>
+                        <th>ID</th>
+                        <th>名称</th>
+                        <th>优惠金额</th>
+                        <th>数量</th>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
 
-            <br>
-
-            <table class="table table-bordered table-striped">
-                <caption>优惠券</caption>
-                <thead></thead>
-                <tbody id="tbody-userCouponList">
-                <tr>
-                    <th>ID</th>
-                    <th>名称</th>
-                    <th>优惠金额</th>
-                    <th>数量</th>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="row" id="div-exchangedCouponList" style="display: none">
-        <div class="col-lg-5 col-lg-offset-5 col-md-6 col-md-offset-5 col-sm-7 col-sm-offset-4 col-xs-12">
-            <div class="row">
-                <div class="col-lg-4 col-md-4 col-sm-4">
-                    <button class="btn btn-default" onclick="exchangedCouponList_to_userCouponList()">
-                        <span class="glyphicon glyphicon-arrow-left"></span>
-                    </button>
+            <div id="div-exchangedCouponList" style="display: none">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <button class="btn btn-default" onclick="exchangedCouponList_to_userCouponList()">
+                            <span class="glyphicon glyphicon-arrow-left"></span>
+                        </button>
+                    </div>
                 </div>
+
+                <br>
+
+                <table class="table table-bordered table-hover">
+                    <caption>可兑换优惠券</caption>
+                    <thead></thead>
+                    <tbody id="tbody-exchangedCouponList">
+                    <tr>
+                        <th>ID</th>
+                        <th>名称</th>
+                        <th>优惠金额</th>
+                        <th>所需积分</th>
+                        <th></th>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
-
-            <br>
-
-            <table class="table table-bordered table-hover">
-                <caption>可兑换优惠券</caption>
-                <thead></thead>
-                <tbody id="tbody-exchangedCouponList">
-                <tr>
-                    <th>ID</th>
-                    <th>名称</th>
-                    <th>优惠金额</th>
-                    <th>所需积分</th>
-                    <th></th>
-                </tr>
-                </tbody>
-            </table>
         </div>
     </div>
 </div>
